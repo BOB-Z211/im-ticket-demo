@@ -1,0 +1,17 @@
+.DS_Store
+.gstack/
+.autosave.pid
+autosave.log
+*.log
+qa-*.png
+backups/
+scripts/
+src/scripts/
+src/pages/login.html
+src/pages/workbench.html
+AUTOSAVE.md
+AGENTS.md
+TASKS.md
+DESIGN.md
+IM_OA_USER_INFO_REDESIGN.md
+oa-registration-demo.html

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IM Chat — User</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue-2: #e8f3ff; --blue-6: #1677ff; --neutral-1: #f5f5f5;
+    --neutral-2: #eee; --neutral-4: #c0c4cc; --neutral-5: #8b8fa3;
+    --neutral-7: #4e5462; --neutral-9: #1d2129; --success: #00b42a;
+    --error-dark: #c2090a; --warning: #ff7d00;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f0f2f5; color: var(--neutral-9);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal-overlay.hidden { display: none; }
+  .role-modal {
+    background: #fff; border-radius: 16px; padding: 32px;
+    width: min(820px, 94vw); max-height: 80vh; overflow-y: auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  }
+  .role-modal h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+  .role-modal .sub { font-size: 14px; color: var(--neutral-5); margin-bottom: 24px; }
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .role-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border: 1px solid var(--neutral-2); border-radius: 12px;
+    cursor: pointer; transition: border-color .15s, box-shadow .15s; background: #fff;
+  }
+  .role-card:hover { border-color: var(--blue-6); box-shadow: 0 2px 8px rgba(22,119,255,0.1); }
+  .role-card img.avatar { width: 44px; height: 44px; border-radius: 12px; object-fit: cover; flex: none; }
+  .role-card .info { flex: 1; min-width: 0; }
+  .role-card .name { font-size: 15px; font-weight: 600; }
+  .role-card .meta { font-size: 12px; color: var(--neutral-5); margin-top: 2px; }
+  .role-card .row2 { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .role-card .id { font-size: 12px; color: var(--neutral-5); }
+  .tag { font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 6px; }
+  .tag.green { color: #00801e; background: #e8f8ee; }
+  .tag.orange { color: #d46b08; background: #fff3e0; }
+  .tag.red { color: #c2090a; background: #fff0f0; }
+  .tag.blue { color: #1677ff; background: #e8f3ff; }
+  .tag.gray { color: #8b8fa3; background: #f5f5f5; }
+
+  /* Chat */
+  .chat-container {
+    max-width: 720px; margin: 0 auto; height: 100vh; display: flex; flex-direction: column;
+    background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.06);
+  }
+  .chat-container.hidden { display: none; }
+  .chat-topbar {
+    display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+    border-bottom: 1px solid var(--neutral-2); flex: none;
+  }
+  .chat-topbar .brand { display: flex; align-items: center; gap: 8px; }
+  .chat-topbar .brand img { width: 24px; height: 24px; border-radius: 6px; }
+  .chat-topbar .brand span { font-size: 13px; color: var(--neutral-5); }
+  .chat-topbar .spacer { flex: 1; }
+  .chat-topbar .user-chip {
+    display: flex; align-items: center; gap: 8px; text-align: right;
+  }
+  .chat-topbar .user-chip .uname { font-size: 14px; font-weight: 600; }
+  .chat-topbar .user-chip .uid { font-size: 11px; color: var(--neutral-5); }
+  .chat-topbar img.avatar-sm { width: 32px; height: 32px; border-radius: 10px; object-fit: cover; }
+  .switch-btn {
+    font-size: 12px; padding: 5px 14px; border: 1px solid var(--neutral-4); border-radius: 8px;
+    background: #fff; color: var(--neutral-7); cursor: pointer; flex: none;
+  }
+  .switch-btn:hover { border-color: var(--blue-6); color: var(--blue-6); }
+
+  /* Messages */
+  .message-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .msg-row { display: flex; gap: 10px; max-width: 80%; }
+  .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg-row.agent { align-self: flex-start; }
+  .msg-row img.avatar { width: 32px; height: 32px; border-radius: 999px; object-fit: cover; flex: none; align-self: flex-end; }
+  .bubble { padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.55; max-width: 400px; }
+  .msg-row.user .bubble { background: var(--blue-2); border-radius: 12px 12px 2px 12px; }
+  .msg-row.agent .bubble { background: var(--neutral-1); border-radius: 12px 12px 12px 2px; }
+  .bubble-time { font-size: 11px; color: var(--neutral-5); margin-top: 4px; }
+  .msg-row.user .bubble-time { text-align: right; }
+
+  /* Composer */
+  .composer-bar {
+    display: flex; align-items: flex-end; gap: 10px; padding: 12px 20px 20px;
+    border-top: 1px solid var(--neutral-2); flex: none;
+  }
+  .composer-bar textarea {
+    flex: 1; border: 1px solid var(--neutral-4); border-radius: 12px; padding: 10px 14px;
+    font-size: 14px; font-family: inherit; resize: none; outline: none; min-height: 42px;
+    max-height: 120px; line-height: 1.5;
+  }
+  .composer-bar textarea:focus { border-color: var(--blue-6); }
+  .send-btn {
+    padding: 10px 24px; border: none; border-radius: 12px; background: var(--blue-6);
+    color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; flex: none;
+  }
+  .send-btn:disabled { opacity: 0.35; cursor: default; }
+  .empty-hint { text-align: center; color: var(--neutral-5); font-size: 14px; padding: 40px; }
+  .msg-system { text-align: center; padding: 16px 0 8px; color: var(--neutral-4); font-size: 12px; user-select: none; }
+</style>
+</head>
+<body>
+<div class="modal-overlay" id="roleModal">
+  <div class="role-modal">
+    <h1>Select Your Role</h1>
+    <p class="sub">Choose a user identity to start chatting — the agent will see your messages in real time.</p>
+    <div class="role-grid" id="roleGrid"></div>
+  </div>
+</div>
+
+<div class="chat-container hidden" id="chatView">
+  <header class="chat-topbar">
+    <div class="brand" id="chatBrand"></div>
+    <div class="spacer"></div>
+    <div class="user-chip"><div><div class="uname" id="chatUserName"></div><div class="uid" id="chatUserId"></div></div><img class="avatar-sm" id="chatUserAvatar" src="" alt=""></div>
+    <button class="switch-btn" id="switchBtn">Switch Role</button>
+  </header>
+  <div class="message-area" id="messageArea"><div class="empty-hint">Loading conversation…</div></div>
+  <div class="composer-bar">
+    <textarea id="composerInput" rows="1" placeholder="Type a message…" disabled></textarea>
+    <button class="send-btn" id="sendBtn" disabled>Send</button>
+  </div>
+</div>
+
+<script>
+const LS_KEY = 'im_ticket_session_data';
+
+// Default session data — same as index.html
+const DEFAULT_DATA = [
+  { name:'Amelia Reed', avatar:'../../assets/crops/avatar01.jpg', source:'US-EINSEO', status:'Pending', id:'20491862', destination:'2016', country:'US', gender:'Female', age:'32', lastSeen:'2026-06-22 19:16:04', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-22 18:12', text:'Hi, my SmartHub Pro X200 keeps disconnecting from WiFi every few hours. I’ve tried restarting it but it doesn’t help.' },{ dir:'out', time:'2026-06-22 18:18', text:'I understand the frustration, Amelia. Let me check a few things — can you tell me when you first noticed this issue, and which firmware version the device is running?' },{ dir:'in', time:'2026-06-22 18:25', text:'Started about 3 days ago. The firmware says v2.4.1. I also noticed the LED blinks red twice every few minutes.' },{ dir:'out', time:'2026-06-22 18:32', text:'The red blink pattern suggests a connectivity loop. This needs a deeper diagnostic from our hardware team. Let me transfer you to a specialist who can run remote tests on your unit.' },{ system:true, time:'2026-06-22 18:33', text:'Chat transferred — waiting for hardware specialist' },{ dir:'in', time:'2026-06-22 19:16', text:'OK, I’ll wait. How long does the transfer usually take?' }] },
+  { name:'Klaus Crawley', avatar:'../../assets/crops/avatar02.jpg', source:'US-EINSEO', status:'Serving', id:'20647975', destination:'2016', country:'UK', gender:'Male', age:'47', lastSeen:'2026-06-23 02:46:58', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-23 09:15', text:'Hi, I need some help setting up my new SmartHub Pro X200. The quick start guide isn’t very clear.' },{ dir:'out', time:'2026-06-23 09:20', text:'No problem, Klaus! Which step are you stuck on? The setup has three stages: WiFi pairing, account linking, and device calibration.' },{ dir:'in', time:'2026-06-23 09:25', text:'I got through WiFi, but now it’s asking for a “pairing code” and I don’t see one anywhere in the box.' },{ dir:'out', time:'2026-06-23 09:28', text:'The pairing code is printed on a sticker on the bottom of the device — 8 digits. Can you check there?' },{ dir:'in', time:'2026-06-23 09:32', text:'Found it! Thanks. Now the app says “firmware update required” — should I do that now or skip it?' },{ dir:'out', time:'2026-06-23 09:35', text:'Definitely do the update now — it patches a known connectivity bug. It’ll take about 5 minutes and the device will restart. I’ll wait here if anything goes wrong.' }] },
+  { name:'Yuto Sato', avatar:'../../assets/crops/avatar03.jpg', source:'JP-Yavaota', status:'Unsolved', id:'20938411', destination:'1028', country:'JP', gender:'Male', age:'29', lastSeen:'2026-06-21 08:10:35', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-20 14:20', text:'I submitted a replacement request last week for my defective SmartHub Mini — request #R20260615-0034. The status still says “processing”. Can you check?' },{ dir:'out', time:'2026-06-20 14:25', text:'Let me pull up your replacement request now. One moment, Yuto.' },{ dir:'out', time:'2026-06-20 14:35', text:'I can see the request is with our warehouse team. The issue is that SmartHub Mini is currently out of stock in the JP warehouse — the replacement unit hasn’t been allocated yet. I’ve escalated this to the warehouse supervisor and marked it urgent.' },
+          { system:true, time:'2026-06-20 14:36', text:'Marked as Unresolved — escalated to warehouse supervisor' },{ dir:'in', time:'2026-06-20 14:40', text:'How long will that take? I’ve been waiting a week already and this is my primary home hub.' },{ dir:'out', time:'2026-06-20 14:45', text:'Completely understand the urgency. You should get an update within 24–48 hours. I’ve also noted that if stock doesn’t arrive by then, we’ll arrange cross-warehouse shipping from our KR center.' },{ dir:'in', time:'2026-06-21 08:10', text:'It’s been over 24 hours and I still haven’t heard anything. Can you follow up again?' }] },
+  { name:'Mia Turner', avatar:'../../assets/crops/avatar04.jpg', source:'GB-Kismloit', status:'Serving', id:'20751340', destination:'3015', country:'UK', gender:'Female', age:'36', lastSeen:'2026-06-22 11:32:47', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-22 10:15', text:'Hi, I need help registering my product warranty. I bought the SmartChef Air Fryer last week and the card says I need to register within 14 days.' },{ dir:'out', time:'2026-06-22 10:20', text:'Happy to help, Mia! Please share your order ID and the product model number — both are on your order confirmation email.' },{ dir:'in', time:'2026-06-22 10:25', text:'Order ID is GB-KS-20260615-0892. Model is SC-AF800. Where do I find the serial number?' },{ dir:'out', time:'2026-06-22 10:28', text:'The serial number is on the bottom of the unit next to the barcode — it starts with “SN” followed by 12 digits.' },{ dir:'in', time:'2026-06-22 10:35', text:'Found it — SN2406KT7931X. Can you register it now?' },{ dir:'out', time:'2026-06-22 10:40', text:'Done! Your warranty is now active through June 2028. You’ll get a confirmation email shortly. Is there anything else?' }] },
+  { name:'Lena Cole', avatar:'../../assets/crops/avatar05.jpg', source:'GB-Domifo', status:'Closed', id:'20377508', destination:'2410', country:'UK', gender:'Female', age:'41', lastSeen:'2026-06-20 22:05:12', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-18 09:20', text:'Hi, I returned an order 2 weeks ago and I still haven’t received my refund. Order #GB-DM-20260528-0451.' },{ dir:'out', time:'2026-06-18 09:25', text:'Let me look into this for you, Lena. One moment while I check the return and refund status.' },{ dir:'out', time:'2026-06-18 09:30', text:'I can see your return was received at our warehouse on June 2. The refund of £89.99 was processed on June 5 back to your original payment method. It typically takes 5–10 business days to appear on your statement.' },{ dir:'in', time:'2026-06-18 09:35', text:'Oh — I was checking the wrong card! Let me look at my other account… Yes, I see it now. It came through on June 12. Sorry for the confusion!' },{ dir:'out', time:'2026-06-18 09:38', text:'No worries at all, glad it’s sorted! Is there anything else I can help with today?' },{ dir:'in', time:'2026-06-18 09:40', text:'No that’s everything — thank you so much for checking, really appreciate it!' },{ system:true, time:'2026-06-18 09:42', text:'Chat ended' }] },
+  { name:'Nora Bell', avatar:'../../assets/crops/avatar06.jpg', source:'US-EINSEO', status:'Pending', id:'20564290', destination:'2016', country:'US', gender:'Female', age:'38', lastSeen:'2026-06-22 15:44:29', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-22 14:50', text:'Hi, I received my order #US-ES-20260610-1128 yesterday, but the package was damaged and one of the items is missing. The box had a tear on the side.' },{ dir:'out', time:'2026-06-22 15:10', text:'I’m sorry to hear about the damaged package, Nora. I’ve pulled up your order — it contains 3 items. Which one is missing? And do you have any photos of the damaged box?' },{ dir:'in', time:'2026-06-22 15:20', text:'The SmartChef Temperature Probe is missing. I took photos of the box — I can send them. The other two items are fine.' },{ dir:'out', time:'2026-06-22 15:30', text:'Thank you for the details. I’ve opened a missing-item case (#MIC-20260622-0047) and attached it to your order. Please upload the photos when you can, and I’ll review everything together.' },{ dir:'in', time:'2026-06-22 15:44', text:'Photos uploaded. Please let me know what the next steps are once you’ve reviewed them.' }] },
+  { name:'Ethan Park', avatar:'../../assets/crops/avatar07.jpg', source:'US-Lumora', status:'Serving', id:'20801429', destination:'2016', country:'US', gender:'Male', age:'34', lastSeen:'2026-06-23 06:24:10', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-22 20:30', text:'Hi, can you check my latest order? The tracking hasn’t updated in 4 days and it was supposed to arrive yesterday.' },{ dir:'out', time:'2026-06-22 20:35', text:'Sure, Ethan. Can you share the order ID or the tracking number? I’ll look into it right away.' },{ dir:'in', time:'2026-06-22 20:38', text:'Order #US-LM-20260615-0337. The last tracking update says “In Transit — Departed Regional Facility” on June 18, then nothing.' },{ dir:'out', time:'2026-06-22 20:45', text:'I’ve checked with the carrier — there’s a backlog at the Chicago distribution center due to severe weather last weekend. Your package is still in transit, just delayed. New ETA is June 25.' },{ dir:'in', time:'2026-06-22 20:50', text:'That’s frustrating. I needed it for a project this weekend. Is there any way to expedite?' },{ dir:'out', time:'2026-06-22 20:55', text:'I completely understand. Unfortunately we can’t expedite once it’s with the carrier, but I’ve added a $15 credit to your account for the inconvenience. You’ll see it in your next checkout.' },{ dir:'in', time:'2026-06-23 06:24', text:'OK, thanks for the credit. Please keep me posted if the tracking updates.' }] },
+  { name:'Sofia Grant', avatar:'../../assets/crops/avatar08.jpg', source:'CA-Mavion', status:'Unsolved', id:'20348017', destination:'1890', country:'CA', gender:'Female', age:'31', lastSeen:'2026-06-22 23:18:45', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-22 15:00', text:'Hi, I’m trying to submit my OA review but the product link is missing from my work order. The page just shows “Product not linked” when I try to proceed.' },{ dir:'out', time:'2026-06-22 15:08', text:'Let me check your work order, Sofia. Can you share the work order ID or your JoyHub user ID?' },{ dir:'in', time:'2026-06-22 15:12', text:'My user ID is 20348017. The work order is WO-20260615-0092 for the SmartChef Air Fryer review.' },{ dir:'out', time:'2026-06-22 15:20', text:'I can see the issue — the product mapping for this work order wasn’t saved properly when it was created. This is a known sync bug with OA-originated orders. I’ve flagged it to our engineering team.' },
+          { system:true, time:'2026-06-22 15:21', text:'Marked as Unresolved — engineering team investigating' },{ dir:'in', time:'2026-06-22 16:45', text:'Any update? My review deadline is tomorrow and I’m worried this won’t be fixed in time.' },{ dir:'out', time:'2026-06-22 17:00', text:'Still waiting on engineering — they’re investigating the sync issue. As a workaround, I can manually link the product on my end so you can submit. I’ll update you as soon as it’s done.' }] },
+  { name:'Noah Blake', avatar:'../../assets/crops/avatar09.jpg', source:'AU-Noretta', status:'Closed', id:'20261174', destination:'2204', country:'AU', gender:'Male', age:'44', lastSeen:'2026-06-20 13:40:02', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-19 16:00', text:'Hi, my account shows I was charged twice for my last order — #AU-NR-20260610-0562. Can you check?' },{ dir:'out', time:'2026-06-19 16:10', text:'Oh no, let me look into that right away, Noah. Let me pull up your billing history.' },{ dir:'out', time:'2026-06-19 16:18', text:'I can see two charges of AUD 129.00 on June 10. The second one is showing as “authorization hold” — it hasn’t actually been captured. This sometimes happens when the payment gateway retries. The hold should drop off within 3 business days.' },{ dir:'in', time:'2026-06-19 16:22', text:'OK, so I’ll get that back automatically? I don’t need to dispute it with my bank?' },{ dir:'out', time:'2026-06-19 16:25', text:'Correct — no need to dispute. The hold will expire automatically. I’ve also added a note to your account so if it doesn’t clear by June 23, we’ll manually reverse it.' },{ dir:'in', time:'2026-06-20 13:40', text:'Just checked — the hold dropped off today. Thanks for the clear explanation, really helpful!' },{ system:true, time:'2026-06-20 13:42', text:'Chat ended' }] },
+  { name:'Iris Wood', avatar:'../../assets/crops/avatar10.jpg', source:'GB-EINSEO', status:'Pending', id:'20977036', destination:'2016', country:'UK', gender:'Female', age:'39', lastSeen:'2026-06-23 01:12:33', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-22 22:30', text:'Hi, I’m trying to set up my new SmartHub but the app keeps crashing on the calibration step. I’m using an iPhone 14 with iOS 20.' },{ dir:'out', time:'2026-06-22 22:38', text:'Thanks for reaching out, Iris. This might be an app compatibility issue. Which version of the SmartHub app are you running?' },{ dir:'in', time:'2026-06-22 22:42', text:'Version 4.2.0 — I just downloaded it today from the App Store.' },{ dir:'out', time:'2026-06-22 22:50', text:'Version 4.2.0 has a known crash bug on iOS 20 during calibration. Our dev team is working on a hotfix. In the meantime, you can use the web-based setup at setup.smarthub.com — it bypasses the calibration bug entirely.' },{ dir:'in', time:'2026-06-22 23:30', text:'The web setup worked for the first two steps, but now I’m stuck on linking my account. It says “email already in use” but I only have one account.' },{ dir:'out', time:'2026-06-22 23:45', text:'That’s odd — it could be a duplicate record from an old system migration. I’m transferring your case to our account team who can merge the duplicates. They’ll pick this up shortly.' },{ system:true, time:'2026-06-22 23:46', text:'Chat transferred to account team' }] },
+  { name:'Lucas Hart', avatar:'../../assets/crops/avatar01.jpg', source:'US-EINSEO', status:'Converting', id:'20812345', destination:'3015', country:'US', gender:'Male', age:'28', lastSeen:'2026-06-23 09:15:22', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-23 08:30', text:'Hi, my 14-day trial ends tomorrow and I want to convert to a paid plan. Can you help me choose the right one?' },{ dir:'out', time:'2026-06-23 08:35', text:'Absolutely, Lucas! Based on your trial usage, you’ve been using the Pro features heavily — multi-device sync, advanced analytics, and custom automations. The Pro plan at $12.99/month would keep all of that. The Basic plan at $6.99 loses analytics and multi-device. Which sounds better?' },
+          { system:true, time:'2026-06-23 08:36', text:'Moved to In Conversion' },{ dir:'in', time:'2026-06-23 08:42', text:'Pro sounds right — I do use the analytics a lot. Is there an annual option? Monthly adds up.' },{ dir:'out', time:'2026-06-23 08:48', text:'Great choice! The annual Pro plan is $119.99/year — that saves you about 23% vs monthly. You also get priority support and early access to new features on annual.' },{ dir:'in', time:'2026-06-23 09:15', text:'Annual Pro sounds perfect. Can I use the same payment method from my trial signup?' }] },
+  { name:'Emma Cole', avatar:'../../assets/crops/avatar05.jpg', source:'GB-Domifo', status:'Converting', id:'20723890', destination:'2410', country:'UK', gender:'Female', age:'35', lastSeen:'2026-06-22 18:30:45', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-22 17:00', text:'Hi, I’m currently on the Basic plan but I need more device slots. I have 3 SmartHubs now and Basic only supports 2. Can I upgrade?' },{ dir:'out', time:'2026-06-22 17:08', text:'Hi Emma! Yes, you can upgrade anytime. The Family plan supports up to 5 devices and includes shared automations. It’s £15.99/month. Your unused Basic days will be prorated as credit toward the upgrade.' },
+          { system:true, time:'2026-06-22 17:09', text:'Moved to In Conversion' },{ dir:'in', time:'2026-06-22 17:15', text:'That sounds good. What about the annual Family plan? Is there a discount?' },{ dir:'out', time:'2026-06-22 17:22', text:'Annual Family is £159.99/year — saves you about 17% vs monthly. Plus you get free device setup support for any new SmartHubs you add within the year.' },{ dir:'in', time:'2026-06-22 18:00', text:'OK let’s do the annual Family plan. My payment method on file should still be valid — it’s the Visa ending in 4492.' },{ dir:'out', time:'2026-06-22 18:15', text:'I’ve initiated the upgrade. Since you’re switching from Basic annual, your remaining Basic time (4 months) converts to £21.33 credit. Your new total is £138.66. I’ll send a confirmation once it processes — should be within the hour.' }] },
+  { name:'Liam Chen', avatar:'../../assets/crops/avatar03.jpg', source:'JP-Yavaota', status:'New', id:'20998765', destination:'1028', country:'JP', gender:'Male', age:'26', lastSeen:'2026-06-23 10:05:18', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-23 10:05', text:'Hi, I just signed up and I’m a bit lost. The app asked me to connect a device but I haven’t bought anything yet — I just wanted to browse the product catalog first. Is that possible without a device?' }] },
+  { name:'Olivia Ross', avatar:'../../assets/crops/avatar06.jpg', source:'CA-Mavion', status:'New', id:'20887654', destination:'1890', country:'CA', gender:'Female', age:'30', lastSeen:'2026-06-23 08:42:30', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-23 08:42', text:'Hello, this is my first time using this platform. A friend recommended it for smart home setup. I’m not very technical — can you help me figure out what I need to get started?' }] },
+  { name:'Jacob Kim', avatar:'../../assets/crops/avatar07.jpg', source:'US-Lumora', status:'Replace', id:'20776543', destination:'2016', country:'US', gender:'Male', age:'42', lastSeen:'2026-06-21 14:20:15', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-20 10:00', text:'I received my SmartHub Pro X200 yesterday and it’s defective — it won’t power on at all. I’ve tried different outlets and cables. Order #US-LM-20260608-0291.' },{ dir:'out', time:'2026-06-20 10:12', text:'I’m sorry to hear that, Jacob. Let me verify your order and check replacement eligibility. One moment.' },{ dir:'out', time:'2026-06-20 10:20', text:'Your order is within the 30-day replacement window. I’ve initiated a replacement request. Before I proceed — can you confirm the device shows no physical damage? No drops, water exposure, etc.?' },{ dir:'in', time:'2026-06-20 10:30', text:'No damage at all. It’s brand new, just won’t turn on. The LED doesn’t even blink when I plug it in.' },{ dir:'out', time:'2026-06-20 10:40', text:'Thanks for confirming. I’ve opened replacement case #RPL-20260620-0083. The next step is for our quality team to review — they’ll likely approve the replacement within 24 hours and issue a return label for the defective unit. I’m handing this over to our replacement specialist who will take it from here.' },{ system:true, time:'2026-06-21 09:28', text:'Chat transferred — replacement specialist assigned' },{ dir:'out', time:'2026-06-21 09:30', text:'Hi Jacob, I’m taking over your replacement case from my colleague. I can see the quality review was approved this morning. I’ll now generate your prepaid return label and set up the replacement shipment. Do you need the replacement sent to the same address as your original order?' }] },
+  { name:'Ava Singh', avatar:'../../assets/crops/avatar08.jpg', source:'GB-Kismloit', status:'Replace', id:'20665432', destination:'3015', country:'UK', gender:'Female', age:'33', lastSeen:'2026-06-22 20:55:40', lastIsAgent:true, messages:[{ dir:'in', time:'2026-06-22 15:30', text:'Hi, the SmartChef Air Fryer I ordered arrived today but the digital display is cracked. The box looked fine on the outside so I think it was damaged before packing.' },{ dir:'out', time:'2026-06-22 15:40', text:'Oh no, that’s not acceptable — I’m sorry, Ava. Can you share a photo of the cracked display? And your order ID so I can pull up the details.' },{ dir:'in', time:'2026-06-22 15:50', text:'Order #GB-KS-20260614-0173. I’ve attached 3 photos — you can see the crack runs across the entire display panel.' },{ dir:'out', time:'2026-06-22 16:00', text:'I can see the damage clearly in the photos. This definitely qualifies for a replacement. I’ve noted the damage type as “pre-shipment display crack” and started the replacement workflow. I’m now transferring your case to our replacement processing team who will finalize everything.' },{ system:true, time:'2026-06-22 20:28', text:'Chat transferred — replacement processing team assigned' },{ dir:'out', time:'2026-06-22 20:30', text:'Hi Ava, I’ve picked up your replacement case. Your replacement has been approved and a new unit is being prepared for shipment. I just need to confirm your shipping address — is the original address at 42 Oak Lane, Manchester still correct?' }] },
+  { name:'Mason Lee', avatar:'../../assets/crops/avatar02.jpg', source:'AU-Noretta', status:'Serving', id:'20554321', destination:'2204', country:'AU', gender:'Male', age:'37', lastSeen:'2026-06-23 07:28:50', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-23 06:30', text:'Hi, I can’t log into my account this morning. It says “account locked for security reasons” but I haven’t done anything unusual.' },{ dir:'out', time:'2026-06-23 06:35', text:'Let me check your account security log, Mason. This can happen if there were multiple failed login attempts from an unfamiliar location. Can you confirm your JoyHub ID?' },{ dir:'in', time:'2026-06-23 06:38', text:'ID is 20554321. I did travel to Sydney this week — could that be it? I’m using hotel WiFi.' },{ dir:'out', time:'2026-06-23 06:45', text:'That explains it! Our system flagged the Sydney IP as unusual for your account (you’re normally based in Melbourne). It’s a security precaution. I’ve verified it’s really you and removed the lock. You should be able to log in now.' },{ dir:'in', time:'2026-06-23 07:28', text:'I’m back in, thanks! Is there a way to prevent this next time I travel? I go to Sydney every month.' }] },
+  { name:'Sophia Patel', avatar:'../../assets/crops/avatar04.jpg', source:'US-EINSEO', status:'Pending', id:'20443210', destination:'2016', country:'US', gender:'Female', age:'29', lastSeen:'2026-06-23 11:10:25', lastIsAgent:false, messages:[{ dir:'in', time:'2026-06-23 11:10', text:'Hi, I placed order #US-ES-20260619-1204 three days ago and it still says “Processing”. The product page said “Ships within 24 hours” — when will it actually ship? I need it for a birthday gift next week.' }] }
+];
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      // Merge dynamic fields from localStorage into DEFAULT_DATA (so avatar paths stay correct for this file's location)
+      const stored = JSON.parse(raw);
+      const merged = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      for (let i = 0; i < merged.length; i++) {
+        if (stored[i] && stored[i].messages) {
+          merged[i].messages = stored[i].messages;
+          merged[i].lastIsAgent = stored[i].lastIsAgent;
+          merged[i].lastSeen = stored[i].lastSeen;
+          if (stored[i].status) merged[i].status = stored[i].status;
+        }
+      }
+      return merged;
+    }
+  } catch (e) { /* ignore */ }
+  localStorage.setItem(LS_KEY, JSON.stringify(DEFAULT_DATA));
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function saveData(data) {
+  localStorage.setItem(LS_KEY, JSON.stringify(data));
+}
+
+let sessionData = loadData();
+let currentRoleIndex = null;
+
+const statusColors = { Pending:'orange', Serving:'green', Unsolved:'red', Converting:'blue', Closed:'gray', New:'green', Replace:'blue' };
+
+// Brand images (relative to src/pages/)
+const brandImgs = {
+  'US-EINSEO':'../../assets/crops/brand-einseo.png', 'US-Lumora':'../../assets/crops/brand-einseo.png',
+  'GB-Domifo':'../../assets/crops/brand-einseo.png', 'GB-Kismloit':'../../assets/crops/brand-einseo.png',
+  'GB-EINSEO':'../../assets/crops/brand-einseo.png', 'JP-Yavaota':'../../assets/crops/brand-einseo.png',
+  'CA-Mavion':'../../assets/crops/brand-einseo.png', 'AU-Noretta':'../../assets/crops/brand-einseo.png'
+};
+
+function renderRoleGrid() {
+  const grid = document.getElementById('roleGrid');
+  grid.innerHTML = sessionData.map((s, i) => {
+    const sc = statusColors[s.status] || 'gray';
+    return `<div class="role-card" data-index="${i}">
+      <img class="avatar" src="${s.avatar}" alt="">
+      <div class="info">
+        <div class="name">${s.name}</div>
+        <div class="meta">${s.country} · ${s.gender} · ${s.age} yrs</div>
+        <div class="row2"><span class="id">ID ${s.id}</span><span class="tag ${sc}">${s.status}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.role-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.dataset.index);
+      selectRole(idx);
+    });
+  });
+}
+
+function selectRole(index) {
+  currentRoleIndex = index;
+  const s = sessionData[index];
+  if (!s) return;
+
+  document.getElementById('roleModal').classList.add('hidden');
+  document.getElementById('chatView').classList.remove('hidden');
+
+  const bi = brandImgs[s.source] || '../../assets/crops/brand-einseo.png';
+  document.getElementById('chatBrand').innerHTML = `<img src="${bi}" alt=""><span>${s.source}</span>`;
+  document.getElementById('chatUserName').textContent = s.name;
+  document.getElementById('chatUserId').textContent = 'ID ' + s.id;
+  document.getElementById('chatUserAvatar').src = s.avatar;
+
+  document.getElementById('composerInput').disabled = false;
+  renderMessages();
+}
+
+function renderMessages() {
+  const s = sessionData[currentRoleIndex];
+  const area = document.getElementById('messageArea');
+  if (!s || !s.messages || !s.messages.length) {
+    area.innerHTML = '<div class="empty-hint">No messages yet. Say hello!</div>';
+    return;
+  }
+  area.innerHTML = s.messages.map(m => {
+    if (m.system) {
+      return `<div class="msg-system"><span>${m.text}</span>&nbsp;·&nbsp;<span>${formatChatTime(m.time)}</span></div>`;
+    }
+    const isUser = m.dir === 'in';
+    const avatar = isUser ? s.avatar : '../../assets/crops/agent01.jpg';
+    const cls = isUser ? 'user' : 'agent';
+    const timeStr = formatChatTime(m.time);
+    return `<div class="msg-row ${cls}">
+      <img class="avatar" src="${avatar}" alt="">
+      <div class="bubble"><div>${m.text}</div><div class="bubble-time">${timeStr}${isUser ? '' : '  — Noimz'}</div></div>
+    </div>`;
+  }).join('');
+  area.scrollTop = area.scrollHeight;
+}
+
+function timeStampNow() {
+  const now = new Date();
+  const pad = (v) => String(v).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+}
+
+function formatChatTime(dateStr) {
+  if (!dateStr) return '';
+  var date = new Date(dateStr);
+  var now = new Date();
+  var pad = function(n) { return n < 10 ? '0' + n : n; };
+  var diffSec = Math.floor((now - date) / 1000);
+  var diffMin = Math.floor(diffSec / 60);
+  var diffHour = Math.floor(diffMin / 60);
+  var isToday = date.getDate() === now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+  var yesterday = new Date(now); yesterday.setDate(yesterday.getDate() - 1);
+  var isYesterday = date.getDate() === yesterday.getDate() && date.getMonth() === yesterday.getMonth() && date.getFullYear() === yesterday.getFullYear();
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var timeStr = pad(date.getHours()) + ':' + pad(date.getMinutes());
+
+  if (diffSec < 60) return 'Just now';
+  if (diffMin < 60) return diffMin + ' min ago';
+  if (isToday) return 'Today ' + timeStr;
+  if (isYesterday) return 'Yesterday ' + timeStr;
+  if (diffHour < 168) return days[date.getDay()] + ' ' + timeStr;
+  if (date.getFullYear() === now.getFullYear()) return pad(date.getMonth()+1) + '-' + pad(date.getDate()) + ' ' + timeStr;
+  return date.getFullYear() + '-' + pad(date.getMonth()+1) + '-' + pad(date.getDate()) + ' ' + timeStr;
+}
+
+function sendMessage() {
+  const input = document.getElementById('composerInput');
+  const text = input.value.trim();
+  if (!text || currentRoleIndex === null) return;
+
+  const s = sessionData[currentRoleIndex];
+  const ts = timeStampNow();
+  s.messages.push({ dir:'in', text, time:ts });
+  s.lastSeen = ts;
+  s.lastIsAgent = false;
+  saveData(sessionData);
+  renderMessages();
+
+  input.value = '';
+  updateSendState();
+}
+
+function updateSendState() {
+  const btn = document.getElementById('sendBtn');
+  const input = document.getElementById('composerInput');
+  btn.disabled = !input.value.trim();
+}
+
+// Event listeners
+document.getElementById('sendBtn').addEventListener('click', sendMessage);
+document.getElementById('composerInput').addEventListener('input', updateSendState);
+document.getElementById('composerInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+document.getElementById('switchBtn').addEventListener('click', () => {
+  document.getElementById('chatView').classList.add('hidden');
+  document.getElementById('roleModal').classList.remove('hidden');
+  document.getElementById('composerInput').value = '';
+  updateSendState();
+});
+
+// Listen for agent replies from the other tab
+window.addEventListener('storage', (e) => {
+  if (e.key !== LS_KEY) return;
+  try {
+    const newData = JSON.parse(e.newValue);
+    if (newData) {
+      sessionData = newData;
+      if (currentRoleIndex !== null) renderMessages();
+    }
+  } catch (err) { /* ignore */ }
+});
+
+// Init
+renderRoleGrid();
+updateSendState();
+</script>
+</body>
+</html>
