@@ -1867,12 +1867,16 @@
 
     .oa-order-group {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(296px, 100%), 296px));
+      grid-template-columns: repeat(auto-fit, minmax(min(296px, 100%), 1fr));
       justify-content: start;
       align-items: stretch;
       gap: 12px;
       padding-top: 8px;
       padding-bottom: 8px;
+    }
+    .oa-order-group > .panel-head {
+      grid-column: 1 / -1;
+      width: 100%;
     }
 
     .oa-group-head {
@@ -1930,6 +1934,29 @@
       background: var(--neutral-1);
       border-color: var(--neutral-2);
     }
+    .product.is-new-order {
+      position: relative;
+      overflow: hidden;
+      border-color: #8fcbff;
+      background: #f3f9ff;
+      animation: oaNewOrderSettle 1.6s ease-out both;
+    }
+    .product.is-new-order::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.82) 45%, transparent 70%);
+      transform: translateX(-120%);
+      animation: oaNewOrderSweep 1.2s ease-out 0.18s both;
+      pointer-events: none;
+    }
+    @keyframes oaNewOrderSweep {
+      to { transform: translateX(120%); }
+    }
+    @keyframes oaNewOrderSettle {
+      0%, 68% { background: #f3f9ff; border-color: #8fcbff; }
+      100% { background: #fff; border-color: var(--neutral-1); }
+    }
 
     .product:last-of-type { border-bottom: 0; }
 
@@ -1966,6 +1993,9 @@
       min-height: 0;
       height: auto;
       padding: 12px 8px;
+    }
+    .oa-order-group .product.is-filter-hidden {
+      display: none;
     }
 
     .oa-order-group .product > img {
@@ -2139,6 +2169,10 @@
 
     .products.expanded .product-hidden-preview {
       display: grid;
+    }
+    .products.expanded .product.is-filter-hidden,
+    .products .product.is-filter-hidden {
+      display: none;
     }
 
     .products.hide-view-toggle .view-toggle,
@@ -2326,6 +2360,16 @@
       width: 16px;
       height: 16px;
       flex: none;
+    }
+    .oa-order-type-dropdown {
+      width: 100%;
+    }
+    .oa-order-type-dropdown .dropdown-trigger {
+      justify-content: flex-start;
+    }
+    .oa-order-type-dropdown .dropdown-label {
+      flex: 1;
+      text-align: left;
     }
     .oa-order-verify-row {
       width: 100%;
@@ -2555,17 +2599,22 @@
       min-width: 0;
     }
     .oa-create-currency {
-      width: 72px;
-      max-width: 72px;
+      width: 88px;
+      max-width: 88px;
       flex: none;
+      justify-content: space-between;
+    }
+    .oa-currency-dropdown .dropdown-menu {
+      min-width: 184px;
     }
     .oa-upload-box.has-image {
-      padding: 4px;
+      padding: 0;
+      overflow: hidden;
     }
     .oa-upload-box.has-image img {
-      width: 72px;
-      max-height: 72px;
-      object-fit: contain;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .oa-create-action.is-hidden {
       display: none;
@@ -2588,6 +2637,151 @@
       font-weight: 400;
       line-height: 16px;
       cursor: pointer;
+    }
+    .oa-order-group .product {
+      cursor: pointer;
+    }
+    .oa-detail-header {
+      justify-content: space-between;
+    }
+    .oa-detail-header > .search-all-header {
+      width: auto;
+      flex: 1;
+    }
+    #oaDetailDrawer {
+      gap: 16px;
+      padding-bottom: 12px;
+    }
+    #oaCreateDrawer {
+      padding-bottom: 12px;
+    }
+    #oaDetailDrawer .oa-create-form {
+      gap: 32px;
+      max-width: none;
+    }
+    .oa-detail-unbind {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--warning);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .oa-detail-unbind.is-bind {
+      color: var(--blue-6);
+    }
+    .oa-detail-unbind.is-hidden {
+      display: none;
+    }
+    .oa-readonly-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .oa-readonly-pill,
+    .oa-readonly-value {
+      max-width: 200px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      color: #000;
+      font-size: 14px;
+      line-height: 17px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .oa-readonly-value.oa-copy-value {
+      max-width: min(360px, 100%);
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      overflow-wrap: anywhere;
+      cursor: pointer;
+    }
+    .oa-readonly-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .oa-readonly-row .oa-create-field-label {
+      flex: none;
+    }
+    .oa-readonly-row .oa-readonly-value {
+      text-align: right;
+    }
+    .oa-readonly-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .oa-readonly-status {
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font-size: 10px;
+      line-height: 12px;
+    }
+    .oa-readonly-upload {
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .oa-readonly-upload img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .oa-readonly-pending {
+      color: var(--neutral-5);
+      font-size: 14px;
+      line-height: 17px;
+    }
+    .oa-readonly-input {
+      width: 100%;
+      min-height: 33px;
+      padding: 8px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+      font-size: 14px;
+      line-height: 17px;
+    }
+    #oaDetailEdit {
+      width: 100%;
+      max-width: none;
+    }
+    #oaCreateDrawer .oa-create-submit-row,
+    #oaDetailDrawer .oa-create-submit-row {
+      position: sticky;
+      bottom: 12px;
+      padding-top: 8px;
+      background: #fff;
+      z-index: 2;
+    }
+    .oa-review-filled,
+    .oa-refund-filled {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .oa-review-filled.is-hidden,
+    .oa-refund-filled.is-hidden,
+    .oa-readonly-pending.is-hidden {
+      display: none;
     }
     .search-all-section {
       display: flex; flex-direction: column; gap: 8px;
@@ -3051,7 +3245,7 @@
         <div class="session-tabs">
           <div style="display:flex;align-items:baseline;gap:8px">
             <div class="session-tab active" data-list-tab="Session" data-i18n="session.tab.session">Session</div>
-            <div class="session-tab" data-list-tab="Contacts" data-i18n="session.tab.contacts">Contacts</div>
+            <div class="session-tab" data-list-tab="Contacts" data-i18n="session.tab.contacts">To-do</div>
           </div>
           <div class="dropdown" id="statusDropdown">
             <button class="dropdown-trigger" type="button" data-i18n-tip="tip.statusFilter" data-tip-placement="bottom">
@@ -3225,23 +3419,24 @@
           <span class="panel-title">User OA Orders</span>
           <div class="dropdown oa-filter" id="oaOrderFilterDropdown">
             <button class="dropdown-trigger" type="button">
-              <span class="dropdown-label">Customer Orders</span>
+              <span class="dropdown-label">All</span>
               <img src="assets/icons/Property%201=down.svg" alt="">
             </button>
             <div class="dropdown-menu dropdown-right">
-              <div class="dropdown-item selected" data-value="Customer Orders" data-i18n-tip="tip.customerOrders" data-tip-placement="left">Customer Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item selected" data-value="All">All<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="Customer Orders" data-i18n-tip="tip.customerOrders" data-tip-placement="left">Customer Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
               <div class="dropdown-item" data-value="Pending Match Orders" data-i18n-tip="tip.pendingMatchOrders" data-tip-placement="left">Pending Match Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
               <div class="dropdown-item" data-value="Linked Orders" data-i18n-tip="tip.linkedOrders" data-tip-placement="left">Linked Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
             </div>
           </div>
         </div>
 
-      <section class="panel-card products oa-order-group">
+      <section class="panel-card products oa-order-group" data-order-type="RDO">
         <div class="panel-head">
-          <span class="oa-group-head"><span class="oa-group-title">Prompted Review Orders</span><span class="count blue">4</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
-          <button class="oa-create-btn" type="button" data-order-type="Prompted Review" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
+          <span class="oa-group-head"><span class="oa-group-title" data-i18n-tip="tip.rdo" data-tip-placement="left">RDO</span><span class="count blue">4</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+          <button class="oa-create-btn" type="button" data-order-type="RDO" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
         </div>
-        <article class="product">
+        <article class="product" data-match-type="Customer Orders">
           <img src="assets/crops/product-rose.png" alt="">
           <div class="product-copy">
             <div class="product-title">贵妃多多款五代-玫红-新APP</div>
@@ -3253,7 +3448,7 @@
           </div>
           <div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
-        <article class="product">
+        <article class="product" data-match-type="Linked Orders">
           <img src="assets/crops/product-mars.png" alt="">
           <div class="product-copy">
             <div class="product-title">狮子飞机杯</div>
@@ -3265,7 +3460,7 @@
           </div>
           <div class="product-actions"><button class="product-action" type="button">Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
-        <article class="product product-hidden-preview">
+        <article class="product product-hidden-preview" data-match-type="Pending Match Orders">
           <img src="assets/crops/product-angela.png" alt="">
           <div class="product-copy">
             <div class="product-title">安吉拉</div>
@@ -3277,7 +3472,7 @@
           </div>
           <div class="product-actions"><button class="product-action" type="button">Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
-        <article class="product product-hidden-preview">
+        <article class="product product-hidden-preview" data-match-type="Customer Orders">
           <img src="assets/crops/product-rose.png" alt="">
           <div class="product-copy">
             <div class="product-title">贵妃多多款五代-玫红-新APP</div>
@@ -3292,14 +3487,14 @@
         <button class="center-up view-toggle" type="button"><span>View All</span><img class="small-icon" src="assets/icons/ic_view_all_12.svg" alt=""></button>
       </section>
 
-      <section class="panel-card products compact oa-order-group">
+      <section class="panel-card products compact oa-order-group" data-order-type="RSO">
         <div class="panel-head">
-          <span class="oa-group-head"><span class="oa-group-title">Sponsored Review Orders</span>
+          <span class="oa-group-head"><span class="oa-group-title" data-i18n-tip="tip.rso" data-tip-placement="left">RSO</span>
           <span class="panel-actions"><span class="count blue">2</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
           </span>
-          <button class="oa-create-btn" type="button" data-order-type="Sponsored Review" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
+          <button class="oa-create-btn" type="button" data-order-type="RSO" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
         </div>
-        <article class="product">
+        <article class="product" data-match-type="Customer Orders">
           <img src="assets/crops/product-rose.png" alt="">
           <div class="product-copy">
             <div class="product-title">贵妃多多款五代-玫红-新APP</div>
@@ -3311,7 +3506,7 @@
           </div>
           <div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
-        <article class="product">
+        <article class="product" data-match-type="Pending Match Orders">
           <img src="assets/crops/product-mars.png" alt="">
           <div class="product-copy">
             <div class="product-title">狮子飞机杯</div>
@@ -3493,9 +3688,15 @@
         <div class="oa-create-form">
           <div class="oa-create-fieldset">
             <div class="oa-create-section-title">Order Type</div>
-            <div class="oa-create-input">
-              <span id="oaCreateOrderType">Prompted Review</span>
-              <img src="assets/icons/Property%201=down.svg" alt="">
+            <div class="dropdown oa-order-type-dropdown" id="oaOrderTypeDropdown">
+              <button class="oa-create-input dropdown-trigger" type="button">
+                <span class="dropdown-label" id="oaCreateOrderType">RDO</span>
+                <img src="assets/icons/Property%201=down.svg" alt="">
+              </button>
+              <div class="dropdown-menu dropdown-right">
+                <div class="dropdown-item selected" data-value="RDO" data-i18n-tip="tip.rdo" data-tip-placement="left">RDO<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+                <div class="dropdown-item" data-value="RSO" data-i18n-tip="tip.rso" data-tip-placement="left">RSO<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              </div>
             </div>
           </div>
           <div class="oa-create-block">
@@ -3504,7 +3705,7 @@
               <div class="oa-create-fieldset">
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Amazon Order No.</span></div>
                 <div class="oa-order-verify-row" id="oaOrderVerifyRow">
-                  <input class="oa-create-input-field" id="oaOrderNoInput" type="text" placeholder="XXX-XXXXXXX-XXXXXXX" aria-label="Amazon Order No.">
+                  <input class="oa-create-input-field" id="oaOrderNoInput" type="text" inputmode="numeric" maxlength="19" placeholder="XXX-XXXXXXX-XXXXXXX" aria-label="Amazon Order No.">
                   <button class="oa-order-verify-action" type="button" id="oaOrderVerifyButton" aria-label="Verify Amazon Order No.">
                     <span class="oa-order-verify-icon is-idle" id="oaOrderVerifyIcon" aria-hidden="true"></span>
                   </button>
@@ -3521,7 +3722,7 @@
               </div>
               <div class="oa-create-fieldset">
                 <div class="oa-create-field-label">Pre-submit Screenshot</div>
-                <button class="oa-upload-box" type="button" aria-label="Add pre-submit screenshot"><span class="oa-upload-plus" aria-hidden="true"></span></button>
+                <button class="oa-upload-box oa-demo-upload" type="button" id="oaPreSubmitUpload" aria-label="Add pre-submit screenshot"><span class="oa-upload-plus" aria-hidden="true"></span></button>
               </div>
             </div>
             <button class="oa-create-action" type="button" id="oaAddReviewInfo">Add Review Info <img src="assets/icons/ic_create_16.svg" alt=""></button>
@@ -3547,7 +3748,19 @@
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Refund Method</span></div>
                 <div class="oa-create-money-row">
                   <div class="oa-create-input"><input class="oa-create-input-field oa-required-field" id="oaRefundAmountInput" type="text" inputmode="decimal" data-i18n-ph="oa.placeholder.amount" placeholder="Please enter amount" aria-label="Refund amount"></div>
-                  <div class="oa-create-input oa-create-currency"><span>USD</span><img src="assets/icons/Property%201=down.svg" alt=""></div>
+                  <div class="dropdown oa-currency-dropdown" id="oaCurrencyDropdown">
+                    <button class="oa-create-input oa-create-currency dropdown-trigger" type="button">
+                      <span class="dropdown-label" id="oaRefundCurrency">USD</span><img src="assets/icons/Property%201=down.svg" alt="">
+                    </button>
+                    <div class="dropdown-menu dropdown-right">
+                      <div class="dropdown-item selected" data-value="USD"><span data-i18n="currency.usd">USD · US Dollar</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                      <div class="dropdown-item" data-value="EUR"><span data-i18n="currency.eur">EUR · Euro</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                      <div class="dropdown-item" data-value="GBP"><span data-i18n="currency.gbp">GBP · British Pound</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                      <div class="dropdown-item" data-value="JPY"><span data-i18n="currency.jpy">JPY · Japanese Yen</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                      <div class="dropdown-item" data-value="CAD"><span data-i18n="currency.cad">CAD · Canadian Dollar</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                      <div class="dropdown-item" data-value="AUD"><span data-i18n="currency.aud">AUD · Australian Dollar</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="oa-create-fieldset">
@@ -3562,6 +3775,67 @@
           </div>
           <div class="oa-create-submit-row">
             <button class="oa-submit-btn" type="button" id="oaCreateSubmit">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="drawer scroll-area oa-create-drawer" id="oaDetailDrawer">
+        <div class="search-all-header oa-detail-header">
+          <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#oaDetailDrawer'))">
+            <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
+            <span class="search-all-title">Back</span>
+          </button>
+          <button class="oa-detail-unbind" type="button" id="oaDetailUnbind">Unbind</button>
+        </div>
+        <div class="oa-create-form">
+          <div class="oa-create-fieldset">
+            <div class="oa-readonly-head">
+              <div class="oa-create-section-title">Order Type</div>
+              <div class="oa-readonly-pill" id="oaDetailOrderType">RDO</div>
+            </div>
+          </div>
+          <div class="oa-readonly-section">
+            <div class="oa-create-section-title">Order Info</div>
+            <div class="oa-order-product is-visible">
+              <img id="oaDetailProductImage" src="assets/crops/product-rose.png" alt="">
+              <div class="oa-order-product-info">
+                <div class="oa-order-product-title" id="oaDetailProductTitle">贵妃多多款五代-玫红-新APP</div>
+                <div class="oa-order-product-subtitle" id="oaDetailProductSubtitle">Rosethorn 2</div>
+                <div class="oa-order-product-tag" id="oaDetailProductCategory">03玫瑰花品类</div>
+              </div>
+            </div>
+            <div class="oa-readonly-row"><div class="oa-create-field-label">Amazon Order No.</div><div class="oa-readonly-value" id="oaDetailOrderNo">026-6986879-2656330</div></div>
+            <div class="oa-create-fieldset">
+              <div class="oa-create-field-label">Pre-submit Screenshot</div>
+              <div class="oa-readonly-upload"><img src="assets/crops/oa-uploaded-screenshot.png" alt=""></div>
+            </div>
+            <div class="oa-readonly-row"><div class="oa-create-field-label">Country</div><div class="oa-readonly-value">USA</div></div>
+            <div class="oa-readonly-row"><div class="oa-create-field-label">SKU</div><div class="oa-readonly-value">8212656330</div></div>
+            <div class="oa-readonly-row"><div class="oa-create-field-label">ASIN</div><div class="oa-readonly-value">8928171260</div></div>
+            <div class="oa-readonly-row"><div class="oa-create-field-label">Store/SID</div><div class="oa-readonly-value">1260</div></div>
+          </div>
+          <div class="oa-readonly-section" id="oaDetailReviewSection">
+            <div class="oa-readonly-head"><div class="oa-create-detail-title">Review Info</div><div class="oa-readonly-status">Pending</div></div>
+            <div class="oa-review-filled">
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Review ID</div><div class="oa-readonly-value">R123456</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Review Link</div><div class="oa-readonly-value oa-copy-value" id="oaDetailReviewLink" data-copy="http://page.quark.cn/baike?id=a93577d561c54570b5a117f1e67b8a1b">http://page.quark.cn/baike?id=a93577d561c54570b5a117f1e67b8a1b</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Screenshot</div><div class="oa-readonly-upload"><img src="assets/crops/oa-uploaded-screenshot.png" alt=""></div></div>
+            </div>
+            <div class="oa-readonly-pending oa-review-empty">Review info pending</div>
+          </div>
+          <div class="oa-readonly-section" id="oaDetailRefundSection">
+            <div class="oa-readonly-head"><div class="oa-create-detail-title">Refund Info</div><div class="oa-readonly-status">Pending</div></div>
+            <div class="oa-refund-filled">
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Refund ID</div><div class="oa-readonly-input">9001</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Review Type</div><div class="oa-readonly-input">Principal</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Refund Method</div><div class="oa-readonly-input">PayPal</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Amount</div><div class="oa-readonly-input">20 USD</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Account</div><div class="oa-readonly-input">user@mail.com</div></div>
+              <div class="oa-create-fieldset"><div class="oa-create-field-label">Collection Code</div><div class="oa-readonly-upload"><img src="assets/crops/oa-uploaded-screenshot.png" alt=""></div></div>
+            </div>
+            <div class="oa-readonly-pending oa-refund-empty">Refund info pending</div>
+          </div>
+          <div class="oa-create-submit-row">
+            <button class="oa-submit-btn" type="button" id="oaDetailEdit">Edit</button>
           </div>
         </div>
       </div>
@@ -3852,12 +4126,20 @@
       'tip.clock':                    ['View chat history','查看历史会话','履歴会話を表示'],
       'tip.aiOptimize':               ['AI optimize copy','AI优化文案','AIで文面を最適化'],
       'tip.createOaOrder':            ['Create OA Order','Create OA Order','OA注文を作成'],
+      'tip.rdo':                      ['Review Discount Order','Review Discount Order','Review Discount Order'],
+      'tip.rso':                      ['Review Solicitation Order','Review Solicitation Order','Review Solicitation Order'],
       'tip.customerOrders':           ['Shows all orders this customer has placed or participated in.','展示该客户下单或参与过的所有订单。','この顧客が注文または参加したすべての注文を表示します。'],
       'tip.pendingMatchOrders':       ['Shows orders with missing related information that may belong to the same customer and are waiting for details to be entered.','展示缺少关联信息、可能属于同一客户且等待补充信息的订单。','関連情報が不足し、同一顧客の可能性があり、詳細入力待ちの注文を表示します。'],
       'tip.linkedOrders':             ['Shows orders that may belong to the same customer, such as orders from other IM accounts with similar payment details or matching customer information.','展示可能属于同一客户的订单，例如来自其他 IM 账号但付款信息相似或客户信息匹配的订单。','同一顧客の可能性がある注文を表示します。例: 支払い情報が類似する、または顧客情報が一致する他のIMアカウントの注文。'],
       'oa.placeholder.link':          ['Please enter link','请输入链接','リンクを入力してください'],
       'oa.placeholder.amount':        ['Please enter amount','请输入金额','金額を入力してください'],
       'oa.placeholder.account':       ['Please enter account info','请输入账号信息','アカウント情報を入力してください'],
+      'currency.usd':                 ['USD · US Dollar','USD · 美元','USD · 米ドル'],
+      'currency.eur':                 ['EUR · Euro','EUR · 欧元','EUR · ユーロ'],
+      'currency.gbp':                 ['GBP · British Pound','GBP · 英镑','GBP · 英ポンド'],
+      'currency.jpy':                 ['JPY · Japanese Yen','JPY · 日元','JPY · 日本円'],
+      'currency.cad':                 ['CAD · Canadian Dollar','CAD · 加元','CAD · カナダドル'],
+      'currency.aud':                 ['AUD · Australian Dollar','AUD · 澳元','AUD · 豪ドル'],
       'topbar.lang':                  ['English','中文','日本語'],
       'topbar.status.online':         ['Online','在线','オンライン'],
       'rail.aria.primary':            ['Primary','主导航','メインナビゲーション'],
@@ -3870,7 +4152,7 @@
       'rail.subitem.campaigns':       ['Campaigns','营销活动','キャンペーン'],
       'rail.subitem.templates':       ['Templates','模板','テンプレート'],
       'session.tab.session':          ['Session','会话','セッション'],
-      'session.tab.contacts':         ['Contacts','联系人','連絡先'],
+      'session.tab.contacts':         ['To-do','To-do','To-do'],
       'status.all':                   ['All','全部','すべて'],
       'status.pending':               ['Pending','待接入','保留中'],
       'status.serving':               ['Serving','服务中','対応中'],
@@ -4149,13 +4431,13 @@
     // Brand image mapping
     const brandImages = {
       'US-EINSEO': 'assets/crops/brand-einseo.png',
-      'US-Lumora': 'assets/crops/brand-einseo.png',
-      'GB-Domifo': 'assets/crops/brand-einseo.png',
-      'GB-Kismloit': 'assets/crops/brand-einseo.png',
+      'US-Lumora': 'assets/crops/brand-lumora.png',
+      'GB-Domifo': 'assets/crops/brand-domifo.png',
+      'GB-Kismloit': 'assets/crops/brand-kismloit.png',
       'GB-EINSEO': 'assets/crops/brand-einseo.png',
-      'JP-Yavaota': 'assets/crops/brand-einseo.png',
-      'CA-Mavion': 'assets/crops/brand-einseo.png',
-      'AU-Noretta': 'assets/crops/brand-einseo.png'
+      'JP-Yavaota': 'assets/crops/brand-yavaota.png',
+      'CA-Mavion': 'assets/crops/brand-mavion.png',
+      'AU-Noretta': 'assets/crops/brand-noretta.png'
     };
     const transparentIcon = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
     const brandFallbackAttrs = `onerror="this.onerror=null;this.src='${transparentIcon}'"`;
@@ -4504,7 +4786,10 @@
         button.addEventListener('click', (event) => {
           event.stopPropagation();
           const orderType = document.getElementById('oaCreateOrderType');
-          if (orderType) orderType.textContent = button.dataset.orderType || 'Prompted Review';
+          if (orderType) orderType.textContent = button.dataset.orderType || 'RDO';
+          document.querySelectorAll('#oaOrderTypeDropdown .dropdown-item').forEach((item) => {
+            item.classList.toggle('selected', item.dataset.value === (button.dataset.orderType || 'RDO'));
+          });
           resetOaCreateForm();
           openDrawer(document.querySelector('#oaCreateDrawer'));
         });
@@ -4566,6 +4851,12 @@
         const value = icon.dataset.copy || icon.closest('.order-id')?.textContent.trim() || '';
         if (value) copyText(value);
       });
+    });
+    document.addEventListener('click', function(event) {
+      const copyValue = event.target.closest('.oa-copy-value[data-copy]');
+      if (!copyValue) return;
+      event.stopPropagation();
+      copyText(copyValue.dataset.copy);
     });
 
     const viewport = document.querySelector('.viewport');
@@ -5442,18 +5733,39 @@
     const oaReviewLinkInput = document.getElementById('oaReviewLinkInput');
     const oaRefundAmountInput = document.getElementById('oaRefundAmountInput');
     const oaRefundAccountInput = document.getElementById('oaRefundAccountInput');
+    const oaCurrencyDropdown = document.getElementById('oaCurrencyDropdown');
+    const oaPreSubmitUpload = document.getElementById('oaPreSubmitUpload');
     const oaReviewScreenshotUpload = document.getElementById('oaReviewScreenshotUpload');
     const oaCollectionCodeUpload = document.getElementById('oaCollectionCodeUpload');
     const oaCreateSubmit = document.getElementById('oaCreateSubmit');
+    const oaUploadedScreenshotSrc = 'assets/crops/oa-uploaded-screenshot.png';
+    const oaCopyIconSrc = 'assets/icons/ic_copy_12.svg';
+    let currentOaDetailCard = null;
+    let oaCreateMode = 'create';
     function isOaUploadReady(button) {
       return !!button?.classList.contains('has-image');
+    }
+    function formatAmazonOrderNo(value) {
+      const digits = value.replace(/\D/g, '').slice(0, 17);
+      const groups = [digits.slice(0, 3), digits.slice(3, 10), digits.slice(10, 17)].filter(Boolean);
+      return groups.join('-');
+    }
+    function formatRefundAmount(value) {
+      let next = value.replace(/[^\d.]/g, '');
+      const dotIndex = next.indexOf('.');
+      if (dotIndex !== -1) {
+        next = next.slice(0, dotIndex + 1) + next.slice(dotIndex + 1).replace(/\./g, '');
+        const parts = next.split('.');
+        next = parts[0] + '.' + (parts[1] || '').slice(0, 2);
+      }
+      return next;
     }
     function updateOaCreateSubmitState() {
       if (!oaCreateSubmit) return;
       const reviewReady = oaReviewInfoForm?.classList.contains('is-visible');
       const refundReady = oaRefundInfoForm?.classList.contains('is-visible');
-      const reviewComplete = reviewReady && !!oaReviewLinkInput?.value.trim() && isOaUploadReady(oaReviewScreenshotUpload);
-      const refundComplete = refundReady && !!oaRefundAmountInput?.value.trim() && !!oaRefundAccountInput?.value.trim() && isOaUploadReady(oaCollectionCodeUpload);
+      const reviewComplete = !reviewReady || (!!oaReviewLinkInput?.value.trim() && isOaUploadReady(oaReviewScreenshotUpload));
+      const refundComplete = !refundReady || (!!oaRefundAmountInput?.value.trim() && !!oaRefundAccountInput?.value.trim() && isOaUploadReady(oaCollectionCodeUpload));
       oaCreateSubmit.disabled = oaOrderVerifyState.value !== 'success' || !reviewComplete || !refundComplete;
     }
     function setOaOrderVerifyState(state) {
@@ -5477,11 +5789,20 @@
       updateOaCreateSubmitState();
     }
     function resetOaCreateForm() {
+      oaCreateMode = 'create';
       if (oaOrderVerifyState.timer) {
         window.clearTimeout(oaOrderVerifyState.timer);
         oaOrderVerifyState.timer = null;
       }
       if (oaOrderNoInput) oaOrderNoInput.value = '';
+      const productImg = oaOrderProductCard?.querySelector('img');
+      if (productImg) productImg.src = 'assets/crops/product-rose.png';
+      const productTitle = oaOrderProductCard?.querySelector('.oa-order-product-title');
+      if (productTitle) productTitle.textContent = '贵妃多多款五代-玫红-新APP';
+      const productSubtitle = oaOrderProductCard?.querySelector('.oa-order-product-subtitle');
+      if (productSubtitle) productSubtitle.textContent = 'Rosethorn 2';
+      const productTag = oaOrderProductCard?.querySelector('.oa-order-product-tag');
+      if (productTag) productTag.textContent = '03玫瑰花品类';
       if (oaReviewInfoForm) oaReviewInfoForm.classList.remove('is-visible');
       if (oaRefundInfoForm) oaRefundInfoForm.classList.remove('is-visible');
       if (oaAddReviewInfo) oaAddReviewInfo.classList.remove('is-hidden');
@@ -5489,24 +5810,79 @@
       [oaReviewLinkInput, oaRefundAmountInput, oaRefundAccountInput].forEach(function(input) {
         if (input) input.value = '';
       });
-      [oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
+      [oaPreSubmitUpload, oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
         if (!button) return;
         button.classList.remove('has-image');
         button.innerHTML = '<span class="oa-upload-plus" aria-hidden="true"></span>';
       });
       setOaOrderVerifyState('idle');
     }
+    function setOaCreateOrderType(orderType) {
+      const nextType = orderType === 'RSO' ? 'RSO' : 'RDO';
+      const label = document.getElementById('oaCreateOrderType');
+      if (label) label.textContent = nextType;
+      document.querySelectorAll('#oaOrderTypeDropdown .dropdown-item').forEach((item) => {
+        item.classList.toggle('selected', item.dataset.value === nextType);
+      });
+    }
+    function getOaCardData(card) {
+      if (!card) return null;
+      const copyLines = Array.from(card.querySelectorAll('.product-copy > div')).map((el) => el.textContent.trim()).filter(Boolean);
+      return {
+        orderType: card.closest('.oa-order-group')?.dataset.orderType || 'RDO',
+        matchType: card.dataset.matchType || card.querySelector('.mini-tags .mini-tag:first-child')?.textContent?.trim() || '',
+        image: card.querySelector(':scope > img')?.getAttribute('src') || 'assets/crops/product-rose.png',
+        title: card.querySelector('.product-title')?.textContent?.trim() || '贵妃多多款五代-玫红-新APP',
+        subtitle: copyLines[1] || 'Rosethorn 2',
+        category: card.querySelector('.category')?.textContent?.trim() || '03玫瑰花品类',
+        orderNo: card.querySelector('.order-id')?.childNodes[0]?.textContent?.trim() || '026-6986879-2656330',
+        hasFilledInfo: (card.dataset.matchType || '') === 'Customer Orders' && !card.classList.contains('product-hidden-preview')
+      };
+    }
+    function fillOaCreateFormFromCard(card) {
+      const data = getOaCardData(card);
+      if (!data) return;
+      resetOaCreateForm();
+      oaCreateMode = 'edit';
+      setOaCreateOrderType(data.orderType);
+      if (oaOrderNoInput) oaOrderNoInput.value = data.orderNo;
+      const productImg = oaOrderProductCard?.querySelector('img');
+      if (productImg) productImg.src = data.image;
+      const productTitle = oaOrderProductCard?.querySelector('.oa-order-product-title');
+      if (productTitle) productTitle.textContent = data.title;
+      const productSubtitle = oaOrderProductCard?.querySelector('.oa-order-product-subtitle');
+      if (productSubtitle) productSubtitle.textContent = data.subtitle;
+      const productTag = oaOrderProductCard?.querySelector('.oa-order-product-tag');
+      if (productTag) productTag.textContent = data.category;
+      setOaOrderVerifyState('success');
+      setOaUploadComplete(oaPreSubmitUpload);
+      if (data.hasFilledInfo) {
+        oaReviewInfoForm?.classList.add('is-visible');
+        oaRefundInfoForm?.classList.add('is-visible');
+        oaAddReviewInfo?.classList.add('is-hidden');
+        oaAddRefundInfo?.classList.add('is-hidden');
+        if (oaReviewLinkInput) oaReviewLinkInput.value = document.getElementById('oaDetailReviewLink')?.textContent?.trim() || 'http://page.quark.cn/baike?id=a93577d561c54570b5a117f1e67b8a1b';
+        if (oaRefundAmountInput) oaRefundAmountInput.value = '20';
+        if (oaRefundAccountInput) oaRefundAccountInput.value = 'user@mail.com';
+        setOaUploadComplete(oaReviewScreenshotUpload);
+        setOaUploadComplete(oaCollectionCodeUpload);
+      }
+      updateOaCreateSubmitState();
+    }
     function verifyOaOrderNo() {
       if (!oaOrderNoInput) return;
-      const orderNo = oaOrderNoInput.value.trim();
+      oaOrderNoInput.value = formatAmazonOrderNo(oaOrderNoInput.value);
+      const orderDigits = oaOrderNoInput.value.replace(/\D/g, '');
       setOaOrderVerifyState('loading');
       oaOrderVerifyState.timer = window.setTimeout(function() {
-        const shouldFail = !orderNo || orderNo.includes('000');
+        const shouldFail = orderDigits.length !== 17 || orderDigits.includes('000');
         setOaOrderVerifyState(shouldFail ? 'error' : 'success');
       }, 800);
     }
     if (oaOrderNoInput) {
       oaOrderNoInput.addEventListener('input', function() {
+        const formattedValue = formatAmazonOrderNo(oaOrderNoInput.value);
+        if (oaOrderNoInput.value !== formattedValue) oaOrderNoInput.value = formattedValue;
         if (oaOrderVerifyState.value !== 'idle') {
           if (oaOrderVerifyState.timer) {
             window.clearTimeout(oaOrderVerifyState.timer);
@@ -5545,21 +5921,189 @@
         addOaDetailForm(oaRefundInfoForm, 'Order status does not allow adding refund info yet.');
       });
     }
-    [oaReviewLinkInput, oaRefundAmountInput, oaRefundAccountInput].forEach(function(input) {
+    [oaReviewLinkInput, oaRefundAccountInput].forEach(function(input) {
       input?.addEventListener('input', updateOaCreateSubmitState);
     });
-    [oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
-      button?.addEventListener('click', function() {
-        button.classList.add('has-image');
-        button.innerHTML = '<img src="assets/crops/brand-einseo.png" alt="">';
+    if (oaRefundAmountInput) {
+      oaRefundAmountInput.addEventListener('input', function() {
+        const formattedValue = formatRefundAmount(oaRefundAmountInput.value);
+        if (oaRefundAmountInput.value !== formattedValue) oaRefundAmountInput.value = formattedValue;
         updateOaCreateSubmitState();
       });
+    }
+    if (oaCurrencyDropdown) {
+      const currencyLabel = oaCurrencyDropdown.querySelector('.dropdown-label');
+      oaCurrencyDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          if (currencyLabel) currencyLabel.textContent = item.dataset.value || 'USD';
+        });
+      });
+    }
+    function setOaUploadComplete(button) {
+      if (!button) return;
+      button.classList.add('has-image');
+      button.innerHTML = '<img src="' + oaUploadedScreenshotSrc + '" alt="">';
+      updateOaCreateSubmitState();
+    }
+    [oaPreSubmitUpload, oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
+      button?.addEventListener('click', function() {
+        setOaUploadComplete(button);
+      });
+    });
+    function createOaOrderCard(orderType) {
+      const article = document.createElement('article');
+      article.className = 'product is-new-order';
+      article.dataset.matchType = 'Customer Orders';
+      const orderNo = oaOrderNoInput?.value.trim() || '026-6986879-2656330';
+      article.innerHTML = [
+        '<img src="assets/crops/product-rose.png" alt="">',
+        '<div class="product-copy">',
+          '<div class="product-title">贵妃多多款五代-玫红-新APP</div>',
+          '<div>Rosethorn 2</div>',
+          '<div>2025-03-28 14:22:52</div>',
+          '<div class="category">03玫瑰花品类</div>',
+          '<div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Customer Orders</span><span class="mini-tag blue oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Pending Review</span></div>',
+          '<div class="order-id">' + orderNo + ' <img class="copy-icon" src="' + oaCopyIconSrc + '" width="12" height="12" data-copy="' + orderNo + '" alt=""></div>',
+        '</div>',
+        '<div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>'
+      ].join('');
+      return article;
+    }
+    function saveEditedOaOrderCard() {
+      if (!currentOaDetailCard) return;
+      const orderNo = oaOrderNoInput?.value.trim() || '026-6986879-2656330';
+      const orderId = currentOaDetailCard.querySelector('.order-id');
+      if (orderId) {
+        orderId.innerHTML = orderNo + ' <img class="copy-icon" src="' + oaCopyIconSrc + '" width="12" height="12" data-copy="' + orderNo + '" alt="">';
+      }
+      openOaDetailDrawer(currentOaDetailCard);
+      showToast('Saved');
+    }
+    function applyOaOrderFilter(value) {
+      const filterValue = value || document.querySelector('#oaOrderFilterDropdown .dropdown-item.selected')?.dataset.value || 'All';
+      document.querySelectorAll('.oa-order-group .product').forEach(function(card) {
+        const matchType = card.dataset.matchType || card.querySelector('.mini-tags .mini-tag:first-child')?.textContent?.trim() || '';
+        card.classList.toggle('is-filter-hidden', filterValue !== 'All' && matchType !== filterValue);
+      });
+    }
+    const oaOrderFilterDropdown = document.getElementById('oaOrderFilterDropdown');
+    if (oaOrderFilterDropdown) {
+      oaOrderFilterDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          applyOaOrderFilter(item.dataset.value);
+        });
+      });
+      applyOaOrderFilter('All');
+    }
+    function appendCreatedOaOrderCard(orderType) {
+      const targetType = orderType === 'RSO' ? 'RSO' : 'RDO';
+      const group = document.querySelector('.oa-order-group[data-order-type="' + targetType + '"]');
+      if (!group) return;
+      group.classList.add('expanded');
+      group.classList.remove('collapsed');
+      const count = group.querySelector('.count');
+      if (count) count.textContent = String((Number(count.textContent.trim()) || 0) + 1);
+      const card = createOaOrderCard(targetType);
+      const firstProduct = group.querySelector('.product');
+      group.insertBefore(card, firstProduct);
+      applyOaOrderFilter();
+      syncProductViewToggle(group);
+      card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      window.setTimeout(function() {
+        card.classList.remove('is-new-order');
+      }, 1800);
+    }
+    function setOaDetailFilled(section, prefix, filled) {
+      section?.querySelector('.oa-' + prefix + '-filled')?.classList.toggle('is-hidden', !filled);
+      section?.querySelector('.oa-' + prefix + '-empty')?.classList.toggle('is-hidden', filled);
+    }
+    function updateOaDetailBindButton(matchType) {
+      const button = document.getElementById('oaDetailUnbind');
+      if (!button) return;
+      const canToggle = matchType === 'Customer Orders' || matchType === 'Linked Orders';
+      button.classList.toggle('is-hidden', !canToggle);
+      button.classList.toggle('is-bind', matchType !== 'Customer Orders');
+      button.textContent = matchType === 'Customer Orders' ? 'Unbind' : 'Bind';
+    }
+    function setOaCardBindingState(card, bound) {
+      if (!card) return;
+      const matchType = bound ? 'Customer Orders' : 'Linked Orders';
+      card.dataset.matchType = matchType;
+      const relationTag = card.querySelector('.mini-tags .mini-tag:first-child');
+      if (relationTag) {
+        relationTag.classList.toggle('green', bound);
+        relationTag.classList.toggle('oa-status-bound-other', !bound);
+        relationTag.innerHTML = '<svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>' + matchType;
+      }
+      const bindButton = card.querySelector('.product-actions .product-action:first-child');
+      if (bindButton) {
+        bindButton.disabled = bound;
+        bindButton.textContent = 'Bind';
+      }
+      if (currentOaDetailCard === card) {
+        updateOaDetailBindButton(matchType);
+      }
+      applyOaOrderFilter();
+    }
+    function openOaDetailDrawer(card) {
+      if (!card) return;
+      const drawer = document.getElementById('oaDetailDrawer');
+      if (!drawer) return;
+      currentOaDetailCard = card;
+      const data = getOaCardData(card);
+      drawer.querySelector('#oaDetailOrderType').textContent = data.orderType;
+      drawer.querySelector('#oaDetailProductImage').src = data.image;
+      drawer.querySelector('#oaDetailProductTitle').textContent = data.title;
+      drawer.querySelector('#oaDetailProductSubtitle').textContent = data.subtitle;
+      drawer.querySelector('#oaDetailProductCategory').textContent = data.category;
+      drawer.querySelector('#oaDetailOrderNo').textContent = data.orderNo;
+      updateOaDetailBindButton(data.matchType);
+      setOaDetailFilled(drawer.querySelector('#oaDetailReviewSection'), 'review', data.hasFilledInfo);
+      setOaDetailFilled(drawer.querySelector('#oaDetailRefundSection'), 'refund', data.hasFilledInfo);
+      openDrawer(drawer);
+    }
+    document.querySelectorAll('.oa-order-group').forEach(function(group) {
+      group.addEventListener('click', function(event) {
+        const bindAction = event.target.closest('.product-actions .product-action:first-child');
+        if (bindAction) {
+          event.stopPropagation();
+          if (!bindAction.disabled) {
+            setOaCardBindingState(bindAction.closest('.product'), true);
+            showToast('Bound to current chat');
+          }
+          return;
+        }
+        if (event.target.closest('.oa-create-btn, .copy-icon')) return;
+        const card = event.target.closest('.product');
+        if (!card || !group.contains(card)) return;
+        openOaDetailDrawer(card);
+      });
+    });
+    document.getElementById('oaDetailEdit')?.addEventListener('click', function() {
+      if (!currentOaDetailCard) return;
+      fillOaCreateFormFromCard(currentOaDetailCard);
+      openDrawer(document.querySelector('#oaCreateDrawer'));
+    });
+    document.getElementById('oaDetailUnbind')?.addEventListener('click', function() {
+      if (!currentOaDetailCard) return;
+      const shouldBind = currentOaDetailCard.dataset.matchType !== 'Customer Orders';
+      setOaCardBindingState(currentOaDetailCard, shouldBind);
+      showToast(shouldBind ? 'Bound to current chat' : 'Unbound from current chat');
     });
     setOaOrderVerifyState('idle');
     if (oaCreateSubmit) {
       oaCreateSubmit.addEventListener('click', function() {
         if (oaCreateSubmit.disabled) return;
-        showToast('Submitted');
+        if (oaCreateMode === 'edit') {
+          saveEditedOaOrderCard();
+          return;
+        }
+        const orderType = document.getElementById('oaCreateOrderType')?.textContent?.trim() || 'RDO';
+        closeDrawer(document.querySelector('#oaCreateDrawer'));
+        window.setTimeout(function() {
+          appendCreatedOaOrderCard(orderType);
+          showToast('Submitted');
+        }, 280);
       });
     }
 
