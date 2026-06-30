@@ -101,6 +101,7 @@
       overflow: hidden;
       box-shadow: none;
       --assist-width: 310px;
+      --session-width: 344px;
       --rail-width: 200px;
       --topbar-height: 52px;
     }
@@ -311,7 +312,7 @@
       position: absolute;
       left: var(--rail-width);
       top: var(--topbar-height);
-      width: 344px;
+      width: var(--session-width);
       height: calc(100vh - var(--topbar-height));
       background: #fff;
       display: flex;
@@ -367,6 +368,7 @@
       width: 16px;
       height: 16px;
       opacity: 0.95;
+      flex: none;
     }
 
     .search-box {
@@ -386,6 +388,7 @@
 
     .search-box .search-input {
       color: var(--neutral-8) !important;
+      min-width: 0;
     }
 
     .search-box .search-input::placeholder {
@@ -397,7 +400,7 @@
       min-width: 0;
     }
 
-    .dropdown { position: relative; flex-shrink: 0; }
+    .dropdown { position: relative; flex-shrink: 0; overflow: visible; }
     .dropdown-trigger {
       height: 32px; padding: 0 4px 0 12px; display: flex; align-items: center;
       gap: 4px; border: 1px solid var(--neutral-2); border-radius: 6px;
@@ -429,6 +432,50 @@
     }
     .dropdown-item.selected .check { display: block; }
     .dropdown-item.danger { color: var(--error-dark); }
+    .global-tip-layer {
+      position: fixed;
+      z-index: 9999;
+      display: none;
+      pointer-events: none;
+      max-width: 200px;
+      padding: 8px;
+      border-radius: 4px;
+      background: var(--neutral-8);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      white-space: normal;
+      overflow-wrap: break-word;
+    }
+    .global-tip-layer::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--neutral-8);
+      transform: rotate(45deg);
+    }
+    .global-tip-layer[data-placement="left"]::after {
+      top: 50%;
+      right: -4px;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .global-tip-layer[data-placement="right"]::after {
+      top: 50%;
+      left: -4px;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .global-tip-layer[data-placement="top"]::after {
+      left: 50%;
+      bottom: -4px;
+      transform: translateX(-50%) rotate(45deg);
+    }
+    .global-tip-layer[data-placement="bottom"]::after {
+      left: 50%;
+      top: -4px;
+      transform: translateX(-50%) rotate(45deg);
+    }
 
     .session-list {
       flex: 1;
@@ -718,7 +765,7 @@
 
     .chat-header {
       position: absolute;
-      left: calc(var(--rail-width) + 344px);
+      left: calc(var(--rail-width) + var(--session-width));
       top: var(--topbar-height);
       right: 0;
       height: 72px;
@@ -810,7 +857,7 @@
 
     .chat {
       position: absolute;
-      left: calc(var(--rail-width) + 344px);
+      left: calc(var(--rail-width) + var(--session-width));
       top: calc(var(--topbar-height) + 72px);
       right: var(--assist-width);
       height: calc(100vh - var(--topbar-height) - 72px);
@@ -948,11 +995,21 @@
       position: absolute;
       top: calc(var(--topbar-height) + 72px);
       bottom: 0;
-      right: var(--assist-width);
       width: 8px;
       transform: translateX(4px);
       cursor: col-resize;
       z-index: 6;
+    }
+
+    .session-resize-handle {
+      top: var(--topbar-height);
+      left: calc(var(--rail-width) + var(--session-width));
+      bottom: 0;
+      transform: translateX(-4px);
+    }
+
+    .assist-resize-handle {
+      right: var(--assist-width);
     }
 
     .resize-handle::before {
@@ -963,7 +1020,11 @@
     }
 
     .resize-handle:hover::before,
-    .resizing .resize-handle::before {
+    .resizing .assist-resize-handle::before {
+      background: #d9dde5;
+    }
+
+    .session-resizing .session-resize-handle::before {
       background: #d9dde5;
     }
 
@@ -1314,6 +1375,62 @@
       justify-content: space-between;
     }
 
+    .composer-attachment-tray {
+      flex: none;
+      display: none;
+      gap: 6px;
+      max-width: calc(100% - 92px);
+      margin-bottom: 8px;
+      overflow-x: auto;
+    }
+
+    .composer-attachment-tray.has-files {
+      display: flex;
+    }
+
+    .attachment-chip {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 180px;
+      height: 26px;
+      padding: 0 8px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--neutral-8);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .attachment-chip.preview {
+      height: 58px;
+      max-width: 220px;
+      padding: 4px 8px 4px 4px;
+    }
+
+    .attachment-chip img {
+      width: 14px;
+      height: 14px;
+      opacity: 0.7;
+    }
+
+    .attachment-chip.preview img {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+      opacity: 1;
+    }
+
+    .attachment-chip span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .tool-row {
       display: flex;
       gap: 8px;
@@ -1332,8 +1449,17 @@
       cursor: pointer;
     }
 
+    .tool-btn:hover,
+    .tool-btn:focus-visible {
+      background: var(--neutral-3);
+    }
+
     .tool-btn.active {
       background: var(--purple-1);
+    }
+
+    #emojiButton.active {
+      background: var(--neutral-3);
     }
 
     .tool-btn img { width: 16px; height: 16px; }
@@ -1356,6 +1482,78 @@
     .send-btn:disabled {
       opacity: 0.3;
       cursor: default;
+    }
+
+    .emoji-popover {
+      position: absolute;
+      left: 12px;
+      bottom: 56px;
+      width: 394px;
+      max-height: 288px;
+      padding: 12px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      transition: opacity 120ms ease, transform 120ms ease, visibility 120ms ease;
+      z-index: 40;
+    }
+
+    .emoji-popover.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .emoji-popover::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      bottom: -5px;
+      width: 8px;
+      height: 8px;
+      border-right: 1px solid var(--neutral-3);
+      border-bottom: 1px solid var(--neutral-3);
+      border-bottom-right-radius: 4px;
+      background: #fff;
+      transform: rotate(45deg);
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 32px);
+      gap: 4px;
+      max-height: 264px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      padding-right: 10px;
+    }
+
+    .emoji-grid::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    .emoji-item {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .emoji-item:hover {
+      background: var(--neutral-2);
     }
 
     .right-panel {
@@ -1381,7 +1579,7 @@
       display: none;
     }
 
-    .assist-collapsed .resize-handle {
+    .assist-collapsed .assist-resize-handle {
       right: 0;
       cursor: default;
     }
@@ -1647,6 +1845,71 @@
       margin-top: 0;
     }
 
+    .oa-orders {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 0 0;
+    }
+
+    .oa-orders > .panel-head,
+    .oa-orders > .oa-order-group {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .oa-orders > .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .oa-order-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(296px, 100%), 296px));
+      justify-content: start;
+      align-items: stretch;
+      gap: 12px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .oa-group-head {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 28px;
+    }
+
+    .oa-group-title {
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .oa-create-btn {
+      margin-left: auto;
+      width: 24px;
+      height: 24px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .oa-create-btn:hover {
+      background: var(--neutral-3);
+    }
+
+    .oa-create-btn img {
+      width: 16px;
+      height: 16px;
+    }
+
     .product {
       display: grid;
       grid-template-columns: 80px minmax(0, 1fr);
@@ -1692,9 +1955,22 @@
       color: var(--neutral-8);
       font-size: 14px;
       font-weight: 600;
+      line-height: 18px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .oa-order-group .product {
+      grid-template-columns: 60px minmax(0, 1fr);
+      min-height: 0;
+      height: auto;
+      padding: 12px 8px;
+    }
+
+    .oa-order-group .product > img {
+      width: 60px;
+      height: 60px;
     }
 
     .category {
@@ -1736,6 +2012,48 @@
     .mini-tag.blue { background: #e8f3ff; color: var(--blue-6); }
     .mini-tag.red { background: var(--error-light); color: var(--error-dark); }
     .mini-tag.orange { background: #fff7e8; color: var(--warning); }
+
+    .oa-status-bound-other { background: var(--neutral-1); color: var(--neutral-7); }
+
+    .oa-order-status svg {
+      width: 12px;
+      height: 12px;
+      flex: none;
+      color: currentColor;
+    }
+
+    .oa-filter .dropdown-item {
+      font-weight: 400;
+    }
+
+    .product-actions {
+      grid-column: 1 / -1;
+      min-height: 32px;
+      padding-top: 8px;
+      border-top: 1px solid var(--neutral-1);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .product-action {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      border-radius: 20px;
+      color: var(--blue-6);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+      cursor: pointer;
+    }
+
+    .product-action:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
 
     .order-id {
       width: fit-content;
@@ -1901,6 +2219,13 @@
     .search-all-header {
       display: flex; align-items: center; gap: 8px; padding: 8px 0;
     }
+    button.search-all-header {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      cursor: pointer;
+    }
     .drawer-back { width: 16px; height: 16px; cursor: pointer; transform: rotate(180deg); }
     .search-all-title { font-size: 14px; font-weight: 600; color: var(--neutral-8); }
     .search-all-type {
@@ -1934,6 +2259,335 @@
     }
     .drawer .search-input::placeholder {
       color: var(--neutral-5);
+    }
+    .oa-create-drawer {
+      gap: 16px;
+    }
+    .oa-create-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .oa-create-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .oa-create-fieldset {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .oa-create-section-title {
+      color: #000;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+    }
+    .oa-create-input {
+      width: 100%;
+      min-height: 33px;
+      padding: 8px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #000;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+    }
+    .oa-create-input-field {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      border: 0;
+      padding: 0;
+      outline: none;
+      background: transparent;
+      color: var(--neutral-8);
+      font: inherit;
+    }
+    .oa-create-input-field::placeholder {
+      color: var(--neutral-5);
+    }
+    .oa-create-input span {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .oa-create-input img {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+    .oa-order-verify-row {
+      width: 100%;
+      min-height: 33px;
+      padding: 8px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 160ms ease, background-color 160ms ease;
+    }
+    .oa-order-verify-row.is-error {
+      border-color: var(--error-light);
+    }
+    .oa-order-verify-row.is-success {
+      border-color: var(--neutral-1);
+    }
+    .oa-order-verify-action {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      flex: none;
+      color: var(--neutral-8);
+      cursor: pointer;
+    }
+    .oa-order-verify-action:disabled {
+      cursor: default;
+    }
+    .oa-order-verify-icon {
+      width: 16px;
+      height: 16px;
+      display: block;
+      position: relative;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 16px 16px;
+    }
+    .oa-order-verify-icon::before,
+    .oa-order-verify-icon::after {
+      content: "";
+      position: absolute;
+      display: block;
+    }
+    .oa-order-verify-icon.is-idle {
+      background-image: url("assets/icons/ic_submit_arrow_flat_16.svg");
+    }
+    .oa-order-verify-icon.is-loading {
+      background-image: url("assets/icons/ic_loading_16.svg");
+      animation: oaSpin 0.8s linear infinite;
+    }
+    .oa-order-verify-icon.is-success::before {
+      width: 8px;
+      height: 4px;
+      border-left: 1.75px solid var(--success);
+      border-bottom: 1.75px solid var(--success);
+      left: 4px;
+      top: 5px;
+      transform: rotate(-45deg);
+      border-radius: 1px;
+    }
+    .oa-order-verify-icon.is-error {
+      background-image: url("assets/icons/ic_error_16.svg");
+    }
+    @keyframes oaSpin {
+      to { transform: rotate(360deg); }
+    }
+    .oa-order-product {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+    .oa-order-product.is-visible {
+      display: flex;
+    }
+    .oa-order-product img {
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      object-fit: contain;
+      flex: none;
+    }
+    .oa-order-product-info {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .oa-order-product-title {
+      color: var(--neutral-8);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 17px;
+    }
+    .oa-order-product-subtitle {
+      color: var(--neutral-7);
+      font-size: 12px;
+      line-height: 16px;
+    }
+    .oa-order-product-tag {
+      width: fit-content;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font-size: 10px;
+      line-height: 12px;
+    }
+    .oa-order-error {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background: var(--error-light);
+      color: var(--error-dark);
+      font-size: 10px;
+      line-height: 12px;
+      display: none;
+    }
+    .oa-order-error.is-visible {
+      display: block;
+    }
+    .oa-create-field-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-6);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+    }
+    .oa-create-required {
+      color: var(--error-dark);
+    }
+    .oa-upload-box {
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: var(--neutral-5);
+    }
+    .oa-upload-plus {
+      width: 40px;
+      height: 40px;
+      position: relative;
+    }
+    .oa-upload-plus::before,
+    .oa-upload-plus::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 1.5px;
+      border-radius: 999px;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+    }
+    .oa-upload-plus::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+    .oa-create-action {
+      width: 100%;
+      max-width: 300px;
+      min-height: 32px;
+      padding: 8px 16px;
+      border: 0;
+      border-radius: 20px;
+      background: var(--neutral-1);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-6);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      cursor: pointer;
+    }
+    .oa-submit-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .oa-create-action img {
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+    }
+    .oa-create-detail-form {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .oa-create-detail-form.is-visible {
+      display: flex;
+    }
+    .oa-create-detail-title {
+      color: #000;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+    }
+    .oa-create-money-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .oa-create-money-row .oa-create-input {
+      flex: 1;
+      min-width: 0;
+    }
+    .oa-create-currency {
+      width: 72px;
+      max-width: 72px;
+      flex: none;
+    }
+    .oa-upload-box.has-image {
+      padding: 4px;
+    }
+    .oa-upload-box.has-image img {
+      width: 72px;
+      max-height: 72px;
+      object-fit: contain;
+    }
+    .oa-create-action.is-hidden {
+      display: none;
+    }
+    .oa-create-submit-row {
+      display: flex;
+      justify-content: flex-start;
+    }
+    .oa-submit-btn {
+      width: 100%;
+      max-width: 300px;
+      min-height: 32px;
+      padding: 8px 4px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--neutral-8);
+      color: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      cursor: pointer;
     }
     .search-all-section {
       display: flex; flex-direction: column; gap: 8px;
@@ -2211,6 +2865,9 @@
     <symbol id="icon-refund-12" viewBox="0 0 12 12">
       <path d="M6 1.59961C8.43005 1.59961 10.4004 3.56995 10.4004 6C10.4004 8.43005 8.43005 10.4004 6 10.4004C3.56995 10.4004 1.59961 8.43005 1.59961 6C1.59961 3.56995 3.56995 1.59961 6 1.59961ZM6 2.40039C4.01178 2.40039 2.40039 4.01178 2.40039 6C2.40039 7.98822 4.01178 9.59961 6 9.59961C7.98822 9.59961 9.59961 7.98822 9.59961 6C9.59961 4.01178 7.98822 2.40039 6 2.40039ZM6 3.10938C6.12953 3.10949 6.25531 3.15923 6.34961 3.24805C6.44378 3.33689 6.50098 3.45865 6.50879 3.58789V3.90625C6.66317 3.95311 6.80982 4.01974 6.94629 4.10547C7.04117 4.16475 7.11791 4.22358 7.17676 4.27441L7.30566 4.40039L7.30859 4.40332C7.39392 4.50515 7.43607 4.63708 7.42578 4.76953C7.41543 4.90196 7.35296 5.02493 7.25293 5.1123C7.1528 5.19961 7.02225 5.24499 6.88965 5.2373C6.75904 5.22959 6.6368 5.17093 6.54785 5.0752C6.50783 5.03412 6.46235 4.99811 6.41309 4.96875L6.40625 4.96582C6.3158 4.90749 6.21406 4.86903 6.1084 4.85352L6.00195 4.8457C5.83046 4.84574 5.6948 4.90798 5.62793 4.98242L5.62207 4.98926C5.61003 5.00162 5.59981 5.01703 5.59375 5.0332C5.58834 5.04788 5.5856 5.0635 5.58594 5.0791C5.59003 5.11095 5.60346 5.15048 5.68066 5.2168C5.76884 5.29245 5.91932 5.38525 6.1748 5.51758L6.29199 5.57812C6.5896 5.73262 6.80282 5.85897 6.96191 5.98535L7.10449 6.11328C7.24851 6.25988 7.33911 6.41868 7.38867 6.60938L7.42578 6.8125L7.43164 6.9248C7.43363 7.18487 7.34286 7.43202 7.17188 7.64258L7.16992 7.64551C6.99509 7.85277 6.76545 8.00619 6.50879 8.08887V8.39844L6.49902 8.49805C6.4926 8.53058 6.4834 8.56295 6.4707 8.59375C6.44526 8.65533 6.4074 8.71162 6.36035 8.75879C6.31328 8.80586 6.25679 8.84362 6.19531 8.86914C6.13367 8.89461 6.06669 8.90729 6 8.90723C5.86631 8.90642 5.7373 8.85312 5.64258 8.75879C5.54774 8.66411 5.49315 8.53537 5.49219 8.40137V8.09277C5.33896 8.04643 5.19228 7.98016 5.05664 7.89453C4.92366 7.81481 4.80277 7.71705 4.69824 7.60254L4.69531 7.59863C4.60691 7.49711 4.56209 7.36476 4.57129 7.23047C4.58061 7.09614 4.64357 6.97027 4.74512 6.88184C4.84661 6.79379 4.97921 6.74953 5.11328 6.75879C5.24741 6.76819 5.37259 6.83027 5.46094 6.93164C5.46381 6.93488 5.47683 6.94812 5.50098 6.96777C5.52441 6.98683 5.55562 7.00982 5.59277 7.0332L5.69141 7.08594C5.79136 7.13136 5.89414 7.15328 5.99902 7.15332C6.17111 7.15321 6.30718 7.09094 6.37402 7.0166L6.37988 7.01074C6.39188 6.99845 6.40128 6.98291 6.40723 6.9668C6.41256 6.95213 6.41457 6.93648 6.41406 6.9209C6.40998 6.88873 6.39753 6.84861 6.32031 6.78223C6.23228 6.70661 6.0821 6.61395 5.82715 6.48145L5.70898 6.42188L5.70801 6.4209C5.31194 6.21531 5.06675 6.05947 4.89648 5.88672C4.70319 5.6907 4.60716 5.47323 4.57617 5.18652C4.55996 5.03775 4.57443 4.88727 4.61816 4.74414C4.66202 4.60089 4.73424 4.46687 4.83105 4.35254C4.99772 4.149 5.23067 3.99595 5.49219 3.91016V3.58789L5.50781 3.49316C5.5315 3.40022 5.58062 3.31472 5.65137 3.24805C5.74563 3.15941 5.87061 3.10949 6 3.10938Z" fill="currentColor"/>
     </symbol>
+    <symbol id="icon-im-12" viewBox="0 0 12 12">
+      <path d="M9.24985 2.09961C9.88498 2.09961 10.4002 2.61487 10.4002 3.25V7.75C10.4002 8.38513 9.88498 8.90039 9.24985 8.90039H4.3602C4.25397 8.90047 4.15313 8.94829 4.08676 9.03125L3.38071 9.91406C2.79018 10.6521 1.59946 10.2343 1.59946 9.28906V3.25C1.59946 2.61492 2.11479 2.09969 2.74985 2.09961H9.24985ZM2.74985 2.90039C2.55661 2.90047 2.40024 3.05675 2.40024 3.25V9.28906C2.40024 9.47809 2.63759 9.56159 2.75571 9.41406L3.46274 8.53125C3.68092 8.25878 4.01112 8.09969 4.3602 8.09961H9.24985C9.44315 8.09961 9.59946 7.9433 9.59946 7.75V3.25C9.59946 3.0567 9.44315 2.90039 9.24985 2.90039H2.74985ZM7.99985 6.09961C8.22076 6.09961 8.40024 6.27909 8.40024 6.5C8.40024 6.72091 8.22076 6.90039 7.99985 6.90039H3.99985C3.779 6.90031 3.59946 6.72087 3.59946 6.5C3.59946 6.27913 3.779 6.09969 3.99985 6.09961H7.99985ZM7.99985 4.09961C8.22076 4.09961 8.40024 4.27909 8.40024 4.5C8.40024 4.72091 8.22076 4.90039 7.99985 4.90039H3.99985C3.779 4.90031 3.59946 4.72087 3.59946 4.5C3.59946 4.27913 3.779 4.09969 3.99985 4.09961H7.99985Z" fill="currentColor"/>
+    </symbol>
   </svg>
   <main class="viewport" aria-label="IM Session Demo">
     <div class="topbar">
@@ -2219,7 +2876,7 @@
           <button class="topbar-pill active" type="button" data-tab-id="sessions"><span>Sessions</span><span class="close-btn" aria-hidden="true"></span></button>
         </div>
         <div class="topbar-right">
-          <button class="topbar-icon-btn" id="fullscreenToggle" aria-label="Expand" data-i18n-aria="topbar.aria.expand">
+          <button class="topbar-icon-btn" id="fullscreenToggle" aria-label="Expand" data-i18n-aria="topbar.aria.expand" data-i18n-tip="tip.fullscreen" data-tip-placement="bottom">
             <img src="assets/icons/ic_expand_fullscreen_16.svg" alt="">
           </button>
           <button class="topbar-icon-btn" aria-label="Messages">
@@ -2252,7 +2909,7 @@
     <nav class="rail" aria-label="Primary">
       <div class="rail-header">
         <img class="rail-logo" src="assets/crops/logo_1@3x.png" alt="">
-        <button class="rail-toggle" type="button" aria-label="Collapse sidebar">
+        <button class="rail-toggle" type="button" aria-label="Collapse sidebar" data-i18n-tip="tip.collapseSidebar" data-tip-placement="right">
           <img src="assets/icons/ic_side_nav_collapse_16.svg" alt="">
         </button>
       </div>
@@ -2397,7 +3054,7 @@
             <div class="session-tab" data-list-tab="Contacts" data-i18n="session.tab.contacts">Contacts</div>
           </div>
           <div class="dropdown" id="statusDropdown">
-            <button class="dropdown-trigger" type="button">
+            <button class="dropdown-trigger" type="button" data-i18n-tip="tip.statusFilter" data-tip-placement="bottom">
               <span class="dropdown-label" data-i18n="status.all">All</span>
               <img src="assets/icons/Property%201=down.svg" alt="">
             </button>
@@ -2415,7 +3072,7 @@
         </div>
         <div class="filters">
           <div class="dropdown" id="searchTypeDropdown">
-            <button class="dropdown-trigger" type="button">
+            <button class="dropdown-trigger" type="button" data-i18n-tip="tip.ticketFilter" data-tip-placement="bottom">
               <span class="dropdown-label" data-i18n="search.type.userId">User ID</span>
               <img src="assets/icons/Property%201=down.svg" alt="">
             </button>
@@ -2434,6 +3091,7 @@
       <div class="session-list scroll-area" id="sessionList">
       </div>
     </aside>
+    <div class="resize-handle session-resize-handle" aria-label="Resize session list"></div>
 
     <header class="chat-header">
       <div class="profile-head">
@@ -2447,7 +3105,7 @@
       <div class="header-actions">
         <div class="account-pill"><span class="muted" data-i18n="chat.label.destination">Destination account ID</span><strong>2016</strong><img class="small-icon copy-icon" src="assets/icons/ic_copy_16.svg" data-copy="2016" alt=""></div>
         <div class="dropdown" id="statusActionDropdown">
-          <button class="dropdown-trigger" type="button">
+          <button class="dropdown-trigger" type="button" data-i18n-tip="tip.sessionStatus" data-tip-placement="bottom">
             <span class="dropdown-label">Serving</span>
             <img src="assets/icons/Property%201=down.svg" alt="">
           </button>
@@ -2497,19 +3155,24 @@
       </div>
       <div class="composer">
         <div class="composer-input scroll-area" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Shift + Enter for new line. Start with “/” to select a Canned Response." data-i18n-placeholder="chat.composer.placeholder"></div>
+        <div class="emoji-popover" id="emojiPopover" aria-hidden="true">
+          <div class="emoji-grid" id="emojiGrid" role="listbox" aria-label="Emoji picker"></div>
+        </div>
+        <input id="fileUploadInput" type="file" multiple accept="image/*,video/*" hidden>
+        <div class="composer-attachment-tray" id="composerAttachmentTray" aria-live="polite"></div>
         <div class="composer-actions">
           <div class="tool-row">
-            <button class="tool-btn" data-i18n-aria="chat.composer.emoji" aria-label="Emoji"><img src="assets/icons/ic_emoji_16.svg" alt=""></button>
-            <button class="tool-btn" data-i18n-aria="chat.composer.attach" aria-label="Attach"><img src="assets/icons/ic_paperclip_16.svg" alt=""></button>
-            <button class="tool-btn" data-i18n-aria="chat.composer.card" aria-label="Card"><img src="assets/icons/ic_card_16.svg" alt=""></button>
-            <button class="tool-btn" data-i18n-aria="chat.composer.clock" aria-label="Clock"><img src="assets/icons/ic_clock_16.svg" alt=""></button>
-            <button class="tool-btn" id="aiToolButton" data-i18n-aria="chat.composer.ai" aria-label="AI reply"><img class="ai-icon-img" src="assets/icons/ic_ai_magic.svg" alt=""></button>
+            <button class="tool-btn" id="emojiButton" data-i18n-aria="chat.composer.emoji" data-i18n-tip="tip.emoji" data-tip-placement="top" aria-label="Emoji" aria-expanded="false" aria-controls="emojiPopover"><img src="assets/icons/ic_emoji_16.svg" alt=""></button>
+            <button class="tool-btn" id="attachButton" data-i18n-aria="chat.composer.attach" data-i18n-tip="tip.attach" data-tip-placement="top" aria-label="Attach"><img src="assets/icons/ic_paperclip_16.svg" alt=""></button>
+            <button class="tool-btn" data-i18n-aria="chat.composer.card" data-i18n-tip="tip.card" data-tip-placement="top" aria-label="Card"><img src="assets/icons/ic_card_16.svg" alt=""></button>
+            <button class="tool-btn" data-i18n-aria="chat.composer.clock" data-i18n-tip="tip.clock" data-tip-placement="top" aria-label="Clock"><img src="assets/icons/ic_clock_16.svg" alt=""></button>
+            <button class="tool-btn" id="aiToolButton" data-i18n-aria="chat.composer.ai" data-i18n-tip="tip.aiOptimize" data-tip-placement="top" aria-label="AI reply"><img class="ai-icon-img" src="assets/icons/ic_ai_magic.svg" alt=""></button>
           </div>
           <button class="send-btn" disabled data-i18n="chat.composer.send">Send</button>
         </div>
       </div>
     </section>
-    <div class="resize-handle" aria-label="Resize assistant panel"></div>
+    <div class="resize-handle assist-resize-handle" aria-label="Resize assistant panel"></div>
     <button class="side-collapse" type="button" aria-label="Toggle assistant panel" aria-expanded="true">
       <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
     </button>
@@ -2557,10 +3220,26 @@
       </section>
       </section>
 
-      <section class="panel-card products">
+      <section class="oa-orders">
         <div class="panel-head">
-          <span class="panel-title" data-i18n="panel.card.rdoProduct">Prompted Review Order</span>
-          <span class="panel-actions"><span class="count blue">6</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+          <span class="panel-title">User OA Orders</span>
+          <div class="dropdown oa-filter" id="oaOrderFilterDropdown">
+            <button class="dropdown-trigger" type="button">
+              <span class="dropdown-label">Customer Orders</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu dropdown-right">
+              <div class="dropdown-item selected" data-value="Customer Orders" data-i18n-tip="tip.customerOrders" data-tip-placement="left">Customer Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="Pending Match Orders" data-i18n-tip="tip.pendingMatchOrders" data-tip-placement="left">Pending Match Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="Linked Orders" data-i18n-tip="tip.linkedOrders" data-tip-placement="left">Linked Orders<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+            </div>
+          </div>
+        </div>
+
+      <section class="panel-card products oa-order-group">
+        <div class="panel-head">
+          <span class="oa-group-head"><span class="oa-group-title">Prompted Review Orders</span><span class="count blue">4</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+          <button class="oa-create-btn" type="button" data-order-type="Prompted Review" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
         </div>
         <article class="product">
           <img src="assets/crops/product-rose.png" alt="">
@@ -2569,9 +3248,10 @@
             <div>Rosethorn 2</div>
             <div>2025-03-28 14:22:52</div>
             <div class="category">03玫瑰花品类</div>
-            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be linked</span><span class="mini-tag red"><svg class="mini-tag-icon refund" aria-hidden="true"><use href="#icon-refund-12"></use></svg>Refund locked</span></div>
+            <div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Customer Orders</span><span class="mini-tag green oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Pending Review</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
           </div>
+          <div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <article class="product">
           <img src="assets/crops/product-mars.png" alt="">
@@ -2580,9 +3260,10 @@
             <div>MarsLion</div>
             <div>2024-03-20 06:30:15</div>
             <div class="category">01电动飞机杯品类</div>
-            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be linked</span><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be paid</span></div>
+            <div class="mini-tags"><span class="mini-tag oa-status-bound-other"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Linked Orders</span><span class="mini-tag blue oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Pending Payment</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
           </div>
+          <div class="product-actions"><button class="product-action" type="button">Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <article class="product product-hidden-preview">
           <img src="assets/crops/product-angela.png" alt="">
@@ -2591,9 +3272,10 @@
             <div>Angela</div>
             <div>2024-03-20 06:30:15</div>
             <div class="category">09穿戴+跳蛋品类</div>
-            <div class="mini-tags"><span class="mini-tag orange"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Cancelled</span><span class="mini-tag red"><svg class="mini-tag-icon refund" aria-hidden="true"><use href="#icon-refund-12"></use></svg>Refund locked</span></div>
+            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Pending Match Orders</span><span class="mini-tag red oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Review Failed</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
           </div>
+          <div class="product-actions"><button class="product-action" type="button">Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <article class="product product-hidden-preview">
           <img src="assets/crops/product-rose.png" alt="">
@@ -2602,39 +3284,20 @@
             <div>Rosethorn 2</div>
             <div>2025-03-28 14:22:52</div>
             <div class="category">03玫瑰花品类</div>
-            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be linked</span><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be paid</span></div>
+            <div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Customer Orders</span><span class="mini-tag orange oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Cancelled</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
           </div>
-        </article>
-        <article class="product product-hidden-preview">
-          <img src="assets/crops/product-rose.png" alt="">
-          <div class="product-copy">
-            <div class="product-title">贵妃多多款五代-玫红-新APP</div>
-            <div>Rosethorn 2</div>
-            <div>2025-03-28 14:22:52</div>
-            <div class="category">03玫瑰花品类</div>
-            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be linked</span><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be paid</span></div>
-            <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
-          </div>
-        </article>
-        <article class="product product-hidden-preview">
-          <img src="assets/crops/product-rose.png" alt="">
-          <div class="product-copy">
-            <div class="product-title">贵妃多多款五代-玫红-新APP</div>
-            <div>Rosethorn 2</div>
-            <div>2025-03-28 14:22:52</div>
-            <div class="category">03玫瑰花品类</div>
-            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be linked</span><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>To be paid</span></div>
-            <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="026-6986879-2656330" alt=""></div>
-          </div>
+          <div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <button class="center-up view-toggle" type="button"><span>View All</span><img class="small-icon" src="assets/icons/ic_view_all_12.svg" alt=""></button>
       </section>
 
-      <section class="panel-card products compact">
+      <section class="panel-card products compact oa-order-group">
         <div class="panel-head">
-          <span class="panel-title" data-i18n="panel.card.rsoProduct">Sponsored Review Order</span>
+          <span class="oa-group-head"><span class="oa-group-title">Sponsored Review Orders</span>
           <span class="panel-actions"><span class="count blue">2</span><img class="small-icon collapse-arrow product-toggle-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+          </span>
+          <button class="oa-create-btn" type="button" data-order-type="Sponsored Review" data-i18n-tip="tip.createOaOrder" data-tip-placement="left" aria-label="Create OA order"><img src="assets/icons/ic_create_16.svg" alt=""></button>
         </div>
         <article class="product">
           <img src="assets/crops/product-rose.png" alt="">
@@ -2643,9 +3306,10 @@
             <div>Rosethorn 2</div>
             <div>2025-03-28 14:22:52</div>
             <div class="category">03玫瑰花品类</div>
-            <div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Completed</span></div>
+            <div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Customer Orders</span><span class="mini-tag green oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Completed</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" data-copy="026-6986879-2656330" alt=""></div>
           </div>
+          <div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <article class="product">
           <img src="assets/crops/product-mars.png" alt="">
@@ -2654,11 +3318,13 @@
             <div>MarsLion</div>
             <div>2024-03-20 06:30:15</div>
             <div class="category">01电动飞机杯品类</div>
-            <div class="mini-tags"><span class="mini-tag green"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Completed</span></div>
+            <div class="mini-tags"><span class="mini-tag blue"><svg class="mini-tag-icon order" aria-hidden="true"><use href="#icon-order-12"></use></svg>Pending Match Orders</span><span class="mini-tag green oa-order-status"><svg class="mini-tag-icon" aria-hidden="true"><use href="#icon-im-12"></use></svg>Completed</span></div>
             <div class="order-id">026-6986879-2656330 <img class="copy-icon" src="assets/icons/ic_copy_12.svg" data-copy="026-6986879-2656330" alt=""></div>
           </div>
+          <div class="product-actions"><button class="product-action" type="button">Bind</button><button class="product-action" type="button">View Detail</button></div>
         </article>
         <button class="center-up view-toggle" type="button"><span>View All</span><img class="small-icon" src="assets/icons/ic_view_all_12.svg" alt=""></button>
+      </section>
       </section>
 
       <section class="panel-card products">
@@ -2817,6 +3483,86 @@
         <div class="search-all-section">
           <div class="search-all-section-label">Results</div>
           <div class="search-all-cards" id="workorderDrawerResults"></div>
+        </div>
+      </div>
+      <div class="drawer scroll-area oa-create-drawer" id="oaCreateDrawer">
+        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#oaCreateDrawer'))">
+          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
+          <span class="search-all-title">Back</span>
+        </button>
+        <div class="oa-create-form">
+          <div class="oa-create-fieldset">
+            <div class="oa-create-section-title">Order Type</div>
+            <div class="oa-create-input">
+              <span id="oaCreateOrderType">Prompted Review</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </div>
+          </div>
+          <div class="oa-create-block">
+            <div class="oa-create-block">
+              <div class="oa-create-section-title">Order Info</div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Amazon Order No.</span></div>
+                <div class="oa-order-verify-row" id="oaOrderVerifyRow">
+                  <input class="oa-create-input-field" id="oaOrderNoInput" type="text" placeholder="XXX-XXXXXXX-XXXXXXX" aria-label="Amazon Order No.">
+                  <button class="oa-order-verify-action" type="button" id="oaOrderVerifyButton" aria-label="Verify Amazon Order No.">
+                    <span class="oa-order-verify-icon is-idle" id="oaOrderVerifyIcon" aria-hidden="true"></span>
+                  </button>
+                </div>
+                <div class="oa-order-product" id="oaOrderProductCard">
+                  <img src="assets/crops/product-rose.png" alt="">
+                  <div class="oa-order-product-info">
+                    <div class="oa-order-product-title">贵妃多多款五代-玫红-新APP</div>
+                    <div class="oa-order-product-subtitle">Rosethorn 2</div>
+                    <div class="oa-order-product-tag">03玫瑰花品类</div>
+                  </div>
+                </div>
+                <div class="oa-order-error" id="oaOrderError">Invalid Amazon order number. Please try another.</div>
+              </div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label">Pre-submit Screenshot</div>
+                <button class="oa-upload-box" type="button" aria-label="Add pre-submit screenshot"><span class="oa-upload-plus" aria-hidden="true"></span></button>
+              </div>
+            </div>
+            <button class="oa-create-action" type="button" id="oaAddReviewInfo">Add Review Info <img src="assets/icons/ic_create_16.svg" alt=""></button>
+            <div class="oa-create-detail-form" id="oaReviewInfoForm">
+              <div class="oa-create-detail-title">Review Info</div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Review Link</span></div>
+                <div class="oa-create-input"><input class="oa-create-input-field oa-required-field" id="oaReviewLinkInput" type="text" data-i18n-ph="oa.placeholder.link" placeholder="Please enter link" aria-label="Review Link"></div>
+              </div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Submit Screenshot</span></div>
+                <button class="oa-upload-box oa-demo-upload" type="button" id="oaReviewScreenshotUpload" data-upload-target="review" aria-label="Submit screenshot"><span class="oa-upload-plus" aria-hidden="true"></span></button>
+              </div>
+            </div>
+            <button class="oa-create-action" type="button" id="oaAddRefundInfo">Add Refund Info <img src="assets/icons/ic_create_16.svg" alt=""></button>
+            <div class="oa-create-detail-form" id="oaRefundInfoForm">
+              <div class="oa-create-detail-title">Refund Info</div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Review Type</span></div>
+                <div class="oa-create-input"><span>Principal</span><img src="assets/icons/Property%201=down.svg" alt=""></div>
+              </div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Refund Method</span></div>
+                <div class="oa-create-money-row">
+                  <div class="oa-create-input"><input class="oa-create-input-field oa-required-field" id="oaRefundAmountInput" type="text" inputmode="decimal" data-i18n-ph="oa.placeholder.amount" placeholder="Please enter amount" aria-label="Refund amount"></div>
+                  <div class="oa-create-input oa-create-currency"><span>USD</span><img src="assets/icons/Property%201=down.svg" alt=""></div>
+                </div>
+              </div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Account</span></div>
+                <div class="oa-create-input"><input class="oa-create-input-field oa-required-field" id="oaRefundAccountInput" type="text" data-i18n-ph="oa.placeholder.account" placeholder="Please enter account info" aria-label="Account"></div>
+              </div>
+              <div class="oa-create-fieldset">
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Collection Code</span></div>
+                <button class="oa-upload-box oa-demo-upload" type="button" id="oaCollectionCodeUpload" data-upload-target="collection" aria-label="Collection code"><span class="oa-upload-plus" aria-hidden="true"></span></button>
+              </div>
+            </div>
+          </div>
+          <div class="oa-create-submit-row">
+            <button class="oa-submit-btn" type="button" id="oaCreateSubmit">Submit</button>
+          </div>
         </div>
       </div>
     </aside>
@@ -3094,6 +3840,24 @@
       'topbar.aria.expand':           ['Expand','展开','展開'],
       'topbar.aria.exitFullscreen':   ['Exit fullscreen','退出全屏','全画面を終了'],
       'topbar.aria.messages':         ['Messages','消息','メッセージ'],
+      'tip.fullscreen':               ['Show fullscreen','全屏展示','全画面表示'],
+      'tip.collapseSidebar':          ['Collapse','收起','折りたたむ'],
+      'tip.expandSidebar':            ['Expand','展开','展開'],
+      'tip.statusFilter':             ['Set status filter','设置状态筛选项','ステータスフィルターを設定'],
+      'tip.ticketFilter':             ['Set ticket filter','设置工单筛选项','チケットフィルターを設定'],
+      'tip.sessionStatus':            ['Set session status','设置会话状态','セッション状態を設定'],
+      'tip.emoji':                    ['Add emoji','添加emoji','絵文字を追加'],
+      'tip.attach':                   ['Upload images and videos','上传图片和视频','画像と動画をアップロード'],
+      'tip.card':                     ['Send card','发送卡片','カードを送信'],
+      'tip.clock':                    ['View chat history','查看历史会话','履歴会話を表示'],
+      'tip.aiOptimize':               ['AI optimize copy','AI优化文案','AIで文面を最適化'],
+      'tip.createOaOrder':            ['Create OA Order','Create OA Order','OA注文を作成'],
+      'tip.customerOrders':           ['Shows all orders this customer has placed or participated in.','展示该客户下单或参与过的所有订单。','この顧客が注文または参加したすべての注文を表示します。'],
+      'tip.pendingMatchOrders':       ['Shows orders with missing related information that may belong to the same customer and are waiting for details to be entered.','展示缺少关联信息、可能属于同一客户且等待补充信息的订单。','関連情報が不足し、同一顧客の可能性があり、詳細入力待ちの注文を表示します。'],
+      'tip.linkedOrders':             ['Shows orders that may belong to the same customer, such as orders from other IM accounts with similar payment details or matching customer information.','展示可能属于同一客户的订单，例如来自其他 IM 账号但付款信息相似或客户信息匹配的订单。','同一顧客の可能性がある注文を表示します。例: 支払い情報が類似する、または顧客情報が一致する他のIMアカウントの注文。'],
+      'oa.placeholder.link':          ['Please enter link','请输入链接','リンクを入力してください'],
+      'oa.placeholder.amount':        ['Please enter amount','请输入金额','金額を入力してください'],
+      'oa.placeholder.account':       ['Please enter account info','请输入账号信息','アカウント情報を入力してください'],
       'topbar.lang':                  ['English','中文','日本語'],
       'topbar.status.online':         ['Online','在线','オンライン'],
       'rail.aria.primary':            ['Primary','主导航','メインナビゲーション'],
@@ -3294,6 +4058,7 @@
       document.querySelectorAll('[data-i18n-ph]').forEach(function(el) { el.placeholder = t(el.dataset.i18nPh); });
       document.querySelectorAll('[data-i18n-aria]').forEach(function(el) { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) { el.setAttribute('data-placeholder', t(el.dataset.i18nPlaceholder)); });
+      document.querySelectorAll('[data-i18n-tip]').forEach(function(el) { el.setAttribute('data-tip', t(el.dataset.i18nTip)); });
       // Dynamic render — re-render everything
       renderCurrentList();
       if (currentSessionIndex !== null) selectSession(currentSessionIndex);
@@ -3303,6 +4068,7 @@
       document.querySelectorAll('.products').forEach(syncProductViewToggle);
       updateDashFilterSummary();
       if (dashInitialized && document.querySelector('.viewport.workspace-dashboard')) switchDashTab(currentDashTab());
+      if (typeof updateRailToggleTip === 'function') updateRailToggleTip();
       // Status dropdown
       var sl = document.querySelector('#statusActionDropdown .dropdown-label');
       if (sl && currentSessionIndex !== null) { sl.textContent = t('status.' + sessionData[currentSessionIndex].status.toLowerCase()); populateStatusActions(sessionData[currentSessionIndex].status); }
@@ -3734,6 +4500,15 @@
     document.querySelectorAll('.products').forEach((card) => {
       const toggle = card.querySelector('.view-toggle');
       const arrow = card.querySelector('.product-toggle-arrow');
+      card.querySelectorAll('.oa-create-btn').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const orderType = document.getElementById('oaCreateOrderType');
+          if (orderType) orderType.textContent = button.dataset.orderType || 'Prompted Review';
+          resetOaCreateForm();
+          openDrawer(document.querySelector('#oaCreateDrawer'));
+        });
+      });
       card.classList.add('expanded');
       card.classList.remove('collapsed');
       syncProductViewToggle(card);
@@ -3834,6 +4609,37 @@
     const aiLikeButton = document.getElementById('aiLikeButton');
     const aiDislikeButton = document.getElementById('aiDislikeButton');
     const aiToolButton = document.getElementById('aiToolButton');
+    const emojiButton = document.getElementById('emojiButton');
+    const emojiPopover = document.getElementById('emojiPopover');
+    const emojiGrid = document.getElementById('emojiGrid');
+    const attachButton = document.getElementById('attachButton');
+    const fileUploadInput = document.getElementById('fileUploadInput');
+    const composerAttachmentTray = document.getElementById('composerAttachmentTray');
+    const composerEmojiList = [
+      '😀','😃','😄','😁','😆','😅','😂','🤣','🙂','😉',
+      '😊','😇','🥰','😍','😘','😗','😙','😚','😋','😛',
+      '😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','🤐','🤨',
+      '😐','😑','😶','🙄','😏','😒','😬','🤥','😌','😔',
+      '😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵',
+      '🥶','🥴','😵','🤯','🤠','🥳','😎','🤓','🧐','😕',
+      '😟','🙁','☹️','😮','😯','😲','😳','🥺','😦','😧',
+      '😨','😰','😥','😢','😭','😱','😖','😣','😞','😓',
+      '😩','😫','🥱','😤','😡','😠','🤬','😈','👿','💀',
+      '💩','🤡','👻','👽','🤖','🎃','😺','😸','😹','😻',
+      '👍','👎','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙',
+      '👈','👉','👆','👇','☝️','✋','🤚','🖐️','🖖','👋',
+      '🤝','👏','🙌','👐','🤲','🙏','✍️','💅','💪','🦾',
+      '👀','👁️','🧠','🫀','🫁','🦷','🦴','👄','💋','👂',
+      '❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔',
+      '❣️','💕','💞','💓','💗','💖','💘','💝','💟','💯',
+      '✅','❌','❎','⭐','🌟','✨','⚡','🔥','💥','🎉',
+      '🎊','🎁','🏆','🥇','📦','🚚','🛒','💳','💰','🧾',
+      '📷','🎥','📎','📝','📌','📍','🔔','⏰','☎️','📞',
+      '✉️','💬','🔍','🔒','🔓','🔧','🛠️','💡','⚠️','❗',
+      '❓','‼️','⁉️','🔴','🟠','🟡','🟢','🔵','🟣','⚫'
+    ];
+    let composerFiles = [];
+    let composerSavedRange = null;
     let aiState = 'hidden';
     let aiSuggestion = '';
     let aiSourceMessage = '';
@@ -3849,13 +4655,82 @@
     }
 
     function updateSendState() {
-      sendButton.disabled = composerText().length === 0;
+      sendButton.disabled = composerText().length === 0 && composerFiles.length === 0;
     }
 
     function setComposerText(value) {
       composerInput.textContent = value;
       updateSendState();
       composerInput.focus();
+    }
+
+    function saveComposerRange() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0);
+      if (composerInput.contains(range.commonAncestorContainer)) {
+        composerSavedRange = range.cloneRange();
+      }
+    }
+
+    function restoreComposerRange() {
+      composerInput.focus();
+      const selection = window.getSelection();
+      if (!selection) return;
+      selection.removeAllRanges();
+      if (composerSavedRange) selection.addRange(composerSavedRange);
+      else {
+        const range = document.createRange();
+        range.selectNodeContents(composerInput);
+        range.collapse(false);
+        selection.addRange(range);
+      }
+    }
+
+    function insertEmoji(emoji) {
+      restoreComposerRange();
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(emoji));
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      saveComposerRange();
+      updateSendState();
+    }
+
+    function setEmojiPopoverOpen(open) {
+      if (!emojiPopover || !emojiButton) return;
+      emojiPopover.classList.toggle('open', open);
+      emojiPopover.setAttribute('aria-hidden', open ? 'false' : 'true');
+      emojiButton.classList.toggle('active', open);
+      emojiButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function renderComposerFiles() {
+      if (!composerAttachmentTray) return;
+      composerAttachmentTray.querySelectorAll('.attachment-chip.preview img').forEach((img) => {
+        URL.revokeObjectURL(img.src);
+      });
+      composerAttachmentTray.innerHTML = composerFiles.map(file => {
+        const isImage = file.type && file.type.startsWith('image/');
+        const previewSrc = isImage ? URL.createObjectURL(file) : '';
+        return `
+        <span class="attachment-chip${isImage ? ' preview' : ''}" title="${escapeHtml(file.name)}">
+          <img src="${isImage ? previewSrc : 'assets/icons/ic_paperclip_16.svg'}" alt="">
+          <span>${escapeHtml(file.name)}</span>
+        </span>`;
+      }).join('');
+      composerAttachmentTray.classList.toggle('has-files', composerFiles.length > 0);
+      updateSendState();
+    }
+
+    function clearComposerFiles() {
+      composerFiles = [];
+      if (fileUploadInput) fileUploadInput.value = '';
+      renderComposerFiles();
     }
 
     function buildComposerOptimization(text) {
@@ -4061,6 +4936,48 @@
       });
     }
 
+    if (emojiGrid) {
+      emojiGrid.innerHTML = composerEmojiList.map(emoji => `<button class="emoji-item" type="button" role="option">${emoji}</button>`).join('');
+      emojiGrid.addEventListener('click', (event) => {
+        const item = event.target.closest('.emoji-item');
+        if (!item) return;
+        insertEmoji(item.textContent);
+        setEmojiPopoverOpen(false);
+      });
+    }
+
+    if (emojiButton) {
+      emojiButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        saveComposerRange();
+        setEmojiPopoverOpen(!emojiPopover.classList.contains('open'));
+      });
+    }
+
+    if (emojiPopover) {
+      emojiPopover.addEventListener('click', (event) => event.stopPropagation());
+    }
+
+    if (attachButton && fileUploadInput) {
+      attachButton.addEventListener('click', () => {
+        setEmojiPopoverOpen(false);
+        fileUploadInput.click();
+      });
+      fileUploadInput.addEventListener('change', () => {
+        composerFiles = Array.from(fileUploadInput.files || []).filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
+        renderComposerFiles();
+        if (composerFiles.length > 0) showToast(`${composerFiles.length} file${composerFiles.length > 1 ? 's' : ''} selected`);
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('#emojiPopover, #emojiButton')) setEmojiPopoverOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setEmojiPopoverOpen(false);
+    });
+
     function timeStampNow() {
       const now = new Date();
       const pad = (value) => String(value).padStart(2, '0');
@@ -4068,8 +4985,10 @@
     }
 
     function sendComposerMessage(options) {
-      const text = composerText();
-      if (!text) return;
+      const baseText = composerText();
+      if (!baseText && composerFiles.length === 0) return;
+      const attachmentText = composerFiles.map(file => `[Attachment] ${file.name}`).join('\n');
+      const text = [baseText, attachmentText].filter(Boolean).join('\n');
       const messageOptions = options || {};
       const shouldMarkAiGenerated = messageOptions.aiGenerated === true || composerAiOptimized;
       const ts = timeStampNow();
@@ -4091,16 +5010,20 @@
       composerInput.textContent = '';
       composerOriginalText = '';
       setComposerAiToolActive(false);
+      clearComposerFiles();
       updateSendState();
     }
 
     composerInput.addEventListener('input', () => {
+      saveComposerRange();
       updateSendState();
       if (composerAiOptimized && composerText() !== buildComposerOptimization(composerOriginalText)) {
         composerOriginalText = '';
         setComposerAiToolActive(false);
       }
     });
+    composerInput.addEventListener('keyup', saveComposerRange);
+    composerInput.addEventListener('mouseup', saveComposerRange);
     composerInput.addEventListener('compositionstart', () => {
       composerComposing = true;
     });
@@ -4156,19 +5079,86 @@
       });
     });
 
-    const resizeHandle = document.querySelector('.resize-handle');
+    const globalTip = document.createElement('div');
+    globalTip.className = 'global-tip-layer';
+    globalTip.setAttribute('role', 'tooltip');
+    document.body.appendChild(globalTip);
+
+    function hideGlobalTip() {
+      globalTip.style.display = 'none';
+    }
+
+    function showGlobalTip(target) {
+      const text = target.dataset.tip;
+      if (!text) return;
+      const placement = target.dataset.tipPlacement || 'top';
+      globalTip.textContent = text;
+      globalTip.dataset.placement = placement;
+      globalTip.style.display = 'block';
+      globalTip.style.left = '0px';
+      globalTip.style.top = '0px';
+
+      const gap = 12;
+      const viewportPadding = 8;
+      const targetRect = target.getBoundingClientRect();
+      const tipRect = globalTip.getBoundingClientRect();
+      let left = targetRect.left + (targetRect.width - tipRect.width) / 2;
+      let top = targetRect.top - tipRect.height - gap;
+
+      if (placement === 'left') {
+        left = targetRect.left - tipRect.width - gap;
+        top = targetRect.top + (targetRect.height - tipRect.height) / 2;
+      } else if (placement === 'right') {
+        left = targetRect.right + gap;
+        top = targetRect.top + (targetRect.height - tipRect.height) / 2;
+      } else if (placement === 'bottom') {
+        top = targetRect.bottom + gap;
+      }
+
+      left = Math.max(viewportPadding, Math.min(left, window.innerWidth - tipRect.width - viewportPadding));
+      top = Math.max(viewportPadding, Math.min(top, window.innerHeight - tipRect.height - viewportPadding));
+      globalTip.style.left = `${left}px`;
+      globalTip.style.top = `${top}px`;
+    }
+
+    document.addEventListener('mouseover', (event) => {
+      const target = event.target.closest('[data-tip]');
+      if (!target) return;
+      showGlobalTip(target);
+    });
+    document.addEventListener('mouseout', (event) => {
+      const target = event.target.closest('[data-tip]');
+      if (!target || target.contains(event.relatedTarget)) return;
+      hideGlobalTip();
+    });
+    document.addEventListener('scroll', hideGlobalTip, true);
+    window.addEventListener('resize', hideGlobalTip);
+
+    const resizeHandle = document.querySelector('.assist-resize-handle');
+    const sessionResizeHandle = document.querySelector('.session-resize-handle');
     const minAssistWidth = 310;
+    const minSessionWidth = 240;
+    const maxSessionWidth = 344;
     let lastAssistWidth = 310;
+    let lastSessionWidth = 344;
 
     function maxAssistWidth() {
       var railW = parseFloat(getComputedStyle(viewport).getPropertyValue('--rail-width')) || 200;
-      return (window.innerWidth - railW - 344) * 0.6;
+      var sessionW = parseFloat(getComputedStyle(viewport).getPropertyValue('--session-width')) || lastSessionWidth;
+      return (window.innerWidth - railW - sessionW) * 0.6;
     }
 
     function setAssistWidth(width) {
       const nextWidth = Math.max(minAssistWidth, Math.min(maxAssistWidth(), width));
       lastAssistWidth = nextWidth;
       viewport.style.setProperty('--assist-width', `${nextWidth}px`);
+    }
+
+    function setSessionWidth(width) {
+      const nextWidth = Math.max(minSessionWidth, Math.min(maxSessionWidth, width));
+      lastSessionWidth = nextWidth;
+      viewport.style.setProperty('--session-width', `${nextWidth}px`);
+      setAssistWidth(lastAssistWidth);
     }
 
     document.querySelector('.side-collapse').addEventListener('click', (event) => {
@@ -4200,6 +5190,27 @@
 
     resizeHandle.addEventListener('pointerup', stopResize);
     resizeHandle.addEventListener('pointercancel', stopResize);
+
+    sessionResizeHandle.addEventListener('pointerdown', (event) => {
+      sessionResizeHandle.setPointerCapture(event.pointerId);
+      viewport.classList.add('session-resizing');
+      event.preventDefault();
+    });
+
+    sessionResizeHandle.addEventListener('pointermove', (event) => {
+      if (!sessionResizeHandle.hasPointerCapture(event.pointerId)) return;
+      var railW = parseFloat(getComputedStyle(viewport).getPropertyValue('--rail-width')) || 200;
+      setSessionWidth(event.clientX - railW);
+    });
+
+    function stopSessionResize(event) {
+      if (!sessionResizeHandle.hasPointerCapture(event.pointerId)) return;
+      sessionResizeHandle.releasePointerCapture(event.pointerId);
+      viewport.classList.remove('session-resizing');
+    }
+
+    sessionResizeHandle.addEventListener('pointerup', stopSessionResize);
+    sessionResizeHandle.addEventListener('pointercancel', stopSessionResize);
 
     function initDropdowns() {
       document.querySelectorAll('.dropdown').forEach(function(dropdown) {
@@ -4384,9 +5395,20 @@
       });
     });
 
-    document.querySelector('.rail-toggle').addEventListener('click', function() {
-      document.querySelector('.viewport').classList.toggle('rail-collapsed');
-    });
+    const railToggle = document.querySelector('.rail-toggle');
+    function updateRailToggleTip() {
+      if (!railToggle) return;
+      const collapsed = document.querySelector('.viewport').classList.contains('rail-collapsed');
+      railToggle.dataset.i18nTip = collapsed ? 'tip.expandSidebar' : 'tip.collapseSidebar';
+      railToggle.dataset.tip = t(railToggle.dataset.i18nTip);
+    }
+    if (railToggle) {
+      railToggle.addEventListener('click', function() {
+        document.querySelector('.viewport').classList.toggle('rail-collapsed');
+        updateRailToggleTip();
+      });
+      updateRailToggleTip();
+    }
 
     renderWorkspaceTabs();
     updateWorkspaceView();
@@ -4401,6 +5423,144 @@
     function closeDrawer(drawer) {
       drawer.classList.remove('active');
       document.querySelector('.tool-list').style.display = '';
+    }
+
+    const oaOrderVerifyState = {
+      value: 'idle',
+      timer: null
+    };
+    const oaOrderNoInput = document.getElementById('oaOrderNoInput');
+    const oaOrderVerifyRow = document.getElementById('oaOrderVerifyRow');
+    const oaOrderVerifyButton = document.getElementById('oaOrderVerifyButton');
+    const oaOrderVerifyIcon = document.getElementById('oaOrderVerifyIcon');
+    const oaOrderProductCard = document.getElementById('oaOrderProductCard');
+    const oaOrderError = document.getElementById('oaOrderError');
+    const oaAddReviewInfo = document.getElementById('oaAddReviewInfo');
+    const oaAddRefundInfo = document.getElementById('oaAddRefundInfo');
+    const oaReviewInfoForm = document.getElementById('oaReviewInfoForm');
+    const oaRefundInfoForm = document.getElementById('oaRefundInfoForm');
+    const oaReviewLinkInput = document.getElementById('oaReviewLinkInput');
+    const oaRefundAmountInput = document.getElementById('oaRefundAmountInput');
+    const oaRefundAccountInput = document.getElementById('oaRefundAccountInput');
+    const oaReviewScreenshotUpload = document.getElementById('oaReviewScreenshotUpload');
+    const oaCollectionCodeUpload = document.getElementById('oaCollectionCodeUpload');
+    const oaCreateSubmit = document.getElementById('oaCreateSubmit');
+    function isOaUploadReady(button) {
+      return !!button?.classList.contains('has-image');
+    }
+    function updateOaCreateSubmitState() {
+      if (!oaCreateSubmit) return;
+      const reviewReady = oaReviewInfoForm?.classList.contains('is-visible');
+      const refundReady = oaRefundInfoForm?.classList.contains('is-visible');
+      const reviewComplete = reviewReady && !!oaReviewLinkInput?.value.trim() && isOaUploadReady(oaReviewScreenshotUpload);
+      const refundComplete = refundReady && !!oaRefundAmountInput?.value.trim() && !!oaRefundAccountInput?.value.trim() && isOaUploadReady(oaCollectionCodeUpload);
+      oaCreateSubmit.disabled = oaOrderVerifyState.value !== 'success' || !reviewComplete || !refundComplete;
+    }
+    function setOaOrderVerifyState(state) {
+      oaOrderVerifyState.value = state;
+      if (oaOrderVerifyIcon) {
+        oaOrderVerifyIcon.className = 'oa-order-verify-icon is-' + state;
+      }
+      if (oaOrderVerifyRow) {
+        oaOrderVerifyRow.classList.toggle('is-error', state === 'error');
+        oaOrderVerifyRow.classList.toggle('is-success', state === 'success');
+      }
+      if (oaOrderVerifyButton) {
+        oaOrderVerifyButton.disabled = state === 'loading' || state === 'success';
+      }
+      if (oaOrderProductCard) {
+        oaOrderProductCard.classList.toggle('is-visible', state === 'success');
+      }
+      if (oaOrderError) {
+        oaOrderError.classList.toggle('is-visible', state === 'error');
+      }
+      updateOaCreateSubmitState();
+    }
+    function resetOaCreateForm() {
+      if (oaOrderVerifyState.timer) {
+        window.clearTimeout(oaOrderVerifyState.timer);
+        oaOrderVerifyState.timer = null;
+      }
+      if (oaOrderNoInput) oaOrderNoInput.value = '';
+      if (oaReviewInfoForm) oaReviewInfoForm.classList.remove('is-visible');
+      if (oaRefundInfoForm) oaRefundInfoForm.classList.remove('is-visible');
+      if (oaAddReviewInfo) oaAddReviewInfo.classList.remove('is-hidden');
+      if (oaAddRefundInfo) oaAddRefundInfo.classList.remove('is-hidden');
+      [oaReviewLinkInput, oaRefundAmountInput, oaRefundAccountInput].forEach(function(input) {
+        if (input) input.value = '';
+      });
+      [oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
+        if (!button) return;
+        button.classList.remove('has-image');
+        button.innerHTML = '<span class="oa-upload-plus" aria-hidden="true"></span>';
+      });
+      setOaOrderVerifyState('idle');
+    }
+    function verifyOaOrderNo() {
+      if (!oaOrderNoInput) return;
+      const orderNo = oaOrderNoInput.value.trim();
+      setOaOrderVerifyState('loading');
+      oaOrderVerifyState.timer = window.setTimeout(function() {
+        const shouldFail = !orderNo || orderNo.includes('000');
+        setOaOrderVerifyState(shouldFail ? 'error' : 'success');
+      }, 800);
+    }
+    if (oaOrderNoInput) {
+      oaOrderNoInput.addEventListener('input', function() {
+        if (oaOrderVerifyState.value !== 'idle') {
+          if (oaOrderVerifyState.timer) {
+            window.clearTimeout(oaOrderVerifyState.timer);
+            oaOrderVerifyState.timer = null;
+          }
+          setOaOrderVerifyState('idle');
+        }
+      });
+      oaOrderNoInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          verifyOaOrderNo();
+        }
+      });
+    }
+    if (oaOrderVerifyButton) {
+      oaOrderVerifyButton.addEventListener('click', verifyOaOrderNo);
+    }
+    function addOaDetailForm(form, message) {
+      if (oaOrderVerifyState.value !== 'success') {
+        showToast(message || 'Please verify Amazon order number first.');
+        return;
+      }
+      form?.classList.add('is-visible');
+      if (form === oaReviewInfoForm) oaAddReviewInfo?.classList.add('is-hidden');
+      if (form === oaRefundInfoForm) oaAddRefundInfo?.classList.add('is-hidden');
+      updateOaCreateSubmitState();
+    }
+    if (oaAddReviewInfo) {
+      oaAddReviewInfo.addEventListener('click', function() {
+        addOaDetailForm(oaReviewInfoForm, 'Order status does not allow adding review info yet.');
+      });
+    }
+    if (oaAddRefundInfo) {
+      oaAddRefundInfo.addEventListener('click', function() {
+        addOaDetailForm(oaRefundInfoForm, 'Order status does not allow adding refund info yet.');
+      });
+    }
+    [oaReviewLinkInput, oaRefundAmountInput, oaRefundAccountInput].forEach(function(input) {
+      input?.addEventListener('input', updateOaCreateSubmitState);
+    });
+    [oaReviewScreenshotUpload, oaCollectionCodeUpload].forEach(function(button) {
+      button?.addEventListener('click', function() {
+        button.classList.add('has-image');
+        button.innerHTML = '<img src="assets/crops/brand-einseo.png" alt="">';
+        updateOaCreateSubmitState();
+      });
+    });
+    setOaOrderVerifyState('idle');
+    if (oaCreateSubmit) {
+      oaCreateSubmit.addEventListener('click', function() {
+        if (oaCreateSubmit.disabled) return;
+        showToast('Submitted');
+      });
     }
 
     // Search All button
@@ -4717,6 +5877,7 @@
     // Initial render of session list
     renderCurrentList();
     selectSession(1); // Select Klaus Crawley by default
+    applyLanguage();
 
     // ===== Dashboard =====
     var dashInitialized = false;
