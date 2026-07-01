@@ -363,6 +363,44 @@
       align-items: center;
     }
 
+    .todo-segment {
+      align-self: stretch;
+      height: 33px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--neutral-1);
+    }
+
+    .left-panel.todo-mode .filters {
+      display: none;
+    }
+
+    .left-panel.todo-mode .todo-segment {
+      display: flex;
+    }
+
+    .todo-segment-btn {
+      flex: 1;
+      height: 33px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--neutral-5);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .todo-segment-btn.active {
+      border: 1px solid var(--neutral-2);
+      background: #fff;
+      color: var(--neutral-8);
+    }
+
     .search-box img,
     .small-icon {
       width: 16px;
@@ -548,6 +586,354 @@
 
     .contact-group-meta img { width: 16px; height: 16px; }
 
+    .todo-list {
+      padding-bottom: 40px;
+      background: #fff;
+    }
+
+    .todo-recommend-wrap {
+      padding: 0 12px 8px 24px;
+    }
+
+    .todo-recommend {
+      padding: 12px 8px;
+      border-radius: 8px;
+      background: var(--purple-1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-recommend.is-collapsed .todo-recommend-grid,
+    .todo-recommend.is-collapsed .todo-task-center,
+    .todo-recommend.is-collapsed .todo-fold {
+      display: none;
+    }
+
+    .todo-recommend.is-collapsed .todo-recommend-meta .collapse-arrow {
+      transform: rotate(180deg);
+    }
+
+    .todo-recommend-head,
+    .todo-group-head,
+    .todo-card-top,
+    .todo-card-user,
+    .todo-card-meta,
+    .todo-priority-icons,
+    .todo-card-count {
+      display: flex;
+      align-items: center;
+    }
+
+    .todo-recommend-head,
+    .todo-group-head {
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .todo-recommend-head {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      width: 100%;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .todo-recommend-title,
+    .todo-group-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .todo-recommend-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--purple-3);
+      font-size: 12px;
+      font-weight: 500;
+      flex: none;
+    }
+
+    .todo-recommend-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .todo-recommend-card {
+      min-width: 0;
+      padding: 8px;
+      border: 0;
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .todo-card-top {
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .todo-card-source {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-5);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .todo-card-source span:last-child,
+    .todo-product-title,
+    .todo-user-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .todo-priority-icons {
+      gap: 2px;
+      flex: none;
+    }
+
+    .todo-priority-icons img {
+      width: 12px;
+      height: 12px;
+      display: block;
+    }
+
+    .todo-card-main {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .todo-product-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: var(--neutral-1);
+      flex: none;
+    }
+
+    .todo-card-count {
+      justify-content: flex-end;
+      flex: 1;
+      min-width: 0;
+      color: var(--neutral-8);
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 28px;
+    }
+
+    .todo-card-count::before {
+      content: "×";
+      color: var(--neutral-5);
+      font-size: 16px;
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    .todo-card-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .todo-product-title {
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+    }
+
+    .todo-product-model,
+    .todo-card-time,
+    .todo-order-no {
+      color: var(--neutral-7);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 14px;
+    }
+
+    .todo-category {
+      align-self: flex-start;
+      max-width: 100%;
+      min-height: 16px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font-size: 10px;
+      line-height: 12px;
+    }
+
+    .todo-task-center,
+    .todo-fold {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .todo-task-center {
+      height: 28px;
+      border-radius: 999px;
+      background: var(--purple-2);
+      color: #494270;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .todo-fold {
+      align-self: center;
+      height: 24px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--purple-3);
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .todo-fold img {
+      width: 12px;
+      height: 12px;
+      filter: brightness(0) saturate(100%) invert(39%) sepia(88%) saturate(2842%) hue-rotate(250deg) brightness(101%) contrast(101%);
+    }
+
+    .todo-group {
+      padding-bottom: 8px;
+      background: #fff;
+    }
+
+    .todo-group-head {
+      width: 100%;
+      height: 33px;
+      padding: 12px 12px 8px 24px;
+      border: 0;
+      background: #fff;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .todo-group-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-5);
+      font-size: 12px;
+      font-weight: 500;
+      flex: none;
+    }
+
+    .todo-group-items {
+      padding: 0 12px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-group.collapsed .todo-group-items {
+      display: none;
+    }
+
+    .todo-order-card {
+      width: 100%;
+      min-width: 0;
+      padding: 12px 8px;
+      border: 1px solid var(--neutral-1);
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .todo-order-main {
+      display: grid;
+      grid-template-columns: 60px minmax(0, 1fr);
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .todo-card-user {
+      justify-content: flex-end;
+      gap: 2px;
+      min-width: 0;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .todo-card-user .avatar {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      flex: none;
+    }
+
+    .todo-card-user .online-dot-inline {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--success);
+      flex: none;
+    }
+
+    .todo-status-pill {
+      align-self: flex-start;
+      max-width: 100%;
+      min-height: 16px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 10px;
+      line-height: 12px;
+      white-space: nowrap;
+    }
+
+    .todo-status-pill.orange {
+      background: #fff7e8;
+      color: var(--warning);
+    }
+
+    .todo-status-pill.red {
+      background: var(--error-light);
+      color: var(--error-dark);
+    }
+
+    .todo-order-no {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .todo-order-no img {
+      width: 12px;
+      height: 12px;
+      opacity: 0.6;
+    }
+
     .contact-group.collapsed .contact-group-items {
       display: none;
     }
@@ -670,7 +1056,7 @@
     .session-name-row {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       gap: 10px;
       margin-bottom: 4px;
     }
@@ -678,6 +1064,20 @@
     .name {
       font-size: 14px;
       font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .session-name-with-risk {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .session-name-with-risk .session-name-text {
+      min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -801,8 +1201,16 @@
       display: flex;
       align-items: center;
       gap: 2px;
+      min-width: 0;
       font-size: 14px;
       font-weight: 600;
+    }
+    .profile-title .name-text,
+    .user-meta .name-text {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .risk-dot-icon {
       height: 16px;
@@ -905,7 +1313,7 @@
       right: 12px;
       top: 12px;
       z-index: 5;
-      padding: 8px;
+      padding: 8px 12px;
       border: 0;
       border-radius: 12px;
       background: var(--error-light);
@@ -1757,6 +2165,10 @@
     }
 
     .user-meta .name {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      min-width: 0;
       color: var(--neutral-8);
       font-size: 14px;
       font-weight: 600;
@@ -2507,6 +2919,25 @@
     .oa-order-verify-action:disabled {
       cursor: default;
     }
+    .oa-order-clear-action {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      padding: 2px;
+      background: transparent;
+      display: none;
+      place-items: center;
+      flex: none;
+      cursor: pointer;
+    }
+    .oa-order-verify-row.is-error .oa-order-clear-action {
+      display: grid;
+    }
+    .oa-order-clear-action img {
+      width: 12px;
+      height: 12px;
+      display: block;
+    }
     .oa-order-verify-icon {
       width: 16px;
       height: 16px;
@@ -3221,6 +3652,7 @@
             <button class="rail-subitem" type="button" data-i18n="rail.subitem.team">Team</button>
             <button class="rail-subitem" type="button" data-i18n="rail.subitem.agents">Agents</button>
             <button class="rail-subitem active" type="button" data-i18n="rail.subitem.sessions">Sessions</button>
+            <button class="rail-subitem" type="button" data-user-chat-link data-i18n="rail.subitem.userChat">User Chat</button>
           </div>
         </div>
         <div class="rail-section">
@@ -3384,6 +3816,10 @@
             <img src="assets/icons/ic_search_16.svg" alt="">
           </div>
         </div>
+        <div class="todo-segment" role="tablist" aria-label="To-do order type">
+          <button class="todo-segment-btn active" type="button" data-todo-type="RSO">RSO</button>
+          <button class="todo-segment-btn" type="button" data-todo-type="RDO">RDO</button>
+        </div>
       </div>
       <div class="session-list scroll-area" id="sessionList">
       </div>
@@ -3394,7 +3830,7 @@
       <div class="profile-head">
         <img class="avatar" src="assets/crops/avatar02.jpg" alt="">
         <div class="profile-title">
-          <div class="name"><span class="name-text">Klaus Crawley</span><img class="risk-dot-icon" src="assets/icons/ic_error_12.svg" alt=""></div>
+          <div class="name"><img class="risk-dot-icon profile-risk-icon" src="assets/icons/ic_error_12.svg" alt=""><span class="name-text">Klaus Crawley</span></div>
           <div class="response-label" data-i18n="chat.label.responseTime">First Response Time - Last Response Time</div>
           <div class="response-time"><span>00:01:23</span> - <span>00:00:23</span></div>
         </div>
@@ -3498,7 +3934,7 @@
       <div class="user-info">
         <img class="avatar" src="assets/crops/avatar02.jpg" alt="">
         <div class="user-meta">
-          <div class="name"><span class="name-text">Klaus Crawley</span><img class="risk-dot-icon" src="assets/icons/ic_error_12.svg" alt=""></div>
+          <div class="name"><img class="risk-dot-icon profile-risk-icon" src="assets/icons/ic_error_12.svg" alt=""><span class="name-text">Klaus Crawley</span></div>
           <div class="id-row"><span>ID</span><a href="#">20647975</a><img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="20647975" alt=""></div>
           <div class="chip-row">
             <span class="chip">🇬🇧 UK</span>
@@ -3812,6 +4248,7 @@
                   <button class="oa-order-verify-action" type="button" id="oaOrderVerifyButton" aria-label="Verify Amazon Order No.">
                     <span class="oa-order-verify-icon is-idle" id="oaOrderVerifyIcon" aria-hidden="true"></span>
                   </button>
+                  <button class="oa-order-clear-action" type="button" id="oaOrderClearButton" aria-label="Clear Amazon Order No."><img src="assets/icons/ic_close_12.svg" alt=""></button>
                 </div>
                 <div class="oa-order-product" id="oaOrderProductCard">
                   <img src="assets/crops/product-rose.png" alt="">
@@ -3928,11 +4365,11 @@
           <div class="oa-readonly-section" id="oaDetailRefundSection">
             <div class="oa-readonly-head"><div class="oa-create-detail-title">Refund Info</div><div class="oa-readonly-status">Pending</div></div>
             <div class="oa-refund-filled">
-              <div class="oa-create-fieldset"><div class="oa-create-field-label">Refund ID</div><div class="oa-readonly-input">9001</div></div>
-              <div class="oa-create-fieldset"><div class="oa-create-field-label">Review Type</div><div class="oa-readonly-input">Principal</div></div>
-              <div class="oa-create-fieldset"><div class="oa-create-field-label">Refund Method</div><div class="oa-readonly-input">PayPal</div></div>
-              <div class="oa-create-fieldset"><div class="oa-create-field-label">Amount</div><div class="oa-readonly-input">20 USD</div></div>
-              <div class="oa-create-fieldset"><div class="oa-create-field-label">Account</div><div class="oa-readonly-input">user@mail.com</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Refund ID</div><div class="oa-readonly-value">9001</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Review Type</div><div class="oa-readonly-value">Principal</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Refund Method</div><div class="oa-readonly-value">PayPal</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Amount</div><div class="oa-readonly-value">20 USD</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Account</div><div class="oa-readonly-value">user@mail.com</div></div>
               <div class="oa-create-fieldset"><div class="oa-create-field-label">Collection Code</div><div class="oa-readonly-upload"><img src="assets/crops/oa-uploaded-screenshot.png" alt=""></div></div>
             </div>
             <div class="oa-readonly-pending oa-refund-empty">Refund info pending</div>
@@ -4251,11 +4688,22 @@
       'rail.subitem.team':            ['Team','团队','チーム'],
       'rail.subitem.agents':          ['Agents','客服','エージェント'],
       'rail.subitem.sessions':        ['Sessions','会话','セッション'],
+      'rail.subitem.userChat':        ['User Chat','用户模拟','ユーザー模擬'],
       'rail.section.edm':             ['EDM','EDM','EDM'],
       'rail.subitem.campaigns':       ['Campaigns','营销活动','キャンペーン'],
       'rail.subitem.templates':       ['Templates','模板','テンプレート'],
       'session.tab.session':          ['Session','会话','セッション'],
       'session.tab.contacts':         ['To-do','To-do','To-do'],
+      'todo.productRecommendation':   ['Product Recommendation Tasks','产品推荐任务','商品推薦タスク'],
+      'todo.goTaskCenter':            ['Go to Task Center','前往任务中心','タスクセンターへ'],
+      'todo.fold':                    ['Fold','收起','折りたたむ'],
+      'todo.pendingPromptedReview':   ['Pending Prompted Review','待回评','レビュー依頼待ち'],
+      'todo.awaitingRefund':          ['Awaiting Refund','待返款','返金待ち'],
+      'todo.refundFailed':            ['Refund Rejection/Refund Failed','返款驳回/返款失败','返金却下/返金失敗'],
+      'todo.pendingConfirmation':     ['Pending Confirmation','待回评确认','レビュー確認待ち'],
+      'todo.pendingReviewStatus':     ['Pending Prompted Review','待回评','レビュー依頼待ち'],
+      'todo.refundRejection':         ['Refund Rejection','返款驳回','返金却下'],
+      'todo.refundFailedStatus':      ['Refund Failed','返款失败','返金失敗'],
       'status.all':                   ['All','全部','すべて'],
       'status.pending':               ['Pending','待接入','保留中'],
       'status.serving':               ['Serving','服务中','対応中'],
@@ -4675,6 +5123,7 @@
         ? `<img class="agent-sent-icon" src="assets/icons/ic_agent_sent_16.svg" alt=""><span class="last-msg-text">${parts.preview}</span>`
         : `<span class="last-msg-text">${parts.preview}</span>`;
       const unread = options && options.hideUnread ? '' : (!model.isAgentLast && session.status !== 'Closed' && model.lastText) ? `<b class="unread">1</b>` : '';
+      const riskIcon = session.name === 'Klaus Crawley' ? '<img class="risk-dot-icon session-risk-icon" src="assets/icons/ic_error_12.svg" alt="">' : '';
 
       return `
         <section class="session-item" data-index="${originalIndex}" tabindex="0">
@@ -4683,7 +5132,7 @@
             <div class="avatar-wrap"><img class="avatar" src="${session.avatar}" alt=""><span class="online-dot"></span></div>
             <div class="session-copy">
               <div class="session-name-row">
-                <div class="name">${parts.name}</div>
+                <div class="name session-name-with-risk">${riskIcon}<span class="session-name-text">${parts.name}</span></div>
                 <div class="session-time-group"><span>${model.startedAgo}</span><span class="session-time-dot"></span><span>${model.lastMsgAgo}</span></div>
               </div>
               <div class="last-msg">${lastMsg}${unread}</div>
@@ -4755,48 +5204,186 @@
       bindSessionListClicks(container);
     }
 
-    const contactGroups = [
-      { title: 'To Remind', count: 3, expanded: true, items: [{ index: 1 }, { index: 0, unread: 3 }, { index: 5, unread: 3 }] },
-      { title: 'Awaiting Screenshot', count: 2, expanded: false, items: [{ index: 2 }, { index: 8 }] },
-      { title: 'Awaiting Link', count: 6, expanded: false, items: [{ index: 3 }, { index: 4 }, { index: 7 }, { index: 9 }, { index: 12 }, { index: 15 }] },
-    ];
+    const todoRecommendationTasksByType = {
+      RSO: [
+        { source: 'US-EINSEO', priority: ['ic_priority_12s.svg', 'ic_priority_12rush.svg'], count: 6 },
+        { source: 'US-EINSEO', priority: ['ic_priority_121.svg', 'ic_priority_12rush.svg'], count: 1 },
+        { source: 'US-EINSEO', priority: ['ic_priority_121.svg', 'ic_priority_12rush.svg'], count: 32 },
+        { source: 'US-EINSEO', priority: ['ic_priority_122.svg', 'ic_priority_12rush.svg'], count: 4 },
+        { source: 'US-EINSEO', priority: ['ic_priority_123.svg', 'ic_priority_12rush.svg'], count: 1 },
+      ],
+      RDO: [
+        { source: 'US-EINSEO', priority: ['ic_priority_123.svg', 'ic_priority_12rush.svg'], count: 9 },
+        { source: 'GB-HanaCute', priority: ['ic_priority_122.svg', 'ic_priority_12rush.svg'], count: 5 },
+        { source: 'CA-allovu', priority: ['ic_priority_121.svg'], count: 18 },
+      ],
+    };
+    let todoRecommendationExpanded = true;
+    let currentTodoType = 'RSO';
+
+    const todoGroupsByType = {
+      RSO: [
+        { key: 'todo.pendingPromptedReview', count: 3, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
+          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
+          { index: 2, source: 'GB-HanaCute', user: 'Dixnn', userAvatar: 'assets/crops/avatar03.jpg' },
+        ] },
+        { key: 'todo.awaitingRefund', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
+          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
+        ] },
+        { key: 'todo.refundFailed', count: 2, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
+          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg', statusKey: 'todo.refundFailedStatus' },
+        ] },
+        { key: 'todo.pendingConfirmation', count: 2, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 3, source: 'US-EINSEO', user: 'hstoy', userAvatar: 'assets/crops/avatar04.jpg' },
+          { index: 4, source: 'CA-allovu', user: 'Ariana', userAvatar: 'assets/crops/avatar05.jpg' },
+        ] },
+      ],
+      RDO: [
+        { key: 'todo.awaitingRefund', count: 4, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
+          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
+          { index: 3, source: 'GB-HanaCute', user: 'hstoy', userAvatar: 'assets/crops/avatar04.jpg' },
+          { index: 4, source: 'US-EINSEO', user: 'Ariana', userAvatar: 'assets/crops/avatar05.jpg' },
+        ] },
+        { key: 'todo.refundFailed', count: 3, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
+          { index: 2, source: 'GB-HanaCute', user: 'Dixnn', userAvatar: 'assets/crops/avatar03.jpg', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg', statusKey: 'todo.refundFailedStatus' },
+          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg', statusKey: 'todo.refundFailedStatus' },
+        ] },
+        { key: 'todo.pendingConfirmation', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 5, source: 'US-EINSEO', user: 'Miya', userAvatar: 'assets/crops/avatar06.jpg' },
+          { index: 6, source: 'CA-allovu', user: 'Tony', userAvatar: 'assets/crops/avatar07.jpg' },
+        ] },
+        { key: 'todo.pendingPromptedReview', count: 1, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
+          { index: 7, source: 'US-EINSEO', user: 'Lina', userAvatar: 'assets/crops/avatar08.jpg' },
+        ] },
+      ],
+    };
+
+    function renderTodoRecommendationCard(task) {
+      const brandImg = brandImages[task.source] || 'assets/crops/brand-einseo.png';
+      return `
+        <button class="todo-recommend-card" type="button">
+          <div class="todo-card-top">
+            <span class="todo-card-source"><span class="brand-frame"><img class="brand" src="${brandImg}" alt="" ${brandFallbackAttrs}></span><span>${escapeHtml(task.source)}</span></span>
+            <span class="todo-priority-icons">${task.priority.map(icon => `<img src="assets/icons/${icon}" alt="">`).join('')}</span>
+          </div>
+          <div class="todo-card-main">
+            <img class="todo-product-img" src="assets/crops/product-rose.png" alt="">
+            <span class="todo-card-count">${task.count}</span>
+          </div>
+          <div class="todo-card-copy">
+            <div class="todo-product-title">贵妃多多款五代-玫红-新APP</div>
+            <div class="todo-product-model">Rosethorn 2</div>
+            <div class="todo-category">03玫瑰花品类</div>
+          </div>
+        </button>
+      `;
+    }
+
+    function renderTodoOrderCard(item, group) {
+      const session = sessionData[item.index] || sessionData[1];
+      const brandImg = brandImages[item.source] || brandImages[session.source] || 'assets/crops/brand-einseo.png';
+      const statusKey = item.statusKey || group.statusKey;
+      return `
+        <button class="todo-order-card" type="button" data-index="${item.index}">
+          <div class="todo-card-top">
+            <span class="todo-card-source"><span class="brand-frame"><img class="brand" src="${brandImg}" alt="" ${brandFallbackAttrs}></span><span>${escapeHtml(item.source || session.source)}</span></span>
+            <span class="todo-card-user"><img class="avatar" src="${item.userAvatar || session.avatar}" alt=""><span class="online-dot-inline"></span><span class="todo-user-name">${escapeHtml(item.user || session.name)}</span></span>
+          </div>
+          <div class="todo-order-main">
+            <img class="todo-product-img" src="assets/crops/product-rose.png" alt="">
+            <div class="todo-card-copy">
+              <div class="todo-product-title">贵妃多多款五代-玫红-新APP</div>
+              <div class="todo-product-model">Rosethorn 2</div>
+              <div class="todo-card-time">2025-03-28 14:22:52</div>
+              <div class="todo-category">03玫瑰花品类</div>
+              <div class="todo-status-pill ${group.statusTone}">${t(statusKey)}</div>
+              <div class="todo-order-no">026-6986879-2656330 <img src="assets/icons/ic_copy_12.svg" alt=""></div>
+            </div>
+          </div>
+        </button>
+      `;
+    }
 
     function renderContactsList() {
       const container = document.getElementById('sessionList');
       if (!container) return;
-      const queryFiltered = (s) => !currentSearchQuery || sessionMatchesSearch(s, currentSearchType, currentSearchQuery);
+      const recommendationTasks = todoRecommendationTasksByType[currentTodoType] || todoRecommendationTasksByType.RSO;
+      const todoGroups = todoGroupsByType[currentTodoType] || todoGroupsByType.RSO;
+      const queryFiltered = (item) => {
+        const session = sessionData[item.index];
+        if (!session || !currentSearchQuery) return true;
+        return sessionMatchesSearch(session, currentSearchType, currentSearchQuery);
+      };
 
-      container.innerHTML = contactGroups.map(group => {
-        const items = group.items.map(item => ({ ...item, session: sessionData[item.index] })).filter(item => item.session).filter(item => queryFiltered(item.session));
+      const recommendationHtml = `
+        <div class="todo-recommend-wrap">
+          <section class="todo-recommend${todoRecommendationExpanded ? '' : ' is-collapsed'}">
+            <button class="todo-recommend-head" type="button" aria-expanded="${todoRecommendationExpanded ? 'true' : 'false'}">
+              <span class="todo-recommend-title">${t('todo.productRecommendation')}</span>
+              <span class="todo-recommend-meta"><span>${recommendationTasks.length}</span><img class="collapse-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+            </button>
+            <div class="todo-recommend-grid">
+              ${recommendationTasks.map(renderTodoRecommendationCard).join('')}
+            </div>
+            <button class="todo-task-center" type="button">${t('todo.goTaskCenter')} &rsaquo;</button>
+            <button class="todo-fold" type="button">${t('todo.fold')} <img src="assets/icons/ic_view_less_12.svg" alt=""></button>
+          </section>
+        </div>
+      `;
+
+      const groupsHtml = todoGroups.map(group => {
+        const items = group.items.filter(queryFiltered);
         const collapsedClass = group.expanded ? '' : ' collapsed';
         return `
-          <section class="contact-group${collapsedClass}" data-contact-group="${group.title}">
-            <button class="contact-group-head" type="button" aria-expanded="${group.expanded ? 'true' : 'false'}">
-              <span class="contact-group-title">${group.title}</span>
+          <section class="todo-group${collapsedClass}" data-todo-group="${group.key}">
+            <button class="todo-group-head" type="button" aria-expanded="${group.expanded ? 'true' : 'false'}">
+              <span class="todo-group-title">${t(group.key)}</span>
               <span class="contact-group-meta"><span>${group.count}</span><img class="collapse-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
             </button>
-            <div class="contact-group-items">
-              ${items.map(item => renderContactCard(item.session, { unread: item.unread })).join('')}
+            <div class="todo-group-items">
+              ${items.map(item => renderTodoOrderCard(item, group)).join('')}
             </div>
           </section>
         `;
       }).join('');
 
-      container.querySelectorAll('.contact-group-head').forEach(head => {
+      container.innerHTML = `<div class="todo-list">${recommendationHtml}${groupsHtml}</div>`;
+
+      container.querySelectorAll('.todo-recommend-head, .todo-fold').forEach(btn => {
+        btn.addEventListener('click', () => {
+          todoRecommendationExpanded = !todoRecommendationExpanded;
+          renderContactsList();
+        });
+      });
+
+      container.querySelectorAll('.todo-group-head').forEach(head => {
         head.addEventListener('click', () => {
-          const groupEl = head.closest('.contact-group');
-          const title = groupEl.dataset.contactGroup;
-          const data = contactGroups.find(group => group.title === title);
+          const groupEl = head.closest('.todo-group');
+          const key = groupEl.dataset.todoGroup;
+          const data = todoGroups.find(group => group.key === key);
           if (!data) return;
           data.expanded = !data.expanded;
           groupEl.classList.toggle('collapsed', !data.expanded);
           head.setAttribute('aria-expanded', data.expanded ? 'true' : 'false');
         });
       });
-      bindSessionListClicks(container);
+      container.querySelectorAll('.todo-order-card').forEach(item => {
+        item.addEventListener('click', () => {
+          const idx = parseInt(item.dataset.index);
+          selectSession(idx);
+        });
+      });
+      ensureScrollThumb(container);
     }
 
     function renderCurrentList() {
+      const leftPanel = document.querySelector('.left-panel');
+      if (leftPanel) leftPanel.classList.toggle('todo-mode', currentListTab === 'Contacts');
       if (currentListTab === 'Contacts') renderContactsList();
       else renderSessionList();
     }
@@ -4813,7 +5400,7 @@
 
     function updateRiskIndicators(session) {
       const hasRisk = session && session.name === 'Klaus Crawley';
-      document.querySelectorAll('.risk-dot-icon').forEach(icon => {
+      document.querySelectorAll('.profile-risk-icon').forEach(icon => {
         icon.classList.toggle('is-hidden', !hasRisk);
       });
       const banner = document.getElementById('chatRiskBanner');
@@ -5709,6 +6296,15 @@
       });
     });
 
+    document.querySelectorAll('.todo-segment-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.todo-segment-btn').forEach(function(item) { item.classList.remove('active'); });
+        btn.classList.add('active');
+        currentTodoType = btn.dataset.todoType || 'RSO';
+        renderCurrentList();
+      });
+    });
+
     document.querySelectorAll('.rail-section-header').forEach(function(header) {
       header.addEventListener('click', function() {
         header.parentElement.classList.toggle('collapsed');
@@ -5804,6 +6400,10 @@
 
     document.querySelectorAll('.rail-subitem').forEach(function(item) {
       item.addEventListener('click', function() {
+        if (item.dataset.userChatLink !== undefined) {
+          window.open('src/pages/user-chat.html', '_blank');
+          return;
+        }
         activateWorkspaceTab(item.dataset.pageId);
       });
     });
@@ -5846,6 +6446,7 @@
     const oaOrderVerifyRow = document.getElementById('oaOrderVerifyRow');
     const oaOrderVerifyButton = document.getElementById('oaOrderVerifyButton');
     const oaOrderVerifyIcon = document.getElementById('oaOrderVerifyIcon');
+    const oaOrderClearButton = document.getElementById('oaOrderClearButton');
     const oaOrderProductCard = document.getElementById('oaOrderProductCard');
     const oaOrderError = document.getElementById('oaOrderError');
     const oaAddReviewInfo = document.getElementById('oaAddReviewInfo');
@@ -5995,6 +6596,11 @@
       if (!oaOrderNoInput) return;
       oaOrderNoInput.value = formatAmazonOrderNo(oaOrderNoInput.value);
       const orderDigits = oaOrderNoInput.value.replace(/\D/g, '');
+      if (orderDigits.length !== 17) return;
+      if (oaOrderVerifyState.timer) {
+        window.clearTimeout(oaOrderVerifyState.timer);
+        oaOrderVerifyState.timer = null;
+      }
       setOaOrderVerifyState('loading');
       oaOrderVerifyState.timer = window.setTimeout(function() {
         const shouldFail = orderDigits.length !== 17 || orderDigits.includes('000');
@@ -6005,12 +6611,16 @@
       oaOrderNoInput.addEventListener('input', function() {
         const formattedValue = formatAmazonOrderNo(oaOrderNoInput.value);
         if (oaOrderNoInput.value !== formattedValue) oaOrderNoInput.value = formattedValue;
+        const orderDigits = oaOrderNoInput.value.replace(/\D/g, '');
         if (oaOrderVerifyState.value !== 'idle') {
           if (oaOrderVerifyState.timer) {
             window.clearTimeout(oaOrderVerifyState.timer);
             oaOrderVerifyState.timer = null;
           }
           setOaOrderVerifyState('idle');
+        }
+        if (orderDigits.length === 17) {
+          verifyOaOrderNo();
         }
       });
       oaOrderNoInput.addEventListener('keydown', function(event) {
@@ -6022,6 +6632,19 @@
     }
     if (oaOrderVerifyButton) {
       oaOrderVerifyButton.addEventListener('click', verifyOaOrderNo);
+    }
+    if (oaOrderClearButton) {
+      oaOrderClearButton.addEventListener('click', function() {
+        if (oaOrderVerifyState.timer) {
+          window.clearTimeout(oaOrderVerifyState.timer);
+          oaOrderVerifyState.timer = null;
+        }
+        if (oaOrderNoInput) {
+          oaOrderNoInput.value = '';
+          oaOrderNoInput.focus();
+        }
+        setOaOrderVerifyState('idle');
+      });
     }
     function addOaDetailForm(form, message) {
       if (oaOrderVerifyState.value !== 'success') {
@@ -6103,9 +6726,16 @@
     }
     function applyOaOrderFilter(value) {
       const filterValue = value || document.querySelector('#oaOrderFilterDropdown .dropdown-item.selected')?.dataset.value || 'All';
-      document.querySelectorAll('.oa-order-group .product').forEach(function(card) {
-        const matchType = card.dataset.matchType || card.querySelector('.mini-tags .mini-tag:first-child')?.textContent?.trim() || '';
-        card.classList.toggle('is-filter-hidden', filterValue !== 'All' && matchType !== filterValue);
+      document.querySelectorAll('.oa-order-group').forEach(function(group) {
+        let visibleCount = 0;
+        group.querySelectorAll('.product').forEach(function(card) {
+          const matchType = card.dataset.matchType || card.querySelector('.mini-tags .mini-tag:first-child')?.textContent?.trim() || '';
+          const shouldHide = filterValue !== 'All' && matchType !== filterValue;
+          card.classList.toggle('is-filter-hidden', shouldHide);
+          if (!shouldHide) visibleCount += 1;
+        });
+        const count = group.querySelector('.count');
+        if (count) count.textContent = String(visibleCount);
       });
     }
     const oaOrderFilterDropdown = document.getElementById('oaOrderFilterDropdown');
