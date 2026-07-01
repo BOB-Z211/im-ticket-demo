@@ -798,8 +798,20 @@
     }
 
     .profile-title .name {
+      display: flex;
+      align-items: center;
+      gap: 2px;
       font-size: 14px;
       font-weight: 600;
+    }
+    .risk-dot-icon {
+      height: 16px;
+      width: 16px;
+      display: block;
+      flex: none;
+    }
+    .risk-dot-icon.is-hidden {
+      display: none;
     }
 
     .response-label,
@@ -870,7 +882,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      top: 0;
+      top: 44px;
       bottom: 188px;
       padding: 24px 24px 60px;
       box-sizing: border-box;
@@ -885,6 +897,97 @@
     .message-stack > .scroll-thumb {
       right: 2px;
       z-index: 8;
+    }
+
+    .chat-risk-banner {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      top: 12px;
+      z-index: 5;
+      padding: 8px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--error-light);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--error-dark);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .chat-risk-banner.is-hidden {
+      display: none;
+    }
+
+    .chat-risk-banner.is-hidden + .message-stack {
+      top: 0;
+    }
+
+    .chat-risk-banner.is-expanded + .message-stack {
+      top: 84px;
+    }
+
+    .chat-risk-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 16px;
+    }
+
+    .chat-risk-title {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--error-dark);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+    }
+
+    .chat-risk-count {
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 20px;
+      background: var(--error-dark);
+      color: var(--error-light);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    .chat-risk-arrow {
+      width: 16px;
+      height: 16px;
+      transform: rotate(180deg);
+      filter: brightness(0) saturate(100%) invert(14%) sepia(87%) saturate(3316%) hue-rotate(351deg) brightness(93%) contrast(103%);
+    }
+
+    .chat-risk-banner.is-expanded .chat-risk-arrow {
+      transform: rotate(0deg);
+    }
+
+    .chat-risk-tags {
+      display: none;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .chat-risk-banner.is-expanded .chat-risk-tags {
+      display: flex;
+    }
+
+    .chat-risk-tag {
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--error-dark);
+      color: var(--error-light);
+      font-size: 10px;
+      line-height: 12px;
+      white-space: nowrap;
     }
 
     .message {
@@ -3291,7 +3394,7 @@
       <div class="profile-head">
         <img class="avatar" src="assets/crops/avatar02.jpg" alt="">
         <div class="profile-title">
-          <div class="name">Klaus Crawley</div>
+          <div class="name"><span class="name-text">Klaus Crawley</span><img class="risk-dot-icon" src="assets/icons/ic_error_12.svg" alt=""></div>
           <div class="response-label" data-i18n="chat.label.responseTime">First Response Time - Last Response Time</div>
           <div class="response-time"><span>00:01:23</span> - <span>00:00:23</span></div>
         </div>
@@ -3320,6 +3423,19 @@
     </header>
 
     <section class="chat">
+      <button class="chat-risk-banner" id="chatRiskBanner" type="button" aria-expanded="false">
+        <span class="chat-risk-head">
+          <span class="chat-risk-title"><span data-i18n="panel.card.riskProfile">Risk Detected</span><span class="chat-risk-count">5</span></span>
+          <img class="chat-risk-arrow" src="assets/icons/Property%201=up.svg" alt="">
+        </span>
+        <span class="chat-risk-tags">
+          <span class="chat-risk-tag" data-i18n="panel.risk.blacklist">Blacklist</span>
+          <span class="chat-risk-tag" data-i18n="panel.risk.scalper">Scalper</span>
+          <span class="chat-risk-tag" data-i18n="panel.risk.relatedBlacklist">Related-Blacklist</span>
+          <span class="chat-risk-tag" data-i18n="panel.risk.communityHighRisk">Community High-Risk</span>
+          <span class="chat-risk-tag" data-i18n="panel.risk.highRiskUsers">High-Risk Users</span>
+        </span>
+      </button>
       <div class="message-stack scroll-area"></div>
       <div class="ai-capsule" id="aiCapsule" data-state="hidden" aria-live="polite">
         <span class="ai-collapsed-view">
@@ -3382,7 +3498,7 @@
       <div class="user-info">
         <img class="avatar" src="assets/crops/avatar02.jpg" alt="">
         <div class="user-meta">
-          <div class="name">Klaus Crawley</div>
+          <div class="name"><span class="name-text">Klaus Crawley</span><img class="risk-dot-icon" src="assets/icons/ic_error_12.svg" alt=""></div>
           <div class="id-row"><span>ID</span><a href="#">20647975</a><img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="20647975" alt=""></div>
           <div class="chip-row">
             <span class="chip">🇬🇧 UK</span>
@@ -3399,19 +3515,6 @@
         </div>
       </div>
 
-      <section class="panel-card risk-card">
-        <div class="panel-head">
-          <span data-i18n="panel.card.riskProfile">Risk Detected</span>
-          <span class="panel-actions"><span class="count red">5</span><img class="small-icon collapse-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
-        </div>
-        <div class="risk-tags">
-          <span class="risk-tag" data-i18n="panel.risk.blacklist">Blacklist</span>
-          <span class="risk-tag" data-i18n="panel.risk.scalper">Scalper</span>
-          <span class="risk-tag" data-i18n="panel.risk.relatedBlacklist">Related-Blacklist</span>
-          <span class="risk-tag" data-i18n="panel.risk.communityHighRisk">Community High-Risk</span>
-          <span class="risk-tag" data-i18n="panel.risk.highRiskUsers">High-Risk Users</span>
-        </div>
-      </section>
       </section>
 
       <section class="oa-orders">
@@ -4708,6 +4811,15 @@
       if (node) node.src = src;
     }
 
+    function updateRiskIndicators(session) {
+      const hasRisk = session && session.name === 'Klaus Crawley';
+      document.querySelectorAll('.risk-dot-icon').forEach(icon => {
+        icon.classList.toggle('is-hidden', !hasRisk);
+      });
+      const banner = document.getElementById('chatRiskBanner');
+      if (banner) banner.classList.toggle('is-hidden', !hasRisk);
+    }
+
     function selectSession(index) {
       const data = sessionData[index];
       if (!data) return;
@@ -4717,7 +4829,8 @@
         item.classList.toggle('active', itemIndex === index);
       });
       setImage('.profile-head .avatar', data.avatar);
-      setText('.profile-title .name', data.name);
+      setText('.profile-title .name-text', data.name);
+      updateRiskIndicators(data);
       setText('.account-pill strong', data.destination);
       const destinationCopy = document.querySelector('.account-pill .copy-icon');
       if (destinationCopy) destinationCopy.dataset.copy = data.destination;
@@ -4730,7 +4843,7 @@
       msgStack.innerHTML = renderMessagesWithDateSeparators(data.messages, data.avatar);
       ensureScrollThumb(msgStack);
       setImage('.user-info > .avatar', data.avatar);
-      setText('.user-info .name', data.name);
+      setText('.user-info .name-text', data.name);
       setText('.id-row a', data.id);
       const idCopy = document.querySelector('.id-row .copy-icon');
       if (idCopy) idCopy.dataset.copy = data.id;
@@ -4743,6 +4856,15 @@
       if (dates[1]) dates[1].innerHTML = `<span class="label">Last Seen:</span>${data.lastSeen}`;
       maybeStartAiSuggestion(data);
       requestAnimationFrame(positionAiCapsule);
+    }
+
+    const chatRiskBanner = document.getElementById('chatRiskBanner');
+    if (chatRiskBanner) {
+      chatRiskBanner.addEventListener('click', function() {
+        const expanded = !chatRiskBanner.classList.contains('is-expanded');
+        chatRiskBanner.classList.toggle('is-expanded', expanded);
+        chatRiskBanner.setAttribute('aria-expanded', String(expanded));
+      });
     }
 
     document.querySelectorAll('.session-item').forEach((item, index) => {
