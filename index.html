@@ -610,10 +610,6 @@
       display: none;
     }
 
-    .todo-recommend.is-collapsed .todo-recommend-meta .collapse-arrow {
-      transform: rotate(180deg);
-    }
-
     .todo-recommend-head,
     .todo-group-head,
     .todo-card-top,
@@ -659,6 +655,12 @@
       font-size: 12px;
       font-weight: 500;
       flex: none;
+    }
+
+    .todo-recommend-toggle-icon {
+      width: 12px;
+      height: 12px;
+      filter: brightness(0) saturate(100%) invert(39%) sepia(88%) saturate(2842%) hue-rotate(250deg) brightness(101%) contrast(101%);
     }
 
     .todo-recommend-grid {
@@ -1462,6 +1464,103 @@
       background: var(--purple-1);
     }
 
+    .chat-product-card-wrap {
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .chat-product-card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-product-card {
+      width: 280px;
+      padding: 8px;
+      border-radius: 8px;
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+      background: #fff;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .chat-product-card-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 3px;
+      background: var(--neutral-1);
+      object-fit: cover;
+    }
+
+    .chat-product-card-title {
+      align-self: stretch;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .chat-product-card-fields {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chat-product-card-field {
+      align-self: stretch;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .chat-product-card-label {
+      width: 56px;
+      flex: none;
+      color: var(--neutral-5);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .chat-product-card-value {
+      flex: 1;
+      min-width: 0;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-8);
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .chat-product-card-value span {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chat-product-card-value .copy-icon {
+      width: 12px;
+      height: 12px;
+      flex: none;
+    }
+
     .bubble-time {
       color: var(--neutral-5);
       font-size: 10px;
@@ -1976,6 +2075,270 @@
     .tool-btn img { width: 16px; height: 16px; }
     .tool-btn .ai-icon-img {
       filter: none;
+    }
+
+    .product-card-modal-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .product-card-modal-layer.open {
+      display: flex;
+    }
+
+    .product-card-backdrop {
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .product-card-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(716px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      padding: 24px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .product-card-modal-head {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .product-card-modal-title {
+      flex: 1;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .product-card-filter {
+      width: 70px;
+      margin-left: auto;
+    }
+
+    .product-card-filter .dropdown-trigger {
+      width: 100%;
+      height: 34px;
+      padding: 8px 4px 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .product-card-filter .dropdown-menu {
+      min-width: 152px;
+      padding: 8px;
+      border: 0;
+      border-radius: 6px;
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+      box-shadow: none;
+    }
+
+    .product-card-filter .dropdown-item {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--neutral-8);
+    }
+
+    .product-card-filter .dropdown-item:hover,
+    .product-card-filter .dropdown-item.selected {
+      background: var(--neutral-1);
+    }
+
+    .product-card-filter .dropdown-item .check {
+      display: none;
+    }
+
+    .product-card-list {
+      width: 100%;
+      height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .product-card-priority-group {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 220px));
+      gap: 4px;
+      align-content: start;
+    }
+
+    .product-card-option {
+      width: 220px;
+      min-height: 99px;
+      padding: 8px;
+      border-radius: 8px;
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .product-card-option:hover,
+    .product-card-option:focus-visible {
+      outline: 2px solid #c2e0ff;
+      outline-offset: -2px;
+    }
+
+    .product-card-option.selected {
+      outline: 2px solid var(--blue-6);
+      outline-offset: -2px;
+    }
+
+    .product-card-top,
+    .product-card-title-wrap,
+    .product-card-icons,
+    .product-card-body,
+    .product-card-count,
+    .product-card-field {
+      display: flex;
+      align-items: center;
+    }
+
+    .product-card-top {
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .product-card-title-wrap,
+    .product-card-icons {
+      min-width: 0;
+      gap: 4px;
+    }
+
+    .product-card-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .product-card-count {
+      flex: none;
+      gap: 2px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .product-card-count img,
+    .product-card-icons img {
+      width: 12px;
+      height: 12px;
+      flex: none;
+    }
+
+    .product-card-body {
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .product-card-image {
+      width: 48px;
+      height: 48px;
+      flex: none;
+      border-radius: 3px;
+      background: var(--neutral-1);
+      object-fit: cover;
+    }
+
+    .product-card-fields {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-card-field {
+      min-width: 0;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .product-card-label {
+      flex: none;
+      color: var(--neutral-5);
+    }
+
+    .product-card-value {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--neutral-8);
+    }
+
+    .product-card-empty {
+      padding: 28px 0;
+      color: var(--neutral-5);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .product-card-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .product-card-action {
+      min-width: 72px;
+      height: 34px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--neutral-8);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .product-card-action.primary {
+      border-color: var(--blue-6);
+      background: var(--blue-6);
+      color: #fff;
+    }
+
+    .product-card-action:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
 
     .send-btn {
@@ -2735,6 +3098,14 @@
       color: var(--neutral-8);
       font-size: 14px;
       font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.14s ease;
+    }
+
+    .tool-item:hover,
+    .tool-item:focus-visible {
+      background: var(--neutral-1);
+      outline: none;
     }
 
     .tool-item-main {
@@ -2748,6 +3119,10 @@
       width: 16px;
       height: 16px;
       flex: none;
+    }
+
+    .tool-item-main img.text-color-icon {
+      filter: brightness(0) saturate(100%) invert(10%) sepia(11%) saturate(1842%) hue-rotate(182deg) brightness(96%) contrast(89%);
     }
 
     .tool-item-label {
@@ -2774,6 +3149,7 @@
       background: transparent;
       font: inherit;
       cursor: pointer;
+      text-align: left;
     }
     .drawer-back { width: 16px; height: 16px; cursor: pointer; transform: rotate(180deg); }
     .search-all-title { font-size: 14px; font-weight: 600; color: var(--neutral-8); }
@@ -3910,7 +4286,7 @@
           <div class="tool-row">
             <button class="tool-btn" id="emojiButton" data-i18n-aria="chat.composer.emoji" data-i18n-tip="tip.emoji" data-tip-placement="top" aria-label="Emoji" aria-expanded="false" aria-controls="emojiPopover"><img src="assets/icons/ic_emoji_16.svg" alt=""></button>
             <button class="tool-btn" id="attachButton" data-i18n-aria="chat.composer.attach" data-i18n-tip="tip.attach" data-tip-placement="top" aria-label="Attach"><img src="assets/icons/ic_paperclip_16.svg" alt=""></button>
-            <button class="tool-btn" data-i18n-aria="chat.composer.card" data-i18n-tip="tip.card" data-tip-placement="top" aria-label="Card"><img src="assets/icons/ic_card_16.svg" alt=""></button>
+            <button class="tool-btn" id="productCardButton" data-i18n-aria="chat.composer.card" data-i18n-tip="tip.card" data-tip-placement="top" aria-label="Card" aria-haspopup="dialog"><img src="assets/icons/ic_card_16.svg" alt=""></button>
             <button class="tool-btn" data-i18n-aria="chat.composer.clock" data-i18n-tip="tip.clock" data-tip-placement="top" aria-label="Clock"><img src="assets/icons/ic_clock_16.svg" alt=""></button>
             <button class="tool-btn" id="aiToolButton" data-i18n-aria="chat.composer.ai" data-i18n-tip="tip.aiOptimize" data-tip-placement="top" aria-label="AI reply"><img class="ai-icon-img" src="assets/icons/ic_ai_magic.svg" alt=""></button>
           </div>
@@ -4149,7 +4525,7 @@
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
           <button class="tool-item" type="button">
-            <span class="tool-item-main"><img src="assets/icons/ic_OA_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.oaRegistration">OA Registration</span></span>
+            <span class="tool-item-main"><img class="text-color-icon" src="assets/icons/ic_tasks_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.productRecommendation">Product Recommendation</span></span>
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
           <button class="tool-item" type="button">
@@ -4159,10 +4535,10 @@
         </div>
       </div>
       <div class="drawer scroll-area" id="searchDrawer">
-        <div class="search-all-header">
-          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="" onclick="closeDrawer(document.querySelector('#searchDrawer'))">
+        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#searchDrawer'))">
+          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
           <span class="search-all-title">Search All</span>
-        </div>
+        </button>
         <div class="drawer-search-row">
           <div class="dropdown" id="searchDrawerTypeDropdown">
             <button class="dropdown-trigger" type="button">
@@ -4193,10 +4569,10 @@
           </div>
       </div>
       <div class="drawer scroll-area" id="workorderDrawer">
-        <div class="search-all-header">
-          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="" onclick="closeDrawer(document.querySelector('#workorderDrawer'))">
+        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#workorderDrawer'))">
+          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
           <span class="search-all-title">Available WorkOrder Pool</span>
-        </div>
+        </button>
         <div class="drawer-search-row">
           <div class="dropdown" id="workorderDrawerTypeDropdown">
             <button class="dropdown-trigger" type="button">
@@ -4381,6 +4757,31 @@
       </div>
     </aside>
     <div class="toast" role="status" aria-live="polite" data-i18n="misc.toast.copied">Copied to clipboard</div>
+    <div class="product-card-modal-layer" id="productCardModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="productCardBackdrop" aria-label="Close product card dialog"></button>
+      <section class="product-card-dialog" role="dialog" aria-modal="true" aria-labelledby="productCardModalTitle">
+        <div class="product-card-modal-head">
+          <div class="product-card-modal-title" id="productCardModalTitle">Send Product Card</div>
+          <div class="dropdown product-card-filter" id="productCardFilterDropdown">
+            <button class="dropdown-trigger" type="button" aria-label="Filter product cards">
+              <span class="dropdown-label" id="productCardFilterLabel">All</span><img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu dropdown-right">
+              <div class="dropdown-item selected" data-value="All">All<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="S">S-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="1">1-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="2">2-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="3">3-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+            </div>
+          </div>
+        </div>
+        <div class="product-card-list scroll-area" id="productCardList" aria-label="Product cards"></div>
+        <div class="product-card-footer">
+          <button class="product-card-action" type="button" id="productCardCancel">Cancel</button>
+          <button class="product-card-action primary" type="button" id="productCardSend" disabled>Send</button>
+        </div>
+      </section>
+    </div>
   </main>
   <script>
     const sessionData = [
@@ -4774,7 +5175,7 @@
       'tools.searchAll':              ['Search All','全局搜索','全体検索'],
       'tools.quickReplies':           ['Quick Replies','快捷回复','クイック返信'],
       'tools.workorderPool':          ['Available WorkOrder Pool','可用工单池','利用可能なワークオーダープール'],
-      'tools.oaRegistration':         ['OA Registration','OA注册','OA登録'],
+      'tools.productRecommendation':  ['Product Recommendation','产品推荐','商品推薦'],
       'tools.workorderInfo':          ['WorkOrder Info','工单信息','ワークオーダー情報'],
       'drawer.searchAll.title':       ['Search All','全局搜索','全体検索'],
       'drawer.searchAll.results':     ['Results','搜索结果','検索結果'],
@@ -5068,6 +5469,44 @@
       return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
     }
 
+    function renderProductCardMessage(cards, timeStr) {
+      const productCards = Array.isArray(cards) ? cards : [];
+      const cardHtml = productCards.map(function(card) {
+        const fields = [
+          ['ID', card.id],
+          ['Store Name', card.store],
+          ['Links', card.link]
+        ].map(function(field) {
+          const value = field[1] || '';
+          return `
+            <div class="chat-product-card-field">
+              <div class="chat-product-card-label">${escapeHtml(field[0])}</div>
+              <div class="chat-product-card-value">
+                <span>${escapeHtml(value)}</span>
+                <img class="copy-icon" src="assets/icons/ic_copy_12.svg" width="12" height="12" data-copy="${escapeHtml(value)}" alt="">
+              </div>
+            </div>
+          `;
+        }).join('');
+        return `
+          <div class="chat-product-card">
+            <img class="chat-product-card-img" src="${escapeHtml(card.image)}" alt="">
+            <div class="chat-product-card-title">${escapeHtml(card.name)}</div>
+            <div class="chat-product-card-fields">${fields}</div>
+          </div>
+        `;
+      }).join('');
+      return `
+        <div class="message out product-card-message">
+          <div class="chat-product-card-wrap">
+            <div class="chat-product-card-stack">${cardHtml}</div>
+            <div class="bubble-time"><span>${timeStr}</span><span>-</span><span>Noimz</span></div>
+          </div>
+          <img class="avatar" src="assets/crops/agent01.jpg" alt="">
+        </div>
+      `;
+    }
+
     function renderMessagesWithDateSeparators(messages, avatar) {
       var lastDateKey = '';
       return (messages || []).map(function(m) {
@@ -5084,6 +5523,8 @@
           var safeText = escapeHtml(m.text);
           if (m.dir === 'in') {
             html += `<div class="message in"><img class="avatar" src="${avatar}" alt=""><div class="bubble"><div>${safeText}</div><div class="bubble-time">${timeStr}</div></div></div>`;
+          } else if (m.type === 'productCards') {
+            html += renderProductCardMessage(m.productCards, timeStr);
           } else {
             var aiClass = m.aiGenerated ? ' ai-generated' : '';
             var aiIcon = m.aiGenerated ? '<img class="bubble-ai-icon" src="assets/icons/ic_ai_magic_purple.svg" alt="">' : '';
@@ -5224,41 +5665,41 @@
     const todoGroupsByType = {
       RSO: [
         { key: 'todo.pendingPromptedReview', count: 3, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
-          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
-          { index: 2, source: 'GB-HanaCute', user: 'Dixnn', userAvatar: 'assets/crops/avatar03.jpg' },
+          { index: 1, source: 'US-EINSEO' },
+          { index: 0, source: 'CA-allovu' },
+          { index: 2, source: 'GB-HanaCute' },
         ] },
         { key: 'todo.awaitingRefund', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
-          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
+          { index: 1, source: 'US-EINSEO' },
+          { index: 0, source: 'CA-allovu' },
         ] },
         { key: 'todo.refundFailed', count: 2, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
-          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg', statusKey: 'todo.refundRejection' },
-          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg', statusKey: 'todo.refundFailedStatus' },
+          { index: 1, source: 'US-EINSEO', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', statusKey: 'todo.refundFailedStatus' },
         ] },
         { key: 'todo.pendingConfirmation', count: 2, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 3, source: 'US-EINSEO', user: 'hstoy', userAvatar: 'assets/crops/avatar04.jpg' },
-          { index: 4, source: 'CA-allovu', user: 'Ariana', userAvatar: 'assets/crops/avatar05.jpg' },
+          { index: 3, source: 'US-EINSEO' },
+          { index: 4, source: 'CA-allovu' },
         ] },
       ],
       RDO: [
         { key: 'todo.awaitingRefund', count: 4, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg' },
-          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg' },
-          { index: 3, source: 'GB-HanaCute', user: 'hstoy', userAvatar: 'assets/crops/avatar04.jpg' },
-          { index: 4, source: 'US-EINSEO', user: 'Ariana', userAvatar: 'assets/crops/avatar05.jpg' },
+          { index: 1, source: 'US-EINSEO' },
+          { index: 0, source: 'CA-allovu' },
+          { index: 3, source: 'GB-HanaCute' },
+          { index: 4, source: 'US-EINSEO' },
         ] },
         { key: 'todo.refundFailed', count: 3, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
-          { index: 2, source: 'GB-HanaCute', user: 'Dixnn', userAvatar: 'assets/crops/avatar03.jpg', statusKey: 'todo.refundRejection' },
-          { index: 0, source: 'CA-allovu', user: 'Bibinono', userAvatar: 'assets/crops/avatar01.jpg', statusKey: 'todo.refundFailedStatus' },
-          { index: 1, source: 'US-EINSEO', user: 'Klaus Crawley', userAvatar: 'assets/crops/avatar02.jpg', statusKey: 'todo.refundFailedStatus' },
+          { index: 2, source: 'GB-HanaCute', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', statusKey: 'todo.refundFailedStatus' },
+          { index: 1, source: 'US-EINSEO', statusKey: 'todo.refundFailedStatus' },
         ] },
         { key: 'todo.pendingConfirmation', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 5, source: 'US-EINSEO', user: 'Miya', userAvatar: 'assets/crops/avatar06.jpg' },
-          { index: 6, source: 'CA-allovu', user: 'Tony', userAvatar: 'assets/crops/avatar07.jpg' },
+          { index: 5, source: 'US-EINSEO' },
+          { index: 6, source: 'CA-allovu' },
         ] },
         { key: 'todo.pendingPromptedReview', count: 1, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 7, source: 'US-EINSEO', user: 'Lina', userAvatar: 'assets/crops/avatar08.jpg' },
+          { index: 7, source: 'US-EINSEO' },
         ] },
       ],
     };
@@ -5292,7 +5733,7 @@
         <button class="todo-order-card" type="button" data-index="${item.index}">
           <div class="todo-card-top">
             <span class="todo-card-source"><span class="brand-frame"><img class="brand" src="${brandImg}" alt="" ${brandFallbackAttrs}></span><span>${escapeHtml(item.source || session.source)}</span></span>
-            <span class="todo-card-user"><img class="avatar" src="${item.userAvatar || session.avatar}" alt=""><span class="online-dot-inline"></span><span class="todo-user-name">${escapeHtml(item.user || session.name)}</span></span>
+            <span class="todo-card-user"><img class="avatar" src="${session.avatar}" alt=""><span class="online-dot-inline"></span><span class="todo-user-name">${escapeHtml(session.name)}</span></span>
           </div>
           <div class="todo-order-main">
             <img class="todo-product-img" src="assets/crops/product-rose.png" alt="">
@@ -5325,7 +5766,7 @@
           <section class="todo-recommend${todoRecommendationExpanded ? '' : ' is-collapsed'}">
             <button class="todo-recommend-head" type="button" aria-expanded="${todoRecommendationExpanded ? 'true' : 'false'}">
               <span class="todo-recommend-title">${t('todo.productRecommendation')}</span>
-              <span class="todo-recommend-meta"><span>${recommendationTasks.length}</span><img class="collapse-arrow" src="assets/icons/Property%201=up.svg" alt=""></span>
+              <span class="todo-recommend-meta"><span>${recommendationTasks.length}</span><img class="todo-recommend-toggle-icon" src="assets/icons/${todoRecommendationExpanded ? 'ic_view_less_12.svg' : 'ic_view_all_12.svg'}" alt=""></span>
             </button>
             <div class="todo-recommend-grid">
               ${recommendationTasks.map(renderTodoRecommendationCard).join('')}
@@ -5562,11 +6003,219 @@
       });
     });
     document.addEventListener('click', function(event) {
+      const copyIcon = event.target.closest('.copy-icon[data-copy]');
+      if (copyIcon) {
+        event.stopPropagation();
+        copyText(copyIcon.dataset.copy);
+        return;
+      }
       const copyValue = event.target.closest('.oa-copy-value[data-copy]');
       if (!copyValue) return;
       event.stopPropagation();
       copyText(copyValue.dataset.copy);
     });
+
+    const productCardItems = [
+      { id: '9527', name: 'Rosethorn 2', count: 6, priority: 'S', rush: true, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9528', name: 'Rosethorn 2', count: 3, priority: 'S', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9531', name: 'Rosethorn 2', count: 1, priority: 'S', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9538', name: 'Rosethorn 2', count: 5, priority: 'S', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9427', name: 'Rosethorn 2', count: 6, priority: '1', rush: true, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9221', name: 'Rosethorn 2', count: 2, priority: '1', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9385', name: 'Rosethorn 2', count: 4, priority: '1', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9314', name: 'Rosethorn 2', count: 1, priority: '1', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9276', name: 'Rosethorn 2', count: 4, priority: '2', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9186', name: 'Rosethorn 2', count: 7, priority: '2', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9068', name: 'Rosethorn 2', count: 5, priority: '3', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9033', name: 'Rosethorn 2', count: 2, priority: '3', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' }
+    ];
+    const productPriorityIcon = {
+      S: 'assets/icons/ic_priority_12s.svg',
+      '1': 'assets/icons/ic_priority_121.svg',
+      '2': 'assets/icons/ic_priority_122.svg',
+      '3': 'assets/icons/ic_priority_123.svg'
+    };
+    let productCardFilter = 'All';
+    let selectedProductCardIds = new Set();
+
+    function sortedProductCards(items) {
+      return items.slice().sort(function(a, b) {
+        return b.count - a.count
+          || Number(b.rush) - Number(a.rush)
+          || a.id.localeCompare(b.id);
+      });
+    }
+
+    function productCardsByPriority() {
+      const priorities = productCardFilter === 'All' ? ['S', '1', '2', '3'] : [productCardFilter];
+      return priorities.map(function(priority) {
+        return sortedProductCards(productCardItems.filter(function(item) {
+          return item.priority === priority;
+        }));
+      }).filter(function(group) {
+        return group.length > 0;
+      });
+    }
+
+    function renderProductCardItem(item) {
+      const selected = selectedProductCardIds.has(item.id);
+      const fields = [
+        ['ID', item.id],
+        ['Store Name', item.store],
+        ['Links', item.link]
+      ].map(function(field) {
+        return `
+          <div class="product-card-field">
+            <span class="product-card-label">${escapeHtml(field[0])}</span>
+            <span class="product-card-value">${escapeHtml(field[1])}</span>
+          </div>
+        `;
+      }).join('');
+      return `
+        <article class="product-card-option${selected ? ' selected' : ''}" role="button" tabindex="0" data-card-id="${escapeHtml(item.id)}" aria-pressed="${selected ? 'true' : 'false'}">
+          <span class="product-card-top">
+            <span class="product-card-title-wrap">
+              <span class="product-card-title">${escapeHtml(item.name)}</span>
+              <span class="product-card-count"><img src="assets/icons/ic_x_12.svg" alt="">${escapeHtml(item.count)}</span>
+            </span>
+            <span class="product-card-icons">
+              <img src="${productPriorityIcon[item.priority] || productPriorityIcon['3']}" alt="${escapeHtml(item.priority)}">
+              ${item.rush ? '<img src="assets/icons/ic_priority_12rush.svg" alt="Rush">' : ''}
+              ${item.marked ? '<img src="assets/icons/ic_priority_12_star.svg" alt="Marked">' : ''}
+            </span>
+          </span>
+          <span class="product-card-body">
+            <img class="product-card-image" src="${escapeHtml(item.image)}" alt="">
+            <span class="product-card-fields">${fields}</span>
+          </span>
+        </article>
+      `;
+    }
+
+    function renderProductCardModal() {
+      const list = document.getElementById('productCardList');
+      const sendButton = document.getElementById('productCardSend');
+      const filterLabel = document.getElementById('productCardFilterLabel');
+      if (!list || !sendButton || !filterLabel) return;
+      filterLabel.textContent = productCardFilter;
+      const groups = productCardsByPriority();
+      list.innerHTML = groups.length ? groups.map(function(group) {
+        return `<div class="product-card-priority-group">${group.map(renderProductCardItem).join('')}</div>`;
+      }).join('') : '<div class="product-card-empty">No product cards</div>';
+      ensureScrollThumb(list);
+      sendButton.disabled = selectedProductCardIds.size === 0;
+    }
+
+    function openProductCardModal() {
+      const modal = document.getElementById('productCardModal');
+      if (!modal) return;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      renderProductCardModal();
+    }
+
+    function closeProductCardModal() {
+      const modal = document.getElementById('productCardModal');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.querySelector('#productCardFilterDropdown .dropdown-menu')?.classList.remove('open');
+    }
+
+    function sendSelectedProductCards() {
+      if (selectedProductCardIds.size === 0 || currentSessionIndex === null || !sessionData[currentSessionIndex]) return;
+      const selectedCards = productCardItems.filter(function(item) {
+        return selectedProductCardIds.has(item.id);
+      }).map(function(item) {
+        return {
+          id: item.id,
+          name: item.name,
+          store: item.store,
+          link: item.link,
+          image: item.image
+        };
+      });
+      if (selectedCards.length === 0) return;
+      const ts = timeStampNow();
+      const session = sessionData[currentSessionIndex];
+      if (!session.messages) session.messages = [];
+      session.messages.push({
+        dir: 'out',
+        type: 'productCards',
+        text: selectedCards.length === 1 ? selectedCards[0].name : `${selectedCards.length} Product Cards`,
+        time: ts,
+        productCards: selectedCards
+      });
+      session.lastIsAgent = true;
+      session.lastSeen = ts;
+      selectedProductCardIds = new Set();
+      saveSessionData();
+      renderCurrentList();
+      const msgStack = document.querySelector('.message-stack');
+      msgStack.innerHTML = renderMessagesWithDateSeparators(session.messages, session.avatar);
+      ensureScrollThumb(msgStack);
+      msgStack.scrollTop = msgStack.scrollHeight;
+      closeProductCardModal();
+      showToast('Product card sent');
+      requestAnimationFrame(positionAiCapsule);
+    }
+
+    const productCardButton = document.getElementById('productCardButton');
+    if (productCardButton) {
+      productCardButton.addEventListener('click', openProductCardModal);
+    }
+
+    const productCardBackdrop = document.getElementById('productCardBackdrop');
+    const productCardCancel = document.getElementById('productCardCancel');
+    const productCardSend = document.getElementById('productCardSend');
+    if (productCardBackdrop) productCardBackdrop.addEventListener('click', closeProductCardModal);
+    if (productCardCancel) productCardCancel.addEventListener('click', closeProductCardModal);
+    if (productCardSend) {
+      productCardSend.addEventListener('click', function() {
+        if (productCardSend.disabled) return;
+        sendSelectedProductCards();
+      });
+    }
+
+    const productCardFilterDropdown = document.getElementById('productCardFilterDropdown');
+    if (productCardFilterDropdown) {
+      const trigger = productCardFilterDropdown.querySelector('.dropdown-trigger');
+      const menu = productCardFilterDropdown.querySelector('.dropdown-menu');
+      trigger.addEventListener('click', function(event) {
+        event.stopImmediatePropagation();
+        menu.classList.toggle('open');
+      });
+      productCardFilterDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function(event) {
+          event.stopImmediatePropagation();
+          productCardFilter = item.dataset.value || 'All';
+          productCardFilterDropdown.querySelectorAll('.dropdown-item').forEach(function(node) {
+            node.classList.toggle('selected', node === item);
+          });
+          menu.classList.remove('open');
+          renderProductCardModal();
+        });
+      });
+    }
+
+    const productCardList = document.getElementById('productCardList');
+    if (productCardList) {
+      function toggleProductCardFromEvent(event) {
+        const card = event.target.closest('.product-card-option[data-card-id]');
+        if (!card) return;
+        const cardId = card.dataset.cardId;
+        if (selectedProductCardIds.has(cardId)) selectedProductCardIds.delete(cardId);
+        else selectedProductCardIds.add(cardId);
+        renderProductCardModal();
+      }
+      productCardList.addEventListener('click', toggleProductCardFromEvent);
+      productCardList.addEventListener('keydown', function(event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (!event.target.closest('.product-card-option[data-card-id]')) return;
+        event.preventDefault();
+        toggleProductCardFromEvent(event);
+      });
+    }
 
     const viewport = document.querySelector('.viewport');
     const fullscreenToggle = document.getElementById('fullscreenToggle');
