@@ -11,6 +11,7 @@
       --neutral-3: #e5e6eb;
       --neutral-4: #c9cdd4;
       --neutral-5: #a6abb5;
+      --neutral-6: #858c99;
       --neutral-7: #5e6673;
       --neutral-8: #1d2129;
       --blue-1: #e8f3ff;
@@ -292,7 +293,7 @@
       width: 100%;
       padding: 8px 12px;
       border: 0;
-      border-radius: 8px;
+      border-radius: 0;
       background: transparent;
       color: #fff;
       font-family: inherit;
@@ -870,6 +871,12 @@
       text-align: left;
       font-family: inherit;
       cursor: pointer;
+      transition: background-color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .todo-order-card:hover {
+      background: var(--neutral-1);
+      border-color: var(--neutral-2);
     }
 
     .todo-order-main {
@@ -1315,16 +1322,16 @@
       right: 12px;
       top: 12px;
       z-index: 5;
-      padding: 8px 12px;
+      padding: 12px 8px;
       border: 0;
       border-radius: 12px;
       background: var(--error-light);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
       color: var(--error-dark);
       overflow: hidden;
-      cursor: pointer;
+      text-align: left;
     }
     .chat-risk-banner.is-hidden {
       display: none;
@@ -1334,16 +1341,32 @@
       top: 0;
     }
 
-    .chat-risk-banner.is-expanded + .message-stack {
-      top: 84px;
+    .chat-risk-banner:not(.is-hidden) + .message-stack {
+      top: 108px;
+    }
+
+    .chat-risk-banner.risk-banner-enter {
+      animation: riskBannerEnter 260ms cubic-bezier(0.2, 0, 0, 1) both;
+    }
+
+    @keyframes riskBannerEnter {
+      from {
+        opacity: 0;
+        transform: translateY(-16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .chat-risk-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      justify-content: flex-start;
+      gap: 4px;
       min-height: 16px;
+      padding-left: 8px;
     }
 
     .chat-risk-title {
@@ -1356,48 +1379,135 @@
       line-height: 16px;
     }
 
-    .chat-risk-count {
-      min-width: 16px;
-      height: 16px;
-      padding: 0 4px;
-      border-radius: 20px;
-      background: var(--error-dark);
-      color: var(--error-light);
+    .chat-risk-tags {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      color: var(--error-dark);
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
-      text-align: center;
+      white-space: normal;
     }
 
-    .chat-risk-arrow {
+    .chat-risk-tags span,
+    .high-risk-alert-rules-text span {
+      position: relative;
+      padding-left: 10px;
+    }
+
+    .chat-risk-tags span::before,
+    .high-risk-alert-rules-text span::before {
+      content: "";
+      position: absolute;
+      left: 1px;
+      top: 0.58em;
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .high-risk-alert-dialog {
+      width: min(500px, calc(100vw - 48px));
+      transition: transform 220ms cubic-bezier(0.2, 0, 0, 1), opacity 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .high-risk-alert-dialog.is-closing {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    .high-risk-alert-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .high-risk-alert-icon {
       width: 16px;
       height: 16px;
-      transform: rotate(180deg);
-      filter: brightness(0) saturate(100%) invert(14%) sepia(87%) saturate(3316%) hue-rotate(351deg) brightness(93%) contrast(103%);
+      flex: none;
     }
 
-    .chat-risk-banner.is-expanded .chat-risk-arrow {
-      transform: rotate(0deg);
+    .high-risk-alert-title {
+      flex: 1;
+      height: 19px;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 19px;
     }
 
-    .chat-risk-tags {
-      display: none;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    .chat-risk-banner.is-expanded .chat-risk-tags {
+    .high-risk-alert-body {
+      width: 100%;
+      min-height: 160px;
       display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .chat-risk-tag {
-      padding: 2px 4px;
-      border-radius: 4px;
-      background: var(--error-dark);
-      color: var(--error-light);
-      font-size: 10px;
-      line-height: 12px;
-      white-space: nowrap;
+    .high-risk-alert-copy {
+      width: 100%;
+      color: #000;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    .high-risk-alert-rules {
+      width: 100%;
+      padding: 8px 8px 12px;
+      border-radius: 8px;
+      background: var(--error-light);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: var(--error-dark);
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    .high-risk-alert-rules-title {
+      font-weight: 700;
+    }
+
+    .high-risk-alert-rules-text {
+      font-weight: 400;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .high-risk-alert-footer {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .high-risk-alert-confirm {
+      min-width: 100px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue-6);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .high-risk-alert-confirm.is-attention {
+      animation: highRiskConfirmShake 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes highRiskConfirmShake {
+      0%, 100% { transform: translateX(0); }
+      18% { transform: translateX(-7px); }
+      36% { transform: translateX(6px); }
+      54% { transform: translateX(-4px); }
+      72% { transform: translateX(3px); }
     }
 
     .message {
@@ -1455,6 +1565,88 @@
       line-height: 1.17;
     }
 
+    .bubble > div:first-child {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .message-context-menu {
+      position: fixed;
+      min-width: 128px;
+      padding: 6px;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(29, 33, 41, 0.14);
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+      z-index: 80;
+      display: none;
+    }
+
+    .message-context-menu.open {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .message-context-menu button {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--neutral-8);
+      font: 400 13px/16px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .message-context-menu button:hover {
+      background: var(--neutral-1);
+    }
+
+    .amazon-order-token {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--blue-6);
+      font: inherit;
+      line-height: inherit;
+      vertical-align: baseline;
+    }
+
+    .amazon-order-token.is-clickable {
+      cursor: pointer;
+    }
+
+    .amazon-order-token.is-risk {
+      color: var(--error-dark);
+    }
+
+    .amazon-order-token.is-loading {
+      color: var(--blue-6);
+    }
+
+    .amazon-order-token img {
+      width: 12px;
+      height: 12px;
+      flex: none;
+      filter: brightness(0) saturate(100%) invert(38%) sepia(98%) saturate(3078%) hue-rotate(201deg) brightness(101%) contrast(101%);
+    }
+
+    .amazon-order-token.is-risk img {
+      filter: brightness(0) saturate(100%) invert(14%) sepia(87%) saturate(3316%) hue-rotate(351deg) brightness(93%) contrast(103%);
+    }
+
+    .amazon-order-token.is-loading img {
+      filter: none;
+      animation: oaSpin 0.8s linear infinite;
+    }
+
     .out .bubble {
       background: var(--blue-1);
       border-radius: 12px 12px 2px 12px;
@@ -1503,7 +1695,7 @@
       align-self: stretch;
       color: var(--neutral-8);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       line-height: 1.3;
       word-break: break-word;
     }
@@ -1524,10 +1716,10 @@
     }
 
     .chat-product-card-label {
-      width: 56px;
+      width: 40px;
       flex: none;
       color: var(--neutral-5);
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
       line-height: 1.2;
     }
@@ -1540,19 +1732,24 @@
       background: var(--neutral-1);
       display: inline-flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 4px;
       color: var(--neutral-8);
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
       line-height: 1.2;
     }
 
     .chat-product-card-value span {
-      flex: 1;
       min-width: 0;
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .chat-product-card-field.is-link .chat-product-card-value span {
+      flex: 1;
     }
 
     .chat-product-card-value .copy-icon {
@@ -1972,10 +2169,82 @@
       font-weight: 400;
     }
 
-    .composer-input:empty::before {
+    .composer-input.is-empty::before {
       content: attr(data-placeholder);
       color: var(--neutral-5);
       pointer-events: none;
+    }
+
+    .composer-quick-popover {
+      position: absolute;
+      left: 12px;
+      right: auto;
+      bottom: calc(100% + 8px);
+      width: calc(100% - 24px);
+      max-height: 240px;
+      padding: 16px 16px 0;
+      border-radius: 12px;
+      outline: 2px solid var(--neutral-2);
+      outline-offset: -2px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(29, 33, 41, 0.14);
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      z-index: 40;
+    }
+
+    .composer-quick-popover.open {
+      display: flex;
+    }
+
+    .composer-quick-item {
+      width: 100%;
+      padding: 4px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 4px;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .composer-quick-item:hover,
+    .composer-quick-item.active {
+      background: var(--blue-1);
+    }
+
+    .composer-quick-code {
+      width: 60px;
+      flex: none;
+      color: var(--blue-6);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .composer-quick-text {
+      flex: 1;
+      min-width: 0;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+
+    .composer-quick-text .quick-reply-token {
+      color: var(--purple-3);
+    }
+
+    .composer-quick-empty {
+      padding: 8px;
+      color: var(--neutral-5);
+      font-size: 12px;
     }
 
     .composer-actions {
@@ -2113,6 +2382,15 @@
       gap: 12px;
     }
 
+    .product-card-dialog.high-risk-alert-dialog {
+      width: min(500px, calc(100vw - 48px));
+    }
+
+    .conversation-history-dialog {
+      width: min(820px, calc(100vw - 48px));
+      height: min(640px, calc(100vh - 48px));
+    }
+
     .product-card-modal-head {
       display: flex;
       align-items: center;
@@ -2168,6 +2446,196 @@
       display: none;
     }
 
+    .conversation-history-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    .conversation-history-column {
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .conversation-history-log {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .conversation-history-events {
+      width: 300px;
+      flex: none;
+    }
+
+    .conversation-history-label {
+      color: var(--neutral-6);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .conversation-history-chat {
+      flex: 1;
+      min-height: 0;
+      padding: 0;
+      border-radius: 8px;
+      background: transparent;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .history-message {
+      align-self: stretch;
+      padding: 4px 0 4px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      border-left: 2px solid transparent;
+    }
+
+    .history-message.user {
+      background: var(--blue-1);
+      border-left-color: var(--blue-6);
+    }
+
+    .history-message.agent {
+      background: var(--neutral-2);
+      border-left-color: var(--neutral-5);
+    }
+
+    .history-message.ai {
+      background: var(--purple-1);
+      border-left-color: var(--purple-3);
+    }
+
+    .history-message.is-flashing {
+      animation: historyMessageFlash 0.5s ease-in-out 4;
+    }
+
+    @keyframes historyMessageFlash {
+      0%, 100% { box-shadow: inset 0 0 0 0 rgba(22, 119, 255, 0); }
+      50% { box-shadow: inset 0 0 0 2px rgba(22, 119, 255, 0.65); }
+    }
+
+    .history-message-meta {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--neutral-5);
+    }
+
+    .history-message.user .history-message-name {
+      color: var(--blue-6);
+    }
+
+    .history-message.agent .history-message-name,
+    .history-message.ai .history-message-name {
+      color: var(--neutral-6);
+    }
+
+    .history-message-text {
+      align-self: stretch;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .history-message.system .history-message-text {
+      color: var(--neutral-6);
+    }
+
+    .conversation-history-timeline {
+      flex: 1;
+      min-height: 0;
+      padding: 12px 0;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .conversation-history-timeline::before {
+      content: '';
+      position: absolute;
+      left: 2.5px;
+      top: var(--timeline-line-top, 15px);
+      bottom: var(--timeline-line-bottom, 15px);
+      width: 1px;
+      background: var(--neutral-4);
+    }
+
+    .history-event {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .history-event:hover .history-event-copy,
+    .history-event:focus-visible .history-event-copy {
+      background: var(--blue-1);
+      outline: none;
+    }
+
+    .history-event-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--neutral-4);
+      flex: none;
+    }
+
+    .history-event-copy {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 2px;
+      border-radius: 4px;
+      min-width: 0;
+      padding: 2px 4px;
+    }
+
+    .history-event-time {
+      color: var(--blue-6);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .history-event-text {
+      color: var(--neutral-8);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .history-event.success .history-event-text {
+      color: var(--success-dark);
+    }
+
+    .history-event-link {
+      color: var(--blue-6);
+    }
+
     .product-card-list {
       width: 100%;
       height: 300px;
@@ -2211,6 +2679,38 @@
       outline-offset: -2px;
     }
 
+    .product-center-filters {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      align-items: start;
+    }
+
+    .product-center-filters .dropdown,
+    .product-center-filters .dropdown-trigger {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .product-center-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .product-center-list .product-card-priority-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 220px);
+      gap: 8px;
+      align-content: start;
+      justify-content: start;
+    }
+
+    .product-center-list .product-card-option {
+      width: 220px;
+      cursor: pointer;
+    }
+
     .product-card-top,
     .product-card-title-wrap,
     .product-card-icons,
@@ -2239,7 +2739,7 @@
       white-space: nowrap;
       color: var(--neutral-8);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
     }
 
     .product-card-count {
@@ -2318,6 +2818,19 @@
       gap: 8px;
     }
 
+    .product-center-footer {
+      position: sticky;
+      left: 0;
+      right: 0;
+      bottom: -24px;
+      z-index: 10;
+      margin: auto -12px -24px;
+      padding: 12px 12px 16px;
+      background: #fff;
+      border-top: 1px solid var(--neutral-2);
+      box-shadow: 0 -6px 16px rgba(29, 33, 41, 0.08);
+    }
+
     .product-card-action {
       min-width: 72px;
       height: 34px;
@@ -2342,7 +2855,7 @@
     }
 
     .send-btn {
-      width: 80px;
+      width: 104px;
       height: 36px;
       border: 0;
       border-radius: 8px;
@@ -2436,7 +2949,7 @@
       top: calc(var(--topbar-height) + 72px);
       width: var(--assist-width);
       height: calc(100vh - var(--topbar-height) - 72px);
-      background: #fff;
+      background: var(--neutral-1);
       border-left: 1px solid var(--neutral-1);
       padding: 12px 12px 0;
       display: flex;
@@ -2468,7 +2981,7 @@
 
     .right-tabs {
       flex: none;
-      background: var(--neutral-1);
+      background: var(--neutral-2);
       height: 33px;
       border-radius: 8px;
       display: flex;
@@ -2480,7 +2993,7 @@
       min-width: 0;
       font-size: 14px; font-weight: 400; color: var(--neutral-5);
       border-radius: 8px;
-      border: 0; background: transparent;
+      border: 0; background: var(--neutral-2);
       appearance: none; font-family: inherit; cursor: pointer;
     }
 
@@ -2804,13 +3317,13 @@
       border: 1px solid var(--neutral-1);
       border-radius: 8px;
       background: #fff;
-      transition: background-color 0.16s ease, border-color 0.16s ease;
+      transition: box-shadow 0.16s ease, transform 0.16s ease;
       overflow-anchor: none;
     }
 
     .product:hover {
-      background: var(--neutral-1);
-      border-color: var(--neutral-2);
+      box-shadow: 0 4px 10px rgba(29, 33, 41, 0.1);
+      transform: translateY(-1px);
     }
     .product.is-new-order {
       position: relative;
@@ -3104,7 +3617,7 @@
 
     .tool-item:hover,
     .tool-item:focus-visible {
-      background: var(--neutral-1);
+      background: var(--neutral-2);
       outline: none;
     }
 
@@ -3184,6 +3697,349 @@
     }
     .drawer .search-input::placeholder {
       color: var(--neutral-5);
+    }
+    .quick-replies-drawer {
+      gap: 8px;
+    }
+    .quick-reply-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-reply-language {
+      flex: none;
+    }
+    .quick-reply-language .dropdown-trigger {
+      height: 34px;
+      padding: 8px 4px 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .quick-reply-search {
+      flex: 1;
+      height: 34px;
+    }
+    .quick-reply-tabs {
+      width: 100%;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      display: flex;
+      overflow: hidden;
+    }
+    .quick-reply-tab {
+      flex: 1;
+      height: 34px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--neutral-5);
+      font: 400 14px/1 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+    }
+    .quick-reply-tab.active {
+      background: #fff;
+      color: var(--neutral-8);
+      outline: 1px solid var(--neutral-2);
+      outline-offset: -1px;
+    }
+    .quick-reply-tip {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--neutral-8);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .quick-reply-tip span {
+      flex: 1;
+      min-width: 0;
+    }
+    .quick-reply-tip.is-hidden {
+      display: none;
+    }
+    .quick-reply-tip-close {
+      width: 12px;
+      height: 12px;
+      padding: 0;
+      flex: none;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    .quick-reply-tip-close img {
+      width: 12px;
+      height: 12px;
+      display: block;
+    }
+    .quick-reply-list {
+      width: 100%;
+      padding: 8px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-reply-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+    .quick-reply-group-head {
+      width: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--neutral-8);
+      font: 400 12px/1.3 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+    }
+    .quick-reply-group-head img {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+    .quick-reply-group.collapsed .quick-reply-group-head img {
+      transform: rotate(180deg);
+    }
+    .quick-reply-group.collapsed .quick-reply-items {
+      display: none;
+    }
+    .quick-reply-items {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .quick-reply-card {
+      width: 100%;
+      min-width: 0;
+      padding: 8px;
+      border: 0;
+      border-radius: 8px;
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .quick-reply-card:hover,
+    .quick-reply-card:focus-visible {
+      outline: 1px solid var(--blue-2);
+      background: var(--blue-1);
+    }
+    .quick-reply-shortcut {
+      color: var(--blue-6);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .quick-reply-text {
+      width: 100%;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+    .quick-reply-token {
+      color: var(--purple-3);
+    }
+    .quick-reply-empty {
+      padding: 24px 8px;
+      color: var(--neutral-5);
+      font-size: 12px;
+      text-align: center;
+    }
+    .quick-reply-actions {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-reply-action {
+      width: 100%;
+      height: 36px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 8px;
+      outline: 1px solid var(--neutral-2);
+      outline-offset: -1px;
+      background: #fff;
+      color: var(--neutral-8);
+      font: 400 14px/1 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .quick-reply-action:hover,
+    .quick-reply-action:focus-visible {
+      background: var(--neutral-1);
+      outline: none;
+    }
+    .quick-reply-action img {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+    .quick-reply-add-dialog {
+      width: min(532px, calc(100vw - 48px));
+    }
+    .quick-reply-add-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .quick-reply-add-label {
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .quick-reply-category {
+      width: 100%;
+    }
+    .quick-reply-category .dropdown-trigger {
+      width: 100%;
+      height: 36px;
+      padding: 8px 4px 8px 12px;
+      border-radius: 8px;
+      justify-content: space-between;
+    }
+    .quick-reply-category .dropdown-label {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+    }
+    .quick-reply-category-choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .quick-reply-category-choice img {
+      width: 16px;
+      height: 16px;
+      flex: none;
+    }
+    .quick-reply-new-category-input,
+    .quick-reply-add-textarea {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font: 400 14px/20px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      outline: none;
+    }
+    .quick-reply-new-category-input {
+      height: 36px;
+      padding: 8px 12px;
+      display: none;
+    }
+    .quick-reply-new-category-input.is-visible {
+      display: block;
+    }
+    .quick-reply-add-textarea {
+      min-height: 86px;
+      max-height: 200px;
+      padding: 8px 12px;
+      resize: vertical;
+    }
+    .quick-reply-new-category-input::placeholder,
+    .quick-reply-add-textarea::placeholder {
+      color: var(--neutral-5);
+    }
+    .quick-reply-edit-dialog {
+      width: min(532px, calc(100vw - 48px));
+      min-height: 320px;
+      justify-content: space-between;
+    }
+    .quick-reply-edit-body {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+    .quick-reply-edit-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+      max-height: min(52vh, 360px);
+    }
+    .quick-reply-edit-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .quick-reply-edit-group-head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .quick-reply-delete {
+      width: 16px;
+      height: 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--error-dark);
+      color: #fff;
+      cursor: pointer;
+      flex: none;
+      position: relative;
+    }
+    .quick-reply-delete::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      right: 4px;
+      top: 7px;
+      height: 2px;
+      border-radius: 999px;
+      background: #fff;
+    }
+    .quick-reply-edit-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .quick-reply-edit-input {
+      flex: 1;
+      min-width: 0;
+      height: 31px;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      color: var(--neutral-8);
+      font: 400 12px/15px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      outline: none;
     }
     .oa-create-drawer {
       gap: 16px;
@@ -4235,19 +5091,16 @@
     </header>
 
     <section class="chat">
-      <button class="chat-risk-banner" id="chatRiskBanner" type="button" aria-expanded="false">
+      <div class="chat-risk-banner" id="chatRiskBanner">
         <span class="chat-risk-head">
-          <span class="chat-risk-title"><span data-i18n="panel.card.riskProfile">Risk Detected</span><span class="chat-risk-count">5</span></span>
-          <img class="chat-risk-arrow" src="assets/icons/Property%201=up.svg" alt="">
+          <span class="chat-risk-title" data-i18n="panel.card.riskProfile">Risk Detected</span>
         </span>
         <span class="chat-risk-tags">
-          <span class="chat-risk-tag" data-i18n="panel.risk.blacklist">Blacklist</span>
-          <span class="chat-risk-tag" data-i18n="panel.risk.scalper">Scalper</span>
-          <span class="chat-risk-tag" data-i18n="panel.risk.relatedBlacklist">Related-Blacklist</span>
-          <span class="chat-risk-tag" data-i18n="panel.risk.communityHighRisk">Community High-Risk</span>
-          <span class="chat-risk-tag" data-i18n="panel.risk.highRiskUsers">High-Risk Users</span>
+          <span>User has multiple records of malicious complaints or claims</span>
+          <span>Submitted suspicious Amazon order(s)</span>
+          <span>Associated account has been blacklisted</span>
         </span>
-      </button>
+      </div>
       <div class="message-stack scroll-area"></div>
       <div class="ai-capsule" id="aiCapsule" data-state="hidden" aria-live="polite">
         <span class="ai-collapsed-view">
@@ -4276,7 +5129,8 @@
         </span>
       </div>
       <div class="composer">
-        <div class="composer-input scroll-area" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Shift + Enter for new line. Start with “/” to select a Canned Response." data-i18n-placeholder="chat.composer.placeholder"></div>
+        <div class="composer-input scroll-area" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Shift + Enter for new line. Start with “/” to select a Quick Reply." data-i18n-placeholder="chat.composer.placeholder"></div>
+        <div class="composer-quick-popover scroll-area" id="composerQuickPopover" aria-hidden="true"></div>
         <div class="emoji-popover" id="emojiPopover" aria-hidden="true">
           <div class="emoji-grid" id="emojiGrid" role="listbox" aria-label="Emoji picker"></div>
         </div>
@@ -4287,10 +5141,10 @@
             <button class="tool-btn" id="emojiButton" data-i18n-aria="chat.composer.emoji" data-i18n-tip="tip.emoji" data-tip-placement="top" aria-label="Emoji" aria-expanded="false" aria-controls="emojiPopover"><img src="assets/icons/ic_emoji_16.svg" alt=""></button>
             <button class="tool-btn" id="attachButton" data-i18n-aria="chat.composer.attach" data-i18n-tip="tip.attach" data-tip-placement="top" aria-label="Attach"><img src="assets/icons/ic_paperclip_16.svg" alt=""></button>
             <button class="tool-btn" id="productCardButton" data-i18n-aria="chat.composer.card" data-i18n-tip="tip.card" data-tip-placement="top" aria-label="Card" aria-haspopup="dialog"><img src="assets/icons/ic_card_16.svg" alt=""></button>
-            <button class="tool-btn" data-i18n-aria="chat.composer.clock" data-i18n-tip="tip.clock" data-tip-placement="top" aria-label="Clock"><img src="assets/icons/ic_clock_16.svg" alt=""></button>
+            <button class="tool-btn" id="conversationHistoryButton" data-i18n-aria="chat.composer.clock" data-i18n-tip="tip.clock" data-tip-placement="top" aria-label="Clock" aria-haspopup="dialog"><img src="assets/icons/ic_clock_16.svg" alt=""></button>
             <button class="tool-btn" id="aiToolButton" data-i18n-aria="chat.composer.ai" data-i18n-tip="tip.aiOptimize" data-tip-placement="top" aria-label="AI reply"><img class="ai-icon-img" src="assets/icons/ic_ai_magic.svg" alt=""></button>
           </div>
-          <button class="send-btn" disabled data-i18n="chat.composer.send">Send</button>
+          <button class="send-btn" disabled data-i18n="chat.composer.send">Send(Enter)</button>
         </div>
       </div>
     </section>
@@ -4516,7 +5370,7 @@
             <span class="tool-item-main"><img src="assets/icons/ic_search_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.searchAll">Search All</span></span>
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
-          <button class="tool-item" type="button">
+          <button class="tool-item" type="button" onclick="openDrawer(document.querySelector('#quickRepliesDrawer'))">
             <span class="tool-item-main"><img src="assets/icons/ic_replies_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.quickReplies">Quick Replies</span></span>
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
@@ -4524,12 +5378,8 @@
             <span class="tool-item-main"><img src="assets/icons/ic_ticket_pool_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.workorderPool">Available WorkOrder Pool</span></span>
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
-          <button class="tool-item" type="button">
+          <button class="tool-item" type="button" data-tool="product-recommendation">
             <span class="tool-item-main"><img class="text-color-icon" src="assets/icons/ic_tasks_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.productRecommendation">Product Recommendation</span></span>
-            <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
-          </button>
-          <button class="tool-item" type="button">
-            <span class="tool-item-main"><img src="assets/icons/ic_WO_info_16.svg" alt=""><span class="tool-item-label" data-i18n="tools.workorderInfo">WorkOrder Info</span></span>
             <img class="small-icon" src="assets/icons/Property%201=right.svg" alt="">
           </button>
         </div>
@@ -4568,31 +5418,81 @@
             <div class="search-all-cards" id="searchDrawerOnline"></div>
           </div>
       </div>
-      <div class="drawer scroll-area" id="workorderDrawer">
-        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#workorderDrawer'))">
+      <div class="drawer scroll-area quick-replies-drawer" id="quickRepliesDrawer">
+        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#quickRepliesDrawer'))">
           <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
-          <span class="search-all-title">Available WorkOrder Pool</span>
+          <span class="search-all-title">Quick Replies</span>
         </button>
-        <div class="drawer-search-row">
-          <div class="dropdown" id="workorderDrawerTypeDropdown">
+        <div class="quick-reply-filter-row">
+          <div class="dropdown quick-reply-language" id="quickReplyLangDropdown">
             <button class="dropdown-trigger" type="button">
-              <span class="dropdown-label">User ID</span>
+              <span class="dropdown-label">English</span>
               <img src="assets/icons/Property%201=down.svg" alt="">
             </button>
             <div class="dropdown-menu">
-              <div class="dropdown-item selected" data-value="User ID">User ID<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
-              <div class="dropdown-item" data-value="Name">Name<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
-              <div class="dropdown-item" data-value="Keyword">Keyword<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item selected" data-value="en"><span>English</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="fr"><span>Français</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="de"><span>Deutsch</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="ja"><span>日本語</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="es"><span>Español</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
             </div>
           </div>
-          <div class="search-box">
-            <input class="search-input" id="workorderDrawerInput" type="text" placeholder="Search...">
+          <div class="search-box quick-reply-search">
+            <input class="search-input" id="quickReplySearchInput" type="text" placeholder="Keyword">
             <img src="assets/icons/ic_search_16.svg" alt="">
           </div>
         </div>
+        <div class="quick-reply-tabs">
+          <button class="quick-reply-tab active" type="button" data-reply-scope="Team">Team</button>
+          <button class="quick-reply-tab" type="button" data-reply-scope="My">My</button>
+        </div>
+        <div class="quick-reply-tip" id="quickReplyTip"><span>Below are the quick reply options. A left mouse click copies the text to the input field, and a double-click sends it directly.</span><button class="quick-reply-tip-close" id="quickReplyTipClose" type="button" aria-label="Close quick reply tip"><img src="assets/icons/ic_close_12.svg" alt=""></button></div>
+        <div class="quick-reply-list" id="quickReplyList"></div>
+      </div>
+      <div class="drawer scroll-area" id="workorderDrawer">
+        <button class="search-all-header" type="button" onclick="closeDrawer(document.querySelector('#workorderDrawer'))">
+          <img class="drawer-back" src="assets/icons/Property%201=right.svg" alt="">
+          <span class="search-all-title">Product Recommendation Center</span>
+        </button>
+        <div class="drawer-search-row product-center-filters">
+          <div class="dropdown" id="workorderPriorityDropdown">
+            <button class="dropdown-trigger" type="button">
+              <span class="dropdown-label">All</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu">
+              <div class="dropdown-item selected" data-value="All">All<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="S">S-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="1">1-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="2">2-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="3">3-Priority<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+            </div>
+          </div>
+          <div class="dropdown" id="workorderCountryDropdown">
+            <button class="dropdown-trigger" type="button">
+              <span class="dropdown-label">All Countries</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu dropdown-right">
+              <div class="dropdown-item selected" data-value="All">All Countries<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="美国">美国<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="英国">英国<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="加拿大">加拿大<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="澳大利亚">澳大利亚<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="法国">法国<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="意大利">意大利<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="西班牙">西班牙<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="日本">日本<img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+            </div>
+          </div>
+        </div>
         <div class="search-all-section">
-          <div class="search-all-section-label">Results</div>
-          <div class="search-all-cards" id="workorderDrawerResults"></div>
+          <div class="search-all-section-label">All Tasks</div>
+          <div class="product-center-list" id="workorderDrawerResults"></div>
+        </div>
+        <div class="product-card-footer product-center-footer">
+          <button class="product-card-action" type="button" id="workorderProductCancel">Cancel</button>
+          <button class="product-card-action primary" type="button" id="workorderProductSend" disabled>Send</button>
         </div>
       </div>
       <div class="drawer scroll-area oa-create-drawer" id="oaCreateDrawer">
@@ -4757,11 +5657,35 @@
       </div>
     </aside>
     <div class="toast" role="status" aria-live="polite" data-i18n="misc.toast.copied">Copied to clipboard</div>
+    <div class="message-context-menu" id="messageContextMenu" role="menu" aria-hidden="true"></div>
+    <div class="product-card-modal-layer" id="highRiskAlertModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="highRiskAlertBackdrop" aria-label="Close high risk alert"></button>
+      <section class="product-card-dialog high-risk-alert-dialog" role="dialog" aria-modal="true" aria-labelledby="highRiskAlertTitle">
+        <div class="high-risk-alert-head">
+          <img class="high-risk-alert-icon" src="assets/icons/ic_error_12.svg" alt="">
+          <div class="high-risk-alert-title" id="highRiskAlertTitle">High-Risk Customer Alert</div>
+        </div>
+        <div class="high-risk-alert-body">
+          <div class="high-risk-alert-copy">This customer triggered risk control rules. Please communicate with caution to guard against potential risks like fraud or malicious complaints.</div>
+          <div class="high-risk-alert-rules">
+            <div class="high-risk-alert-rules-title">Risk Detected</div>
+            <div class="high-risk-alert-rules-text">
+              <span>User has multiple records of malicious complaints or claims</span>
+              <span>Submitted suspicious Amazon order(s)</span>
+              <span>Associated account has been blacklisted</span>
+            </div>
+          </div>
+        </div>
+        <div class="high-risk-alert-footer">
+          <button class="high-risk-alert-confirm" type="button" id="highRiskAlertConfirm">Got It</button>
+        </div>
+      </section>
+    </div>
     <div class="product-card-modal-layer" id="productCardModal" role="presentation" aria-hidden="true">
       <button class="product-card-backdrop" type="button" id="productCardBackdrop" aria-label="Close product card dialog"></button>
       <section class="product-card-dialog" role="dialog" aria-modal="true" aria-labelledby="productCardModalTitle">
         <div class="product-card-modal-head">
-          <div class="product-card-modal-title" id="productCardModalTitle">Send Product Card</div>
+          <div class="product-card-modal-title" id="productCardModalTitle" data-i18n="productCard.modal.title">Product Recommendation Tasks</div>
           <div class="dropdown product-card-filter" id="productCardFilterDropdown">
             <button class="dropdown-trigger" type="button" aria-label="Filter product cards">
               <span class="dropdown-label" id="productCardFilterLabel">All</span><img src="assets/icons/Property%201=down.svg" alt="">
@@ -4782,8 +5706,96 @@
         </div>
       </section>
     </div>
+    <div class="product-card-modal-layer" id="conversationHistoryModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="conversationHistoryBackdrop" aria-label="Close conversation history"></button>
+      <section class="product-card-dialog conversation-history-dialog" role="dialog" aria-modal="true" aria-labelledby="conversationHistoryTitle">
+        <div class="product-card-modal-head">
+          <div class="product-card-modal-title" id="conversationHistoryTitle">Conversation History</div>
+        </div>
+        <div class="conversation-history-body">
+          <section class="conversation-history-column conversation-history-log">
+            <div class="conversation-history-label">Chat Log</div>
+            <div class="conversation-history-chat scroll-area" id="conversationHistoryLog"></div>
+          </section>
+          <section class="conversation-history-column conversation-history-events">
+            <div class="conversation-history-label">Key Events</div>
+            <div class="conversation-history-timeline" id="conversationHistoryEvents"></div>
+          </section>
+        </div>
+        <div class="product-card-footer">
+          <button class="product-card-action primary" type="button" id="conversationHistoryOk">OK</button>
+        </div>
+      </section>
+    </div>
+    <div class="product-card-modal-layer" id="quickReplyAddModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="quickReplyAddBackdrop" aria-label="Close quick reply dialog"></button>
+      <section class="product-card-dialog quick-reply-add-dialog" role="dialog" aria-modal="true" aria-labelledby="quickReplyAddTitle">
+        <div class="product-card-modal-head">
+          <div class="product-card-modal-title" id="quickReplyAddTitle">Add Quick Replies</div>
+        </div>
+        <div class="quick-reply-add-form">
+          <div class="quick-reply-add-label">Select or Create New Category</div>
+          <div class="dropdown quick-reply-category" id="quickReplyCategoryDropdown">
+            <button class="dropdown-trigger" type="button">
+              <span class="dropdown-label" id="quickReplyCategoryLabel">Order follow-up scripts</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu" id="quickReplyCategoryMenu"></div>
+          </div>
+          <input class="quick-reply-new-category-input" id="quickReplyNewCategoryInput" type="text" placeholder="Type your new category">
+          <div class="quick-reply-add-label">Quick Replies</div>
+          <textarea class="quick-reply-add-textarea" id="quickReplyAddText" placeholder="Type your quick reply here"></textarea>
+        </div>
+        <div class="product-card-footer">
+          <button class="product-card-action" type="button" id="quickReplyAddCancel">Cancel</button>
+          <button class="product-card-action primary" type="button" id="quickReplyAddSend" disabled>Send</button>
+        </div>
+      </section>
+    </div>
+    <div class="product-card-modal-layer" id="quickReplyEditModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="quickReplyEditBackdrop" aria-label="Close edit quick reply dialog"></button>
+      <section class="product-card-dialog quick-reply-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="quickReplyEditTitle">
+        <div class="quick-reply-edit-body">
+          <div class="product-card-modal-head">
+            <div class="product-card-modal-title" id="quickReplyEditTitle">Edit Quick Replies</div>
+          </div>
+          <div class="quick-reply-edit-list scroll-area" id="quickReplyEditList"></div>
+        </div>
+        <div class="product-card-footer">
+          <button class="product-card-action" type="button" id="quickReplyEditCancel">Cancel</button>
+          <button class="product-card-action primary" type="button" id="quickReplyEditSave" disabled>Save</button>
+        </div>
+      </section>
+    </div>
   </main>
   <script>
+    const NORA_REVIEW_ACTIVITY_MESSAGES = [
+      { system:true, time:'2025-03-26 14:22:52', text:'Customer initiated conversation' },
+      { dir:'out', aiGenerated:true, author:'AI', time:'2025-03-26 14:22:55', text:'Hello! Welcome to our customer service team👋 I\'m your intelligent assistant, happy to serve you! How may I help you today?' },
+      { dir:'in', time:'2025-03-26 14:23:18', text:'Hi, I\'d like to learn more about your review request activity. How does it work?' },
+      { dir:'out', aiGenerated:true, author:'AI', time:'2025-03-26 14:23:25', text:'For detailed information about the review request activity, let me transfer you to a professional human agent who can provide you with more comprehensive answers. Please wait a moment...' },
+      { dir:'out', time:'2025-03-26 14:23:45', text:'Hello! I\'m agent Noimz, pleased to serve you😊 Let me introduce our review request activity in detail:\n\nOur review request activity is designed for buyers who have purchased our products. We invite you to leave an authentic product review on Amazon after receiving and experiencing the product. As a token of appreciation, we will provide you with certain rewards, such as gift cards, discount coupons, or small gifts.' },
+      { dir:'in', time:'2025-03-26 14:25:12', text:'Sounds good. How do I participate in this activity?' },
+      { dir:'out', time:'2025-03-26 14:25:35', text:'Great! The participation process is simple:\n1. You need to provide your Amazon Order ID\n2. We will verify your purchase record\n3. After verification passes, we will create a review request task for you\n4. After you receive the product, leave an authentic review on Amazon\n5. After the review is completed, we will issue the reward to you\n\nAre you interested in participating?' },
+      { dir:'in', time:'2025-03-26 14:26:08', text:'Yes, I\'m willing to participate.' },
+      { dir:'out', time:'2025-03-26 14:26:22', text:'Wonderful! Could you please provide your Amazon Order ID so I can verify your information?😊' },
+      { dir:'in', time:'2025-03-26 14:27:05', text:'Why do I need to provide the order ID? Is this safe?' },
+      { dir:'out', time:'2025-03-26 14:27:38', text:'I completely understand your concerns! Let me explain:\n\n1. The order ID is used to verify that you actually purchased our product, ensuring the fairness of the activity\n2. The order ID itself is safe - it only contains order information and does not involve sensitive information like payment passwords\n3. We strictly comply with privacy protection policies. Your information is only used for this activity verification and will not be disclosed to third parties\n4. This is also required by Amazon\'s platform to ensure reviews come from verified buyers\n\nYou can provide it with confidence👍' },
+      { dir:'in', time:'2025-03-26 14:28:45', text:'Okay, I understand. My order ID is: 112-9876543-2109876' },
+      { dir:'out', time:'2025-03-26 14:29:02', text:'Received! Please wait a moment while I verify your order information...' },
+      { system:true, time:'2025-03-26 14:29:15', text:'Amazon Order ID passed risk control check' },
+      { dir:'out', time:'2025-03-26 14:29:28', text:'Excellent! Your order has been verified successfully✅ Your account status is normal with no violation records.\n\nI\'m now creating a review request task for you...' },
+      { system:true, time:'2025-03-26 14:29:45', text:'Noimz created review request order' },
+      { dir:'out', time:'2025-03-26 14:29:52', text:'All done! Your review request task has been created successfully🎉 \n\nTask Details:\n- Order ID: 112-9876543-2109876\n- Reward Type: $15 Amazon Gift Card\n- Task Status: Pending Review\n\nAfter you receive and experience the product, leave an authentic review on Amazon and send us a screenshot. The reward will be issued to your account within 24 hours after approval.\n\nDo you have any other questions?' },
+      { dir:'in', time:'2025-03-26 14:30:25', text:'No, thank you!' },
+      { dir:'out', time:'2025-03-26 14:30:32', text:'You\'re welcome! Wish you a pleasant shopping experience! If you have any questions, feel free to contact us anytime😊 Goodbye!' },
+      { system:true, time:'2025-03-26 14:30:38', text:'Conversation ended' }
+    ];
+
+    function cloneNoraReviewActivityMessages() {
+      return NORA_REVIEW_ACTIVITY_MESSAGES.map(message => Object.assign({}, message));
+    }
+
     const sessionData = [
       { // 0 Amelia Reed — Pending: 从其他客服转接过来，等待新客服接入
         name: 'Amelia Reed', avatar: 'assets/crops/avatar01.jpg', source: 'US-EINSEO', status: 'Pending',
@@ -4806,6 +5818,8 @@
           { dir:'in', time:'2026-06-23 09:15', text:'Hi, I need some help setting up my new SmartHub Pro X200. The quick start guide isn’t very clear.' },
           { dir:'out', time:'2026-06-23 09:20', text:'No problem, Klaus! Which step are you stuck on? The setup has three stages: WiFi pairing, account linking, and device calibration.' },
           { dir:'in', time:'2026-06-23 09:25', text:'I got through WiFi, but now it’s asking for a “pairing code” and I don’t see one anywhere in the box.' },
+          { dir:'in', time:'2026-06-23 09:26', text:'My Amazon Order Number is 827-0001231-8276192' },
+          { dir:'in', time:'2026-06-23 09:27', text:'My Amazon Order Number is 827-1234567-8276192' },
           { dir:'out', time:'2026-06-23 09:28', text:'The pairing code is printed on a sticker on the bottom of the device — 8 digits. Can you check there?' },
           { dir:'in', time:'2026-06-23 09:32', text:'Found it! Thanks. Now the app says “firmware update required” — should I do that now or skip it?' },
           { dir:'out', time:'2026-06-23 09:35', text:'Definitely do the update now — it patches a known connectivity bug. It’ll take about 5 minutes and the device will restart. I’ll wait here if anything goes wrong.' }
@@ -4852,17 +5866,11 @@
           { system:true, time:'2026-06-18 09:42', text:'Chat ended' }
         ]
       },
-      { // 5 Nora Bell — Pending: 系统分配后客服尚未首次回复
+      { // 5 Nora Bell — Pending: Review Request Activity Inquiry
         name: 'Nora Bell', avatar: 'assets/crops/avatar06.jpg', source: 'US-EINSEO', status: 'Pending',
         id: '20564290', destination: '2016', country: '🇺🇸 US', gender: 'Female', age: '38',
-        lastSeen: '2026-06-22 15:44:29', lastIsAgent: false,
-        messages: [
-          { dir:'in', time:'2026-06-22 14:50', text:'Hi, I received my order #US-ES-20260610-1128 yesterday, but the package was damaged and one of the items is missing. The box had a tear on the side.' },
-          { dir:'out', time:'2026-06-22 15:10', text:'I’m sorry to hear about the damaged package, Nora. I’ve pulled up your order — it contains 3 items. Which one is missing? And do you have any photos of the damaged box?' },
-          { dir:'in', time:'2026-06-22 15:20', text:'The SmartChef Temperature Probe is missing. I took photos of the box — I can send them. The other two items are fine.' },
-          { dir:'out', time:'2026-06-22 15:30', text:'Thank you for the details. I’ve opened a missing-item case (#MIC-20260622-0047) and attached it to your order. Please upload the photos when you can, and I’ll review everything together.' },
-          { dir:'in', time:'2026-06-22 15:44', text:'Photos uploaded. Please let me know what the next steps are once you’ve reviewed them.' }
-        ]
+        lastSeen: '2025-03-26 14:30:38', lastIsAgent: true, reviewActivityVersion: 1,
+        messages: cloneNoraReviewActivityMessages()
       },
       { // 6 Ethan Park — Serving: 订单物流查询
         name: 'Ethan Park', avatar: 'assets/crops/avatar07.jpg', source: 'US-Lumora', status: 'Serving',
@@ -5024,6 +6032,37 @@
     function saveSessionData() {
       localStorage.setItem(LS_KEY, JSON.stringify(sessionData));
     }
+    function ensureDemoAmazonOrderMessages() {
+      const klaus = sessionData[1];
+      if (!klaus || !Array.isArray(klaus.messages)) return false;
+      const hasRiskOrder = klaus.messages.some(m => (m.text || '').includes('827-0001231-8276192'));
+      const hasReadyOrder = klaus.messages.some(m => (m.text || '').includes('827-1234567-8276192'));
+      if (hasRiskOrder && hasReadyOrder) return false;
+      const insertAt = Math.min(3, klaus.messages.length);
+      const demoMessages = [];
+      if (!hasRiskOrder) {
+        demoMessages.push({ dir:'in', time:'2026-06-23 09:26', text:'My Amazon Order Number is 827-0001231-8276192' });
+      }
+      if (!hasReadyOrder) {
+        demoMessages.push({ dir:'in', time:'2026-06-23 09:27', text:'My Amazon Order Number is 827-1234567-8276192' });
+      }
+      klaus.messages.splice(insertAt, 0, ...demoMessages);
+      return true;
+    }
+
+    function ensureNoraReviewActivityConversation() {
+      const nora = sessionData.find(session => session.name === 'Nora Bell');
+      if (!nora) return false;
+      const alreadyUpdated = nora.reviewActivityVersion === 1;
+      if (alreadyUpdated) return false;
+      nora.messages = cloneNoraReviewActivityMessages();
+      nora.lastSeen = '2025-03-26 14:30:38';
+      nora.lastIsAgent = true;
+      nora.status = 'Pending';
+      nora.reviewActivityVersion = 1;
+      return true;
+    }
+
     // On first load: seed localStorage if empty, otherwise load from it
     (function() {
       const stored = loadSessionData();
@@ -5035,11 +6074,19 @@
             sessionData[i].lastIsAgent = stored[i].lastIsAgent;
             sessionData[i].lastSeen = stored[i].lastSeen;
             if (stored[i].status) sessionData[i].status = stored[i].status;
+            if (typeof stored[i].reviewActivityVersion === 'number') {
+              sessionData[i].reviewActivityVersion = stored[i].reviewActivityVersion;
+            } else if (sessionData[i].name === 'Nora Bell') {
+              sessionData[i].reviewActivityVersion = 0;
+            }
           }
         }
       } else {
         saveSessionData();
       }
+      const updatedDemoOrders = ensureDemoAmazonOrderMessages();
+      const updatedNoraConversation = ensureNoraReviewActivityConversation();
+      if (updatedDemoOrders || updatedNoraConversation) saveSessionData();
     })();
 
     // ── i18n ──
@@ -5063,7 +6110,7 @@
       'tip.sessionStatus':            ['Set session status','设置会话状态','セッション状態を設定'],
       'tip.emoji':                    ['Add emoji','添加emoji','絵文字を追加'],
       'tip.attach':                   ['Upload images and videos','上传图片和视频','画像と動画をアップロード'],
-      'tip.card':                     ['Send card','发送卡片','カードを送信'],
+      'tip.card':                     ['Product Recommendation Tasks','发送卡片','カードを送信'],
       'tip.clock':                    ['View chat history','查看历史会话','履歴会話を表示'],
       'tip.aiOptimize':               ['AI optimize copy','AI优化文案','AIで文面を最適化'],
       'tip.createOaOrder':            ['Create OA Order','Create OA Order','OA注文を作成'],
@@ -5119,13 +6166,13 @@
       'search.placeholder':           ['Search...','搜索...','検索...'],
       'chat.label.responseTime':      ['First Response Time - Last Response Time','首次响应 – 最近响应','初回応答 – 最終応答'],
       'chat.label.destination':       ['Destination account ID','目标账户ID','宛先アカウントID'],
-      'chat.composer.placeholder':    ['Shift + Enter for new line. Start with “/” to select a Canned Response.','Shift + 回车换行。输入“/”选择快捷回复。','Shift + Enterで改行。“/”で定型文を選択。'],
+      'chat.composer.placeholder':    ['Shift + Enter for new line. Start with “/” to select a Quick Reply.','Shift + 回车换行。输入“/”选择快捷回复。','Shift + Enterで改行。“/”で定型文を選択。'],
       'chat.composer.emoji':          ['Emoji','表情','絵文字'],
       'chat.composer.attach':         ['Attach','附件','添付'],
       'chat.composer.card':           ['Card','卡片','カード'],
       'chat.composer.clock':          ['Clock','历史','履歴'],
       'chat.composer.ai':             ['AI reply','AI回复','AI返信'],
-      'chat.composer.send':           ['Send','发送','送信'],
+      'chat.composer.send':           ['Send(Enter)','发送(Enter)','送信(Enter)'],
       'chat.settings.tag':            ['Tag','标签','タグ'],
       'chat.settings.block':          ['Block','拉黑','ブロック'],
       'chat.settings.unsub':          ['Unsub','退订','配信停止'],
@@ -5176,6 +6223,7 @@
       'tools.quickReplies':           ['Quick Replies','快捷回复','クイック返信'],
       'tools.workorderPool':          ['Available WorkOrder Pool','可用工单池','利用可能なワークオーダープール'],
       'tools.productRecommendation':  ['Product Recommendation','产品推荐','商品推薦'],
+      'productCard.modal.title':      ['Product Recommendation Tasks','产品推荐任务','商品推薦タスク'],
       'tools.workorderInfo':          ['WorkOrder Info','工单信息','ワークオーダー情報'],
       'drawer.searchAll.title':       ['Search All','全局搜索','全体検索'],
       'drawer.searchAll.results':     ['Results','搜索结果','検索結果'],
@@ -5338,15 +6386,20 @@
       if (!needle) return escapeHtml(text);
       const lower = text.toLowerCase();
       const lowerNeedle = needle.toLowerCase();
-      const index = lower.indexOf(lowerNeedle);
-      if (index === -1) return escapeHtml(text);
-      return [
-        escapeHtml(text.slice(0, index)),
-        '<span class="search-highlight">',
-        escapeHtml(text.slice(index, index + lowerNeedle.length)),
-        '</span>',
-        escapeHtml(text.slice(index + lowerNeedle.length))
-      ].join('');
+      const parts = [];
+      let cursor = 0;
+      let index = lower.indexOf(lowerNeedle, cursor);
+      while (index !== -1) {
+        parts.push(escapeHtml(text.slice(cursor, index)));
+        parts.push('<span class="search-highlight">');
+        parts.push(escapeHtml(text.slice(index, index + lowerNeedle.length)));
+        parts.push('</span>');
+        cursor = index + lowerNeedle.length;
+        index = lower.indexOf(lowerNeedle, cursor);
+      }
+      if (cursor === 0) return escapeHtml(text);
+      parts.push(escapeHtml(text.slice(cursor)));
+      return parts.join('');
     }
 
     function sessionMatchesSearch(session, type, query) {
@@ -5393,6 +6446,7 @@
     };
     const transparentIcon = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
     const brandFallbackAttrs = `onerror="this.onerror=null;this.src='${transparentIcon}'"`;
+    const AMAZON_ORDER_CHECK_DELAY = 3000;
 
     // Status tag color mapping
     const statusColors = {
@@ -5474,12 +6528,13 @@
       const cardHtml = productCards.map(function(card) {
         const fields = [
           ['ID', card.id],
-          ['Store Name', card.store],
+          ['Store', card.store],
           ['Links', card.link]
         ].map(function(field) {
           const value = field[1] || '';
+          const linkClass = field[0] === 'Links' ? ' is-link' : '';
           return `
-            <div class="chat-product-card-field">
+            <div class="chat-product-card-field${linkClass}">
               <div class="chat-product-card-label">${escapeHtml(field[0])}</div>
               <div class="chat-product-card-value">
                 <span>${escapeHtml(value)}</span>
@@ -5507,6 +6562,70 @@
       `;
     }
 
+    function orderStatusForAmazonOrder(orderNo) {
+      return orderNo.replace(/\D/g, '').includes('000') ? 'risk' : 'ready';
+    }
+
+    const recognizedAmazonOrders = new Map();
+    const amazonOrderDetectionStartedAt = new Map();
+
+    function renderAmazonOrderToken(orderNo, state) {
+      const safeOrderNo = escapeHtml(orderNo);
+      const nextState = state || 'loading';
+      const isClickable = nextState === 'ready';
+      const iconSrc = nextState === 'risk'
+        ? 'assets/icons/ic_error_12.svg'
+        : nextState === 'ready'
+          ? 'assets/icons/ic_arrow-up-right_12.svg'
+          : 'assets/icons/ic_loading_12.svg';
+      const tagName = isClickable ? 'button' : 'span';
+      const typeAttr = isClickable ? ' type="button"' : '';
+      return `<${tagName} class="amazon-order-token is-${nextState}${isClickable ? ' is-clickable' : ''}"${typeAttr} data-order-no="${safeOrderNo}" data-state="${nextState}"><span>${safeOrderNo}</span><img src="${iconSrc}" alt=""></${tagName}>`;
+    }
+
+    function renderChatTextWithAmazonOrders(text, messageTime) {
+      const source = String(text || '');
+      const orderPattern = /\b\d{3}-\d{7}-\d{7}\b/g;
+      const messageTimestamp = new Date(messageTime || 0).getTime();
+      const isFreshMessage = !Number.isNaN(messageTimestamp) && Date.now() - messageTimestamp < AMAZON_ORDER_CHECK_DELAY;
+      let html = '';
+      let lastIndex = 0;
+      let match;
+      while ((match = orderPattern.exec(source)) !== null) {
+        const orderNo = match[0];
+        let knownState = recognizedAmazonOrders.get(orderNo);
+        if (!knownState && !isFreshMessage) {
+          knownState = orderStatusForAmazonOrder(orderNo);
+          recognizedAmazonOrders.set(orderNo, knownState);
+        } else if (!knownState && !amazonOrderDetectionStartedAt.has(orderNo)) {
+          amazonOrderDetectionStartedAt.set(orderNo, messageTimestamp || Date.now());
+        }
+        html += escapeHtml(source.slice(lastIndex, match.index));
+        html += renderAmazonOrderToken(orderNo, knownState || 'loading');
+        lastIndex = match.index + orderNo.length;
+      }
+      html += escapeHtml(source.slice(lastIndex));
+      return html;
+    }
+
+    function hydrateAmazonOrderTokens(container) {
+      if (!container) return;
+      container.querySelectorAll('.amazon-order-token.is-loading').forEach(function(token) {
+        const orderNo = token.dataset.orderNo || '';
+        const startedAt = amazonOrderDetectionStartedAt.get(orderNo) || Date.now();
+        const remainingDelay = Math.max(0, AMAZON_ORDER_CHECK_DELAY - (Date.now() - startedAt));
+        window.setTimeout(function() {
+          if (!token.isConnected) return;
+          const wrapper = document.createElement('span');
+          const nextState = orderStatusForAmazonOrder(orderNo);
+          recognizedAmazonOrders.set(orderNo, nextState);
+          amazonOrderDetectionStartedAt.delete(orderNo);
+          wrapper.innerHTML = renderAmazonOrderToken(orderNo, nextState);
+          token.replaceWith(wrapper.firstElementChild);
+        }, remainingDelay);
+      });
+    }
+
     function renderMessagesWithDateSeparators(messages, avatar) {
       var lastDateKey = '';
       return (messages || []).map(function(m) {
@@ -5520,19 +6639,177 @@
           html += `<div class="message-system"><span>${escapeHtml(m.text)}</span>&nbsp;·&nbsp;<span>${formatChatTime(m.time)}</span></div>`;
         } else {
           var timeStr = formatChatTime(m.time);
-          var safeText = escapeHtml(m.text);
           if (m.dir === 'in') {
+            var safeText = renderChatTextWithAmazonOrders(m.text, m.time);
             html += `<div class="message in"><img class="avatar" src="${avatar}" alt=""><div class="bubble"><div>${safeText}</div><div class="bubble-time">${timeStr}</div></div></div>`;
           } else if (m.type === 'productCards') {
             html += renderProductCardMessage(m.productCards, timeStr);
           } else {
+            var safeText = escapeHtml(m.text);
             var aiClass = m.aiGenerated ? ' ai-generated' : '';
             var aiIcon = m.aiGenerated ? '<img class="bubble-ai-icon" src="assets/icons/ic_ai_magic_purple.svg" alt="">' : '';
-            html += `<div class="message out${aiClass}"><div class="bubble"><div>${safeText}</div><div class="bubble-time">${aiIcon}<span>${timeStr}</span><span>-</span><span>Noimz</span></div></div><img class="avatar" src="assets/crops/agent01.jpg" alt=""></div>`;
+            var author = m.author || 'Noimz';
+            html += `<div class="message out${aiClass}"><div class="bubble"><div>${safeText}</div><div class="bubble-time">${aiIcon}<span>${timeStr}</span><span>-</span><span>${escapeHtml(author)}</span></div></div><img class="avatar" src="assets/crops/agent01.jpg" alt=""></div>`;
           }
         }
         return html;
       }).join('');
+    }
+
+    function historyMessageKind(message) {
+      if (message.system) return 'system';
+      if (message.aiGenerated) return 'ai';
+      return message.dir === 'in' ? 'user' : 'agent';
+    }
+
+    function historyMessageName(message, session) {
+      const kind = historyMessageKind(message);
+      if (kind === 'user') return session.name;
+      if (kind === 'ai') return 'AI';
+      if (kind === 'agent') return 'Noimz';
+      return '';
+    }
+
+    function renderConversationHistoryLog(session) {
+      return (session.messages || []).map(function(message) {
+        const kind = historyMessageKind(message);
+        const time = escapeHtml(message.time || '');
+        const text = escapeHtml(message.text || '');
+        if (kind === 'system') {
+          return `
+            <div class="history-message system" data-history-time="${time}">
+              <div class="history-message-meta"><span>${time}</span></div>
+              <div class="history-message-text">${text}</div>
+            </div>
+          `;
+        }
+        return `
+          <div class="history-message ${kind}" data-history-time="${time}">
+            <div class="history-message-meta">
+              <span class="history-message-name">${escapeHtml(historyMessageName(message, session))}</span>
+              <span>-</span>
+              <span>${time}</span>
+            </div>
+            <div class="history-message-text">${text}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function conversationHistoryEvents(session) {
+      if (session && session.name === 'Nora Bell') {
+        return [
+          { time:'2025-03-26 14:22:52', text:'Customer initiated conversation' },
+          { time:'2025-03-26 14:23:25', text:'Assigned to Noimz' },
+          { time:'2025-03-26 14:28:45', text:'Customer provided Amazon Order ID' },
+          { time:'2025-03-26 14:29:15', text:'Amazon Order ID passed risk control check', tone:'success' },
+          { time:'2025-03-26 14:29:45', text:'Noimz created review request order' }
+        ];
+      }
+      const messages = session.messages || [];
+      const events = messages.filter(function(message) {
+        return message.system;
+      }).map(function(message) {
+        return { time: message.time, text: message.text };
+      });
+      const firstCustomer = messages.find(function(message) { return !message.system && message.dir === 'in'; });
+      const firstAgent = messages.find(function(message) { return !message.system && message.dir === 'out'; });
+      if (firstCustomer) events.unshift({ time: firstCustomer.time, text: 'Customer initiated conversation' });
+      if (firstAgent) events.splice(firstCustomer ? 1 : 0, 0, { time: firstAgent.time, text: 'Assigned to Noimz' });
+      return events;
+    }
+
+    function renderConversationHistoryEvents(session) {
+      const events = conversationHistoryEvents(session);
+      return events.length ? events.map(function(event) {
+        const time = escapeHtml(event.time || '');
+        const text = escapeHtml(event.text || '').replace(/Noimz/g, '<span class="history-event-link">Noimz</span>');
+        return `
+          <button class="history-event ${event.tone === 'success' ? 'success' : ''}" type="button" data-target-time="${time}">
+            <span class="history-event-dot"></span>
+            <span class="history-event-copy">
+              <span class="history-event-time">${time}</span>
+              <span class="history-event-text">${text}</span>
+            </span>
+          </button>
+        `;
+      }).join('') : '<div class="history-event-text">No key events</div>';
+    }
+
+    function updateConversationTimelineLine() {
+      const timeline = document.getElementById('conversationHistoryEvents');
+      if (!timeline) return;
+      const dots = timeline.querySelectorAll('.history-event-dot');
+      if (dots.length < 2) {
+        timeline.style.setProperty('--timeline-line-top', '0px');
+        timeline.style.setProperty('--timeline-line-bottom', '100%');
+        return;
+      }
+      const timelineRect = timeline.getBoundingClientRect();
+      const firstDotRect = dots[0].getBoundingClientRect();
+      const lastDotRect = dots[dots.length - 1].getBoundingClientRect();
+      const top = firstDotRect.top - timelineRect.top + firstDotRect.height / 2;
+      const bottom = timelineRect.bottom - lastDotRect.top - lastDotRect.height / 2;
+      timeline.style.setProperty('--timeline-line-top', `${top}px`);
+      timeline.style.setProperty('--timeline-line-bottom', `${bottom}px`);
+    }
+
+    function parseHistoryTime(value) {
+      const time = new Date(String(value || '').replace(' ', 'T')).getTime();
+      return Number.isNaN(time) ? 0 : time;
+    }
+
+    function findHistoryMessageByTime(log, targetTime) {
+      const messages = Array.from(log.querySelectorAll('.history-message[data-history-time]'));
+      const targetMs = parseHistoryTime(targetTime);
+      let fallback = null;
+      let fallbackMs = -Infinity;
+      for (const message of messages) {
+        const messageTime = message.dataset.historyTime || '';
+        if (messageTime === targetTime) return message;
+        const messageMs = parseHistoryTime(messageTime);
+        if (messageMs <= targetMs && messageMs > fallbackMs) {
+          fallback = message;
+          fallbackMs = messageMs;
+        }
+      }
+      return fallback || messages[0] || null;
+    }
+
+    function focusConversationHistoryMessage(targetTime) {
+      const log = document.getElementById('conversationHistoryLog');
+      if (!log) return;
+      const target = findHistoryMessageByTime(log, targetTime);
+      if (!target) return;
+      target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      target.classList.remove('is-flashing');
+      void target.offsetWidth;
+      target.classList.add('is-flashing');
+      window.setTimeout(function() {
+        target.classList.remove('is-flashing');
+      }, 2000);
+    }
+
+    function openConversationHistoryModal() {
+      const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
+      const modal = document.getElementById('conversationHistoryModal');
+      const log = document.getElementById('conversationHistoryLog');
+      const events = document.getElementById('conversationHistoryEvents');
+      if (!modal || !log || !events || !session) return;
+      log.innerHTML = renderConversationHistoryLog(session);
+      events.innerHTML = renderConversationHistoryEvents(session);
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      ensureScrollThumb(log);
+      log.scrollTop = log.scrollHeight;
+      requestAnimationFrame(updateConversationTimelineLine);
+    }
+
+    function closeConversationHistoryModal() {
+      const modal = document.getElementById('conversationHistoryModal');
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
     }
 
     function sessionPreviewModel(session) {
@@ -5551,6 +6828,18 @@
         startedAgo: firstMsgObj ? getTimeAgo(firstMsgObj.time) : '',
         lastMsgAgo: lastMsgObj ? getTimeAgo(lastMsgObj.time) : getTimeAgo(session.lastSeen),
       };
+    }
+
+    function latestSessionTimestamp(session) {
+      const msgs = session && Array.isArray(session.messages) ? session.messages : [];
+      for (let i = msgs.length - 1; i >= 0; i--) {
+        if (!msgs[i].system && msgs[i].time) {
+          const messageTime = new Date(msgs[i].time).getTime();
+          if (!Number.isNaN(messageTime)) return messageTime;
+        }
+      }
+      const fallbackTime = new Date(session?.lastSeen || 0).getTime();
+      return Number.isNaN(fallbackTime) ? 0 : fallbackTime;
     }
 
     function renderSessionCard(session, options) {
@@ -5636,6 +6925,7 @@
       if (currentSearchQuery) {
         filtered = filtered.filter(s => sessionMatchesSearch(s, currentSearchType, currentSearchQuery));
       }
+      filtered = filtered.slice().sort((a, b) => latestSessionTimestamp(b) - latestSessionTimestamp(a));
 
       // Render
       container.innerHTML = filtered.map((session, idx) => {
@@ -5645,21 +6935,6 @@
       bindSessionListClicks(container);
     }
 
-    const todoRecommendationTasksByType = {
-      RSO: [
-        { source: 'US-EINSEO', priority: ['ic_priority_12s.svg', 'ic_priority_12rush.svg'], count: 6 },
-        { source: 'US-EINSEO', priority: ['ic_priority_121.svg', 'ic_priority_12rush.svg'], count: 1 },
-        { source: 'US-EINSEO', priority: ['ic_priority_121.svg', 'ic_priority_12rush.svg'], count: 32 },
-        { source: 'US-EINSEO', priority: ['ic_priority_122.svg', 'ic_priority_12rush.svg'], count: 4 },
-        { source: 'US-EINSEO', priority: ['ic_priority_123.svg', 'ic_priority_12rush.svg'], count: 1 },
-      ],
-      RDO: [
-        { source: 'US-EINSEO', priority: ['ic_priority_123.svg', 'ic_priority_12rush.svg'], count: 9 },
-        { source: 'GB-HanaCute', priority: ['ic_priority_122.svg', 'ic_priority_12rush.svg'], count: 5 },
-        { source: 'CA-allovu', priority: ['ic_priority_121.svg'], count: 18 },
-      ],
-    };
-    let todoRecommendationExpanded = true;
     let currentTodoType = 'RSO';
 
     const todoGroupsByType = {
@@ -5704,27 +6979,6 @@
       ],
     };
 
-    function renderTodoRecommendationCard(task) {
-      const brandImg = brandImages[task.source] || 'assets/crops/brand-einseo.png';
-      return `
-        <button class="todo-recommend-card" type="button">
-          <div class="todo-card-top">
-            <span class="todo-card-source"><span class="brand-frame"><img class="brand" src="${brandImg}" alt="" ${brandFallbackAttrs}></span><span>${escapeHtml(task.source)}</span></span>
-            <span class="todo-priority-icons">${task.priority.map(icon => `<img src="assets/icons/${icon}" alt="">`).join('')}</span>
-          </div>
-          <div class="todo-card-main">
-            <img class="todo-product-img" src="assets/crops/product-rose.png" alt="">
-            <span class="todo-card-count">${task.count}</span>
-          </div>
-          <div class="todo-card-copy">
-            <div class="todo-product-title">贵妃多多款五代-玫红-新APP</div>
-            <div class="todo-product-model">Rosethorn 2</div>
-            <div class="todo-category">03玫瑰花品类</div>
-          </div>
-        </button>
-      `;
-    }
-
     function renderTodoOrderCard(item, group) {
       const session = sessionData[item.index] || sessionData[1];
       const brandImg = brandImages[item.source] || brandImages[session.source] || 'assets/crops/brand-einseo.png';
@@ -5743,7 +6997,7 @@
               <div class="todo-card-time">2025-03-28 14:22:52</div>
               <div class="todo-category">03玫瑰花品类</div>
               <div class="todo-status-pill ${group.statusTone}">${t(statusKey)}</div>
-              <div class="todo-order-no">026-6986879-2656330 <img src="assets/icons/ic_copy_12.svg" alt=""></div>
+              <div class="todo-order-no">026-6986879-2656330</div>
             </div>
           </div>
         </button>
@@ -5753,29 +7007,12 @@
     function renderContactsList() {
       const container = document.getElementById('sessionList');
       if (!container) return;
-      const recommendationTasks = todoRecommendationTasksByType[currentTodoType] || todoRecommendationTasksByType.RSO;
       const todoGroups = todoGroupsByType[currentTodoType] || todoGroupsByType.RSO;
       const queryFiltered = (item) => {
         const session = sessionData[item.index];
         if (!session || !currentSearchQuery) return true;
         return sessionMatchesSearch(session, currentSearchType, currentSearchQuery);
       };
-
-      const recommendationHtml = `
-        <div class="todo-recommend-wrap">
-          <section class="todo-recommend${todoRecommendationExpanded ? '' : ' is-collapsed'}">
-            <button class="todo-recommend-head" type="button" aria-expanded="${todoRecommendationExpanded ? 'true' : 'false'}">
-              <span class="todo-recommend-title">${t('todo.productRecommendation')}</span>
-              <span class="todo-recommend-meta"><span>${recommendationTasks.length}</span><img class="todo-recommend-toggle-icon" src="assets/icons/${todoRecommendationExpanded ? 'ic_view_less_12.svg' : 'ic_view_all_12.svg'}" alt=""></span>
-            </button>
-            <div class="todo-recommend-grid">
-              ${recommendationTasks.map(renderTodoRecommendationCard).join('')}
-            </div>
-            <button class="todo-task-center" type="button">${t('todo.goTaskCenter')} &rsaquo;</button>
-            <button class="todo-fold" type="button">${t('todo.fold')} <img src="assets/icons/ic_view_less_12.svg" alt=""></button>
-          </section>
-        </div>
-      `;
 
       const groupsHtml = todoGroups.map(group => {
         const items = group.items.filter(queryFiltered);
@@ -5793,14 +7030,7 @@
         `;
       }).join('');
 
-      container.innerHTML = `<div class="todo-list">${recommendationHtml}${groupsHtml}</div>`;
-
-      container.querySelectorAll('.todo-recommend-head, .todo-fold').forEach(btn => {
-        btn.addEventListener('click', () => {
-          todoRecommendationExpanded = !todoRecommendationExpanded;
-          renderContactsList();
-        });
-      });
+      container.innerHTML = `<div class="todo-list">${groupsHtml}</div>`;
 
       container.querySelectorAll('.todo-group-head').forEach(head => {
         head.addEventListener('click', () => {
@@ -5839,16 +7069,32 @@
       if (node) node.src = src;
     }
 
+    function isHighRiskSession(session) {
+      return session && session.name === 'Klaus Crawley';
+    }
+
     function updateRiskIndicators(session) {
-      const hasRisk = session && session.name === 'Klaus Crawley';
+      const hasRisk = isHighRiskSession(session);
       document.querySelectorAll('.profile-risk-icon').forEach(icon => {
         icon.classList.toggle('is-hidden', !hasRisk);
       });
       const banner = document.getElementById('chatRiskBanner');
-      if (banner) banner.classList.toggle('is-hidden', !hasRisk);
+      if (banner) {
+        banner.classList.add('is-hidden');
+        banner.classList.remove('risk-banner-enter');
+      }
     }
 
-    function selectSession(index) {
+    function revealRiskBanner() {
+      const banner = document.getElementById('chatRiskBanner');
+      if (!banner) return;
+      banner.classList.remove('is-hidden', 'risk-banner-enter');
+      void banner.offsetWidth;
+      banner.classList.add('risk-banner-enter');
+    }
+
+    function selectSession(index, options) {
+      const opts = options || {};
       const data = sessionData[index];
       if (!data) return;
       currentSessionIndex = index;
@@ -5870,6 +7116,13 @@
       const msgStack = document.querySelector('.message-stack');
       msgStack.innerHTML = renderMessagesWithDateSeparators(data.messages, data.avatar);
       ensureScrollThumb(msgStack);
+      hydrateAmazonOrderTokens(msgStack);
+      msgStack.scrollTop = msgStack.scrollHeight;
+      requestAnimationFrame(function() {
+        msgStack.scrollTop = msgStack.scrollHeight;
+        updateScrollThumb(msgStack);
+      });
+      if (!opts.suppressRiskAlert) maybeShowHighRiskAlert(data);
       setImage('.user-info > .avatar', data.avatar);
       setText('.user-info .name-text', data.name);
       setText('.id-row a', data.id);
@@ -5886,14 +7139,59 @@
       requestAnimationFrame(positionAiCapsule);
     }
 
-    const chatRiskBanner = document.getElementById('chatRiskBanner');
-    if (chatRiskBanner) {
-      chatRiskBanner.addEventListener('click', function() {
-        const expanded = !chatRiskBanner.classList.contains('is-expanded');
-        chatRiskBanner.classList.toggle('is-expanded', expanded);
-        chatRiskBanner.setAttribute('aria-expanded', String(expanded));
-      });
+    const acknowledgedHighRiskSessions = new Set();
+
+    function openHighRiskAlert() {
+      const modal = document.getElementById('highRiskAlertModal');
+      if (!modal) return;
+      const dialog = modal.querySelector('.high-risk-alert-dialog');
+      if (dialog) dialog.classList.remove('is-closing');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
     }
+
+    function closeHighRiskAlert(options) {
+      const modal = document.getElementById('highRiskAlertModal');
+      if (!modal) return;
+      const dialog = modal.querySelector('.high-risk-alert-dialog');
+      const shouldReveal = options && options.revealBanner;
+      if (!dialog) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        if (shouldReveal) revealRiskBanner();
+        return;
+      }
+      dialog.classList.add('is-closing');
+      window.setTimeout(function() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        dialog.classList.remove('is-closing');
+        if (shouldReveal) revealRiskBanner();
+      }, 220);
+    }
+
+    function maybeShowHighRiskAlert(session) {
+      if (!isHighRiskSession(session) || acknowledgedHighRiskSessions.has(session.id)) return;
+      acknowledgedHighRiskSessions.add(session.id);
+      openHighRiskAlert();
+    }
+
+    function nudgeHighRiskConfirm() {
+      const button = document.getElementById('highRiskAlertConfirm');
+      if (!button) return;
+      button.classList.remove('is-attention');
+      void button.offsetWidth;
+      button.classList.add('is-attention');
+    }
+
+    const highRiskAlertBackdrop = document.getElementById('highRiskAlertBackdrop');
+    const highRiskAlertConfirm = document.getElementById('highRiskAlertConfirm');
+    if (highRiskAlertBackdrop) highRiskAlertBackdrop.addEventListener('click', function() {
+      nudgeHighRiskConfirm();
+    });
+    if (highRiskAlertConfirm) highRiskAlertConfirm.addEventListener('click', function() {
+      closeHighRiskAlert({ revealBanner: true });
+    });
 
     document.querySelectorAll('.session-item').forEach((item, index) => {
       item.tabIndex = 0;
@@ -5935,12 +7233,12 @@
       card.querySelectorAll('.oa-create-btn').forEach((button) => {
         button.addEventListener('click', (event) => {
           event.stopPropagation();
+          resetOaCreateForm();
           const orderType = document.getElementById('oaCreateOrderType');
           if (orderType) orderType.textContent = button.dataset.orderType || 'RDO';
           document.querySelectorAll('#oaOrderTypeDropdown .dropdown-item').forEach((item) => {
             item.classList.toggle('selected', item.dataset.value === (button.dataset.orderType || 'RDO'));
           });
-          resetOaCreateForm();
           openDrawer(document.querySelector('#oaCreateDrawer'));
         });
       });
@@ -6016,18 +7314,18 @@
     });
 
     const productCardItems = [
-      { id: '9527', name: 'Rosethorn 2', count: 6, priority: 'S', rush: true, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9528', name: 'Rosethorn 2', count: 3, priority: 'S', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9531', name: 'Rosethorn 2', count: 1, priority: 'S', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9538', name: 'Rosethorn 2', count: 5, priority: 'S', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9427', name: 'Rosethorn 2', count: 6, priority: '1', rush: true, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9221', name: 'Rosethorn 2', count: 2, priority: '1', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9385', name: 'Rosethorn 2', count: 4, priority: '1', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9314', name: 'Rosethorn 2', count: 1, priority: '1', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9276', name: 'Rosethorn 2', count: 4, priority: '2', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9186', name: 'Rosethorn 2', count: 7, priority: '2', rush: true, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9068', name: 'Rosethorn 2', count: 5, priority: '3', rush: false, marked: true, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
-      { id: '9033', name: 'Rosethorn 2', count: 2, priority: '3', rush: false, marked: false, store: 'WU ydeng123', link: 'amazon.com/smssnsh', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' }
+      { id: '9527', name: 'Rosethorn 2', count: 6, priority: 'S', rush: true, marked: true, country: '美国', store: 'WU ydeng123', link: 'amazon.com/s?ie=UTF8&keywords=butt+plug&field-asin=B0GD7MMP69&rh=i:aps,ssx:relevance', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '8416', name: 'MarsLion Jet Cup', count: 3, priority: 'S', rush: false, marked: false, country: '加拿大', store: 'CA-allovu', link: 'shopify.com/marslion-cup', orderType: 'Customer Orders', image: 'assets/crops/product-mars.png' },
+      { id: '7392', name: 'Angela Flex Lamp', count: 1, priority: 'S', rush: false, marked: true, country: '英国', store: 'GB-HanaCute', link: 'etsy.com/angela-flex', orderType: 'Customer Orders', image: 'assets/crops/product-angela.png' },
+      { id: '6845', name: 'Pathfinder Mini Kit', count: 5, priority: 'S', rush: true, marked: false, country: '日本', store: 'JP-MoriLab', link: 'rakuten.co.jp/path-kit', orderType: 'Customer Orders', image: 'assets/crops/product-pathfinder.png' },
+      { id: '9427', name: 'Crimson Rose Wand', count: 6, priority: '1', rush: true, marked: true, country: '美国', store: 'US-EINSEO', link: 'amazon.com/crimson-wand', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9221', name: 'Orbit Travel Mug', count: 2, priority: '1', rush: false, marked: false, country: '意大利', store: 'IT-KofferHaus', link: 'otto.it/orbit-mug', orderType: 'Customer Orders', image: 'assets/crops/product-mars.png' },
+      { id: '9385', name: 'Pink Loop Case', count: 4, priority: '1', rush: false, marked: true, country: '西班牙', store: 'ES-LunaPop', link: 'amazon.es/pink-loop', orderType: 'Customer Orders', image: 'assets/crops/product-angela.png' },
+      { id: '9314', name: 'Trail Sensor Pack', count: 1, priority: '1', rush: true, marked: false, country: '法国', store: 'FR-NovaTrail', link: 'fnac.com/trail-sensor', orderType: 'Customer Orders', image: 'assets/crops/product-pathfinder.png' },
+      { id: '9276', name: 'Velvet Rose Set', count: 4, priority: '2', rush: false, marked: true, country: '澳大利亚', store: 'AU-BloomBay', link: 'amazon.com.au/velvet-rose', orderType: 'Customer Orders', image: 'assets/crops/product-rose.png' },
+      { id: '9186', name: 'Carbon Aero Cup', count: 7, priority: '2', rush: true, marked: false, country: '美国', store: 'US-MarsLin', link: 'walmart.com/aero-cup', orderType: 'Customer Orders', image: 'assets/crops/product-mars.png' },
+      { id: '9068', name: 'Angela Pocket Fan', count: 5, priority: '3', rush: false, marked: true, country: '意大利', store: 'IT-SoleCasa', link: 'ebay.it/pocket-fan', orderType: 'Customer Orders', image: 'assets/crops/product-angela.png' },
+      { id: '9033', name: 'Pathfinder Desk Hub', count: 2, priority: '3', rush: false, marked: false, country: '法国', store: 'FR-DeskWave', link: 'fnac.com/desk-hub', orderType: 'Customer Orders', image: 'assets/crops/product-pathfinder.png' }
     ];
     const productPriorityIcon = {
       S: 'assets/icons/ic_priority_12s.svg',
@@ -6154,8 +7452,11 @@
       const msgStack = document.querySelector('.message-stack');
       msgStack.innerHTML = renderMessagesWithDateSeparators(session.messages, session.avatar);
       ensureScrollThumb(msgStack);
+      hydrateAmazonOrderTokens(msgStack);
       msgStack.scrollTop = msgStack.scrollHeight;
       closeProductCardModal();
+      const workorderDrawer = document.querySelector('#workorderDrawer');
+      if (workorderDrawer?.classList.contains('active')) closeDrawer(workorderDrawer);
       showToast('Product card sent');
       requestAnimationFrame(positionAiCapsule);
     }
@@ -6164,6 +7465,21 @@
     if (productCardButton) {
       productCardButton.addEventListener('click', openProductCardModal);
     }
+
+    const conversationHistoryButton = document.getElementById('conversationHistoryButton');
+    const conversationHistoryBackdrop = document.getElementById('conversationHistoryBackdrop');
+    const conversationHistoryOk = document.getElementById('conversationHistoryOk');
+    const conversationHistoryEventsEl = document.getElementById('conversationHistoryEvents');
+    conversationHistoryButton?.addEventListener('click', openConversationHistoryModal);
+    conversationHistoryBackdrop?.addEventListener('click', closeConversationHistoryModal);
+    conversationHistoryOk?.addEventListener('click', closeConversationHistoryModal);
+    conversationHistoryEventsEl?.addEventListener('click', function(event) {
+      const item = event.target.closest('.history-event[data-target-time]');
+      if (!item) return;
+      focusConversationHistoryMessage(item.dataset.targetTime || '');
+    });
+    conversationHistoryEventsEl?.addEventListener('scroll', updateConversationTimelineLine);
+    window.addEventListener('resize', updateConversationTimelineLine);
 
     const productCardBackdrop = document.getElementById('productCardBackdrop');
     const productCardCancel = document.getElementById('productCardCancel');
@@ -6199,14 +7515,17 @@
     }
 
     const productCardList = document.getElementById('productCardList');
+    function toggleProductCardSelection(cardId, renderFn) {
+      if (!cardId) return;
+      if (selectedProductCardIds.has(cardId)) selectedProductCardIds.delete(cardId);
+      else selectedProductCardIds.add(cardId);
+      renderFn();
+    }
     if (productCardList) {
       function toggleProductCardFromEvent(event) {
         const card = event.target.closest('.product-card-option[data-card-id]');
         if (!card) return;
-        const cardId = card.dataset.cardId;
-        if (selectedProductCardIds.has(cardId)) selectedProductCardIds.delete(cardId);
-        else selectedProductCardIds.add(cardId);
-        renderProductCardModal();
+        toggleProductCardSelection(card.dataset.cardId, renderProductCardModal);
       }
       productCardList.addEventListener('click', toggleProductCardFromEvent);
       productCardList.addEventListener('keydown', function(event) {
@@ -6261,6 +7580,7 @@
     const emojiButton = document.getElementById('emojiButton');
     const emojiPopover = document.getElementById('emojiPopover');
     const emojiGrid = document.getElementById('emojiGrid');
+    const composerQuickPopover = document.getElementById('composerQuickPopover');
     const attachButton = document.getElementById('attachButton');
     const fileUploadInput = document.getElementById('fileUploadInput');
     const composerAttachmentTray = document.getElementById('composerAttachmentTray');
@@ -6298,12 +7618,27 @@
     let composerOriginalText = '';
     let composerAiOptimized = false;
     let composerComposing = false;
+    let composerQuickTrigger = null;
+    let composerQuickMatches = [];
+    let composerQuickActiveIndex = 0;
+    let composerLastEscapeAt = 0;
+    let quickReplyGroups = [];
+    let quickReplyLang = 'en';
+    let aiRequestSeq = 0;
+    const COMPOSER_DOUBLE_ESCAPE_MS = 500;
+    const AI_RECOMMEND_BASE = 'https://test-manager-api.best-envision.com';
+    const AI_RECOMMEND_PATH = '/admin/imAiReply/recommend';
 
     function composerText() {
       return composerInput.textContent.replace(/\u00a0/g, ' ').trim();
     }
 
+    function updateComposerEmptyState() {
+      composerInput.classList.toggle('is-empty', composerText().length === 0);
+    }
+
     function updateSendState() {
+      updateComposerEmptyState();
       sendButton.disabled = composerText().length === 0 && composerFiles.length === 0;
     }
 
@@ -6311,6 +7646,183 @@
       composerInput.textContent = value;
       updateSendState();
       composerInput.focus();
+    }
+
+    function clearComposerInputText() {
+      composerInput.textContent = '';
+      closeComposerQuickPopover();
+      composerOriginalText = '';
+      setComposerAiToolActive(false);
+      updateSendState();
+      saveComposerRange();
+    }
+
+    function clearComposerOnDoubleEscape(event) {
+      const now = Date.now();
+      const isDoubleEscape = now - composerLastEscapeAt <= COMPOSER_DOUBLE_ESCAPE_MS;
+      composerLastEscapeAt = now;
+      if (!isDoubleEscape || !composerText()) return false;
+      event.preventDefault();
+      clearComposerInputText();
+      composerLastEscapeAt = 0;
+      return true;
+    }
+
+    function getComposerCaretOffset() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || !composerInput.contains(selection.anchorNode)) {
+        return composerInput.textContent.length;
+      }
+      const range = selection.getRangeAt(0).cloneRange();
+      range.selectNodeContents(composerInput);
+      range.setEnd(selection.anchorNode, selection.anchorOffset);
+      return range.toString().length;
+    }
+
+    function setComposerTextWithCaret(value, caretOffset) {
+      composerInput.textContent = value;
+      const offset = Math.max(0, Math.min(caretOffset, value.length));
+      const range = document.createRange();
+      const selection = window.getSelection();
+      const textNode = composerInput.firstChild || composerInput.appendChild(document.createTextNode(''));
+      range.setStart(textNode, offset);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      updateSendState();
+      composerInput.focus();
+      saveComposerRange();
+    }
+
+    function composerQuickAllItems() {
+      return visibleQuickReplyGroups().flatMap(function(group) {
+        return group.items.filter(function(item) {
+          return Boolean(item.shortcut);
+        }).map(function(item) {
+          return {
+            group: group.title,
+            shortcut: item.shortcut,
+            text: item.text
+          };
+        });
+      });
+    }
+
+    function currentQuickReplyContext() {
+      const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
+      const source = session?.source || '';
+      const brandName = source.includes('-') ? source.split('-').slice(1).join('-') : source;
+      return {
+        customer_name: session?.name || 'customer',
+        company_name: brandName || 'JoyHub'
+      };
+    }
+
+    function renderQuickReplyPreview(text) {
+      const context = currentQuickReplyContext();
+      return String(text)
+        .replace(/\{customer_name\}/g, context.customer_name)
+        .replace(/\{company_name\}/g, context.company_name);
+    }
+
+    function renderComposerQuickPreviewText(text) {
+      const context = currentQuickReplyContext();
+      return escapeHtml(String(text))
+        .replace(/\{customer_name\}/g, '<span class="quick-reply-token">' + escapeHtml(context.customer_name) + '</span>')
+        .replace(/\{company_name\}/g, '<span class="quick-reply-token">' + escapeHtml(context.company_name) + '</span>')
+        .replace(/\{([^}]+)\}/g, '<span class="quick-reply-token">{$1}</span>');
+    }
+
+    function getComposerQuickTrigger() {
+      const text = composerInput.textContent.replace(/\u00a0/g, ' ');
+      const caret = getComposerCaretOffset();
+      const beforeCaret = text.slice(0, caret);
+      const slashIndex = beforeCaret.lastIndexOf('/');
+      if (slashIndex < 0) return null;
+      const prevChar = slashIndex === 0 ? '' : beforeCaret[slashIndex - 1];
+      if (prevChar && !/\s/.test(prevChar)) return null;
+      const query = beforeCaret.slice(slashIndex + 1);
+      if (/\s/.test(query)) return null;
+      return {
+        text,
+        caret,
+        slashIndex,
+        query
+      };
+    }
+
+    function closeComposerQuickPopover() {
+      composerQuickTrigger = null;
+      composerQuickMatches = [];
+      composerQuickActiveIndex = 0;
+      if (!composerQuickPopover) return;
+      composerQuickPopover.classList.remove('open');
+      composerQuickPopover.setAttribute('aria-hidden', 'true');
+      composerQuickPopover.innerHTML = '';
+    }
+
+    function positionComposerQuickPopover() {
+      if (!composerQuickPopover || !composerInput) return;
+      const composerRect = composerInput.closest('.composer').getBoundingClientRect();
+      const inputRect = composerInput.getBoundingClientRect();
+      composerQuickPopover.style.left = (inputRect.left - composerRect.left) + 'px';
+      composerQuickPopover.style.width = inputRect.width + 'px';
+      composerQuickPopover.style.top = 'auto';
+      composerQuickPopover.style.bottom = (composerRect.bottom - inputRect.top + 8) + 'px';
+      composerQuickPopover.style.maxHeight = '240px';
+    }
+
+    function renderComposerQuickPopover() {
+      if (!composerQuickPopover) return;
+      if (!composerQuickTrigger) {
+        closeComposerQuickPopover();
+        return;
+      }
+      if (aiState === 'expanded') setAiState('ready', t('ai.generated'));
+      const query = composerQuickTrigger.query.toLowerCase();
+      composerQuickMatches = composerQuickAllItems().filter(function(item) {
+        const code = item.shortcut.replace(/^\//, '').toLowerCase();
+        return !query || code.startsWith(query);
+      });
+      composerQuickActiveIndex = Math.min(composerQuickActiveIndex, Math.max(0, composerQuickMatches.length - 1));
+      if (!composerQuickMatches.length) {
+        composerQuickPopover.innerHTML = '<div class="composer-quick-empty">No quick replies found</div>';
+      } else {
+        composerQuickPopover.innerHTML = composerQuickMatches.map(function(item, index) {
+          return `
+            <button class="composer-quick-item${index === composerQuickActiveIndex ? ' active' : ''}" type="button" data-index="${index}">
+              <span class="composer-quick-code">${escapeHtml(item.shortcut)}</span>
+              <span class="composer-quick-text">${renderComposerQuickPreviewText(item.text)}</span>
+            </button>
+          `;
+        }).join('');
+      }
+      composerQuickPopover.classList.add('open');
+      composerQuickPopover.setAttribute('aria-hidden', 'false');
+      positionComposerQuickPopover();
+      composerQuickPopover.querySelector('.composer-quick-item.active')?.scrollIntoView({ block: 'nearest' });
+      ensureScrollThumb(composerQuickPopover);
+    }
+
+    function updateComposerQuickPopover() {
+      composerQuickTrigger = getComposerQuickTrigger();
+      composerQuickActiveIndex = 0;
+      if (!composerQuickTrigger) closeComposerQuickPopover();
+      else renderComposerQuickPopover();
+    }
+
+    function applyComposerQuickReply(index) {
+      if (!composerQuickTrigger || !composerQuickMatches.length) return false;
+      const item = composerQuickMatches[index] || composerQuickMatches[0];
+      const before = composerQuickTrigger.text.slice(0, composerQuickTrigger.slashIndex);
+      const after = composerQuickTrigger.text.slice(composerQuickTrigger.caret);
+      const spacer = before && !/\s$/.test(before) ? ' ' : '';
+      const replyText = renderQuickReplyPreview(item.text);
+      const nextText = before + spacer + replyText + after;
+      const nextCaret = (before + spacer + replyText).length;
+      closeComposerQuickPopover();
+      setComposerTextWithCaret(nextText, nextCaret);
+      return true;
     }
 
     function saveComposerRange() {
@@ -6423,6 +7935,7 @@
       if (!aiCapsule || aiState === 'hidden') return;
       aiCapsule.style.top = 'auto';
       aiCapsule.style.bottom = '200px';
+      positionComposerQuickPopover();
     }
 
     function latestUserMessage(session) {
@@ -6433,19 +7946,85 @@
       return null;
     }
 
+    function latestNormalMessage(session) {
+      const messages = session && session.messages ? session.messages : [];
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (!messages[i].system) return messages[i];
+      }
+      return null;
+    }
+
+    function stopAiSuggestion() {
+      window.clearTimeout(aiTimer);
+      aiRequestSeq++;
+      aiSuggestion = '';
+      aiSourceMessage = '';
+      setAiState('hidden', '');
+    }
+
+    function canApplyAiSuggestion(session, userMessage, requestSeq) {
+      return requestSeq === aiRequestSeq
+        && currentSessionIndex !== null
+        && sessionData[currentSessionIndex] === session
+        && latestNormalMessage(session) === userMessage;
+    }
+
     function buildAiSuggestion(session, userMessage) {
       const name = session ? session.name.split(' ')[0] : 'there';
       if (!userMessage) return '';
       return `Thanks, ${name}. I’m checking this now and will guide you through the next step.`;
     }
 
-    function startAiGeneration(forceError) {
+    function storedApiToken() {
+      try {
+        const raw = localStorage.getItem('joyhub_user');
+        if (!raw) return '';
+        const user = JSON.parse(raw);
+        if (user.expire && Date.now() > user.expire) return '';
+        return user.token || '';
+      } catch (err) {
+        return '';
+      }
+    }
+
+    function aiRecommendParams(session, userMessage) {
+      if (!session || !userMessage) return null;
+      const params = {
+        user_id: session.userId || session.user_id || session.id || '10086',
+        chat_id: session.chatId || session.chat_id || '100',
+        chat_record_id: userMessage.chatRecordId || userMessage.chat_record_id || userMessage.recordId || userMessage.record_id || '100',
+        msg_id: userMessage.msgId || userMessage.msg_id || userMessage.id || '14403'
+      };
+      return Object.values(params).every(Boolean) ? params : null;
+    }
+
+    async function fetchAiRecommendation(session, userMessage) {
+      const params = aiRecommendParams(session, userMessage);
+      const token = storedApiToken();
+      if (!params || !token) return null;
+      const res = await fetch(AI_RECOMMEND_BASE + AI_RECOMMEND_PATH, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'Authorization': token
+        },
+        body: new URLSearchParams(params).toString()
+      });
+      const payload = await res.json();
+      if (!res.ok || payload.code !== 0 || !payload.data || !payload.data.recommend_msg) return null;
+      return {
+        text: payload.data.recommend_msg,
+        source: payload.data.user_msg || (userMessage && userMessage.text) || '',
+        meta: payload.data
+      };
+    }
+
+    async function startAiGeneration(forceError) {
       const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
-      const userMessage = latestUserMessage(session);
+      const userMessage = latestNormalMessage(session);
       window.clearTimeout(aiTimer);
-      if (!userMessage) {
-        aiSuggestion = '';
-        setAiState('hidden', '');
+      if (!userMessage || userMessage.dir !== 'in') {
+        stopAiSuggestion();
         return;
       }
       aiSuggestion = buildAiSuggestion(session, userMessage);
@@ -6453,17 +8032,26 @@
       aiSuggestionSent = false;
       setAiFeedback(null);
       setAiState('loading', t('ai.generating'));
+      const requestSeq = ++aiRequestSeq;
+      const remoteSuggestion = forceError ? null : await fetchAiRecommendation(session, userMessage).catch(() => null);
+      if (!canApplyAiSuggestion(session, userMessage, requestSeq)) return;
+      if (remoteSuggestion) {
+        aiSuggestion = remoteSuggestion.text;
+        aiSourceMessage = remoteSuggestion.source;
+        setAiState('expanded', t('ai.generated'));
+        return;
+      }
       aiTimer = window.setTimeout(() => {
+        if (!canApplyAiSuggestion(session, userMessage, requestSeq)) return;
         if (forceError) setAiState('error', t('ai.errorRetry'));
-        else setAiState('ready', t('ai.generated'));
+        else setAiState('expanded', t('ai.generated'));
       }, 3000);
     }
 
     function maybeStartAiSuggestion(session) {
-      const messages = session && session.messages ? session.messages : [];
-      const lastNormal = [...messages].reverse().find(message => !message.system);
+      const lastNormal = latestNormalMessage(session);
       if (lastNormal && lastNormal.dir === 'in') startAiGeneration(false);
-      else setAiState('hidden', '');
+      else stopAiSuggestion();
     }
 
     function fillComposerWithAiSuggestion() {
@@ -6476,13 +8064,12 @@
       aiSuggestionSent = true;
       setComposerText(aiSuggestion);
       sendComposerMessage({ aiGenerated: true });
-      setAiState('ready', t('ai.generated'));
     }
 
     function expandAiCapsule() {
       if (aiState === 'ready') {
         const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
-        const userMessage = latestUserMessage(session);
+        const userMessage = latestNormalMessage(session);
         if (userMessage) aiSourceMessage = userMessage.text;
         setAiState('expanded', t('ai.generated'));
       }
@@ -6599,6 +8186,7 @@
       emojiButton.addEventListener('click', (event) => {
         event.stopPropagation();
         saveComposerRange();
+        closeComposerQuickPopover();
         setEmojiPopoverOpen(!emojiPopover.classList.contains('open'));
       });
     }
@@ -6621,10 +8209,14 @@
 
     document.addEventListener('click', (event) => {
       if (!event.target.closest('#emojiPopover, #emojiButton')) setEmojiPopoverOpen(false);
+      if (!event.target.closest('#composerQuickPopover, .composer-input')) closeComposerQuickPopover();
     });
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') setEmojiPopoverOpen(false);
+      if (event.key === 'Escape') {
+        setEmojiPopoverOpen(false);
+        closeComposerQuickPopover();
+      }
     });
 
     function timeStampNow() {
@@ -6652,11 +8244,13 @@
         const msgStack = document.querySelector('.message-stack');
         msgStack.innerHTML = renderMessagesWithDateSeparators(s.messages, s.avatar);
         ensureScrollThumb(msgStack);
+        hydrateAmazonOrderTokens(msgStack);
         msgStack.scrollTop = msgStack.scrollHeight;
-        if (aiSuggestion) setAiState('ready', t('ai.generated'));
+        stopAiSuggestion();
         requestAnimationFrame(positionAiCapsule);
       }
       composerInput.textContent = '';
+      closeComposerQuickPopover();
       composerOriginalText = '';
       setComposerAiToolActive(false);
       clearComposerFiles();
@@ -6664,24 +8258,54 @@
     }
 
     composerInput.addEventListener('input', () => {
+      composerLastEscapeAt = 0;
       saveComposerRange();
       updateSendState();
+      updateComposerQuickPopover();
       if (composerAiOptimized && composerText() !== buildComposerOptimization(composerOriginalText)) {
         composerOriginalText = '';
         setComposerAiToolActive(false);
       }
     });
-    composerInput.addEventListener('keyup', saveComposerRange);
-    composerInput.addEventListener('mouseup', saveComposerRange);
+    composerInput.addEventListener('keyup', (event) => {
+      saveComposerRange();
+      if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape', 'Tab'].includes(event.key)) return;
+      updateComposerQuickPopover();
+    });
+    composerInput.addEventListener('mouseup', () => {
+      saveComposerRange();
+      updateComposerQuickPopover();
+    });
     composerInput.addEventListener('compositionstart', () => {
       composerComposing = true;
     });
     composerInput.addEventListener('compositionend', () => {
       composerComposing = false;
       updateSendState();
+      updateComposerQuickPopover();
     });
     composerInput.addEventListener('keydown', (event) => {
       if (composerComposing || event.isComposing || event.keyCode === 229) return;
+      if (event.key === 'Escape' && clearComposerOnDoubleEscape(event)) return;
+      if (composerQuickPopover?.classList.contains('open')) {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const direction = event.key === 'ArrowDown' ? 1 : -1;
+          composerQuickActiveIndex = (composerQuickActiveIndex + direction + composerQuickMatches.length) % Math.max(1, composerQuickMatches.length);
+          renderComposerQuickPopover();
+          return;
+        }
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeComposerQuickPopover();
+          return;
+        }
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          applyComposerQuickReply(composerQuickActiveIndex);
+          return;
+        }
+      }
       if (event.key === 'Enter' && aiTabPressed && aiState === 'expanded') {
         event.preventDefault();
         sendAiSuggestion();
@@ -6692,6 +8316,16 @@
         sendComposerMessage();
       }
     });
+    if (composerQuickPopover) {
+      composerQuickPopover.addEventListener('mousedown', (event) => {
+        event.preventDefault();
+      });
+      composerQuickPopover.addEventListener('click', (event) => {
+        const item = event.target.closest('.composer-quick-item[data-index]');
+        if (!item) return;
+        applyComposerQuickReply(Number(item.dataset.index) || 0);
+      });
+    }
     document.addEventListener('keydown', (event) => {
       if (composerComposing || event.isComposing || event.keyCode === 229) return;
       if (event.key === 'Tab') {
@@ -6708,10 +8342,89 @@
     });
     sendButton.addEventListener('click', sendComposerMessage);
     const messageStackForAi = document.querySelector('.message-stack');
+    const messageContextMenu = document.getElementById('messageContextMenu');
+    let messageContextTarget = null;
+
+    function messageBubbleText(bubble) {
+      const clone = bubble.cloneNode(true);
+      clone.querySelectorAll('.bubble-time, img').forEach(node => node.remove());
+      return clone.textContent.trim();
+    }
+
+    function closeMessageContextMenu() {
+      if (!messageContextMenu) return;
+      messageContextMenu.classList.remove('open');
+      messageContextMenu.setAttribute('aria-hidden', 'true');
+      messageContextTarget = null;
+    }
+
+    function openMessageContextMenu(event, bubble) {
+      if (!messageContextMenu) return;
+      const message = bubble.closest('.message');
+      const isUserMessage = message && message.classList.contains('in');
+      const orderToken = bubble.querySelector('.amazon-order-token.is-risk, .amazon-order-token.is-ready');
+      const actions = [
+        { label: 'Copy', action: 'copy' }
+      ];
+      if (isUserMessage && orderToken) {
+        const orderNo = orderToken.dataset.orderNo || '';
+        if (orderToken.classList.contains('is-risk')) {
+          actions.push({ label: 'Mark Risk', action: 'mark-risk', orderNo });
+        } else if (orderToken.classList.contains('is-ready')) {
+          actions.push({ label: 'Create Order', action: 'create-order', orderNo });
+        }
+      }
+      messageContextTarget = bubble;
+      messageContextMenu.innerHTML = actions.map(item => {
+        const orderAttr = item.orderNo ? ` data-order-no="${escapeHtml(item.orderNo)}"` : '';
+        return `<button type="button" role="menuitem" data-action="${item.action}"${orderAttr}>${item.label}</button>`;
+      }).join('');
+      messageContextMenu.classList.add('open');
+      messageContextMenu.setAttribute('aria-hidden', 'false');
+      const menuRect = messageContextMenu.getBoundingClientRect();
+      const left = Math.min(event.clientX, window.innerWidth - menuRect.width - 8);
+      const top = Math.min(event.clientY, window.innerHeight - menuRect.height - 8);
+      messageContextMenu.style.left = Math.max(8, left) + 'px';
+      messageContextMenu.style.top = Math.max(8, top) + 'px';
+    }
+
     if (messageStackForAi) {
       messageStackForAi.addEventListener('scroll', positionAiCapsule, { passive: true });
+      messageStackForAi.addEventListener('click', (event) => {
+        const orderToken = event.target.closest('.amazon-order-token.is-clickable');
+        if (!orderToken) return;
+        event.preventDefault();
+        event.stopPropagation();
+        openOaCreateFromAmazonOrder(orderToken.dataset.orderNo || '');
+      });
+      messageStackForAi.addEventListener('contextmenu', (event) => {
+        const bubble = event.target.closest('.message .bubble');
+        if (!bubble || !messageStackForAi.contains(bubble)) return;
+        event.preventDefault();
+        openMessageContextMenu(event, bubble);
+      });
     }
+    if (messageContextMenu) {
+      messageContextMenu.addEventListener('click', (event) => {
+        const item = event.target.closest('button[data-action]');
+        if (!item || !messageContextTarget) return;
+        const action = item.dataset.action;
+        if (action === 'copy') {
+          copyText(messageBubbleText(messageContextTarget));
+        } else if (action === 'create-order') {
+          openOaCreateFromAmazonOrder(item.dataset.orderNo || '');
+        } else if (action === 'mark-risk') {
+          showToast('Marked as risk');
+        }
+        closeMessageContextMenu();
+      });
+    }
+    document.addEventListener('click', closeMessageContextMenu);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeMessageContextMenu();
+    });
     window.addEventListener('resize', positionAiCapsule);
+    window.addEventListener('resize', positionComposerQuickPopover);
     updateSendState();
 
     document.querySelectorAll('[data-panel-tab]').forEach((tab) => {
@@ -7190,12 +8903,19 @@
       setOaOrderVerifyState('idle');
     }
     function setOaCreateOrderType(orderType) {
-      const nextType = orderType === 'RSO' ? 'RSO' : 'RDO';
+      const nextType = orderType === 'RSO' ? 'RSO' : orderType === 'RDO' ? 'RDO' : '';
       const label = document.getElementById('oaCreateOrderType');
       if (label) label.textContent = nextType;
       document.querySelectorAll('#oaOrderTypeDropdown .dropdown-item').forEach((item) => {
         item.classList.toggle('selected', item.dataset.value === nextType);
       });
+    }
+    function openOaCreateFromAmazonOrder(orderNo) {
+      resetOaCreateForm();
+      setOaCreateOrderType('');
+      if (oaOrderNoInput) oaOrderNoInput.value = formatAmazonOrderNo(orderNo);
+      setOaOrderVerifyState('success');
+      openDrawer(document.querySelector('#oaCreateDrawer'));
     }
     function getOaCardData(card) {
       if (!card) return null;
@@ -7509,15 +9229,537 @@
     }
 
     // Search All button
-    document.querySelector('[data-tool="search"]').addEventListener('click', function() {
+    document.querySelector('[data-tool="search"]')?.addEventListener('click', function() {
       openDrawer(document.querySelector('#searchDrawer'));
       renderSearchDrawer();
     });
     // WorkOrder Pool button (also has inline onclick as fallback)
-    document.querySelector('[data-tool="workorder"]').addEventListener('click', function() {
+    document.querySelector('[data-tool="workorder"]')?.addEventListener('click', function() {
       openDrawer(document.querySelector('#workorderDrawer'));
       renderWorkorderDrawer();
     });
+    document.querySelector('[data-tool="product-recommendation"]')?.addEventListener('click', function() {
+      openDrawer(document.querySelector('#workorderDrawer'));
+      renderWorkorderDrawer();
+    });
+
+    const quickReplyGroupsByLang = {
+      en: [
+        {
+          title: 'Greeting',
+          items: [
+            {
+              shortcut: '/hi',
+              text: 'Hello {customer_name}! Welcome to {company_name} support. How can I help you today?'
+            },
+            {
+              shortcut: '/hold',
+              text: "Thanks for your patience, {customer_name}. I'm currently looking into this for you. It might take a couple of minutes. I'll be right back!"
+            }
+          ]
+        },
+        {
+          title: 'Requesting Info',
+          items: [
+            {
+              shortcut: '/order',
+              text: 'To help me check the exact status of your request, could you please provide your Order ID? It is usually a 6-digit number (e.g., #123456) or you can share the email address associated with your account.'
+            }
+          ]
+        },
+        {
+          title: 'Refund',
+          items: [
+            {
+              shortcut: '/refund',
+              text: "I understand you'd like to request a refund for order {order_id}. Our standard policy allows returns within {return_window} days of delivery. Could you let me know the specific reason for the return so I can guide you through the next steps?"
+            }
+          ]
+        }
+      ],
+      fr: [
+        {
+          title: 'Accueil',
+          items: [
+            {
+              shortcut: '/hi',
+              text: 'Bonjour {customer_name} ! Bienvenue au support {company_name}. Comment puis-je vous aider aujourd’hui ?'
+            },
+            {
+              shortcut: '/hold',
+              text: "Merci pour votre patience, {customer_name}. Je vérifie cela pour vous. Cela peut prendre quelques minutes, je reviens tout de suite !"
+            }
+          ]
+        },
+        {
+          title: 'Demande d’information',
+          items: [
+            {
+              shortcut: '/order',
+              text: 'Pour vérifier précisément le statut de votre demande, pouvez-vous me communiquer votre numéro de commande ? Il s’agit généralement d’un numéro à 6 chiffres (par exemple #123456), ou vous pouvez partager l’adresse e-mail associée à votre compte.'
+            }
+          ]
+        },
+        {
+          title: 'Remboursement',
+          items: [
+            {
+              shortcut: '/refund',
+              text: 'Je comprends que vous souhaitez demander un remboursement pour la commande {order_id}. Notre politique standard autorise les retours dans un délai de {return_window} jours après la livraison. Pouvez-vous m’indiquer la raison précise du retour afin que je vous guide ?'
+            }
+          ]
+        }
+      ],
+      de: [
+        {
+          title: 'Begrüßung',
+          items: [
+            {
+              shortcut: '/hi',
+              text: 'Hallo {customer_name}! Willkommen beim {company_name} Support. Wie kann ich Ihnen heute helfen?'
+            },
+            {
+              shortcut: '/hold',
+              text: 'Vielen Dank für Ihre Geduld, {customer_name}. Ich prüfe das gerade für Sie. Das kann ein paar Minuten dauern. Ich bin gleich wieder da!'
+            }
+          ]
+        },
+        {
+          title: 'Information anfordern',
+          items: [
+            {
+              shortcut: '/order',
+              text: 'Damit ich den genauen Status Ihrer Anfrage prüfen kann, nennen Sie mir bitte Ihre Bestellnummer. Sie ist normalerweise 6-stellig (z. B. #123456), alternativ können Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse angeben.'
+            }
+          ]
+        },
+        {
+          title: 'Rückerstattung',
+          items: [
+            {
+              shortcut: '/refund',
+              text: 'Ich verstehe, dass Sie eine Rückerstattung für die Bestellung {order_id} beantragen möchten. Unsere Standardrichtlinie erlaubt Rücksendungen innerhalb von {return_window} Tagen nach Lieferung. Können Sie mir den genauen Rücksendegrund nennen, damit ich Sie durch die nächsten Schritte führen kann?'
+            }
+          ]
+        }
+      ],
+      ja: [
+        {
+          title: '挨拶',
+          items: [
+            {
+              shortcut: '/hi',
+              text: '{customer_name}さん、こんにちは。{company_name}サポートへようこそ。本日はどのようにお手伝いできますか？'
+            },
+            {
+              shortcut: '/hold',
+              text: '{customer_name}さん、お待ちいただきありがとうございます。現在確認しておりますので、数分ほどお時間をいただく場合があります。すぐに戻ります。'
+            }
+          ]
+        },
+        {
+          title: '情報確認',
+          items: [
+            {
+              shortcut: '/order',
+              text: 'ご依頼の正確な状況を確認するため、注文IDを教えていただけますか？通常は6桁の番号（例：#123456）です。アカウントに登録されたメールアドレスでも確認できます。'
+            }
+          ]
+        },
+        {
+          title: '返金',
+          items: [
+            {
+              shortcut: '/refund',
+              text: '注文 {order_id} の返金をご希望とのこと、承知しました。通常ポリシーでは配送後 {return_window} 日以内の返品を受け付けています。次の手順をご案内するため、返品理由を教えていただけますか？'
+            }
+          ]
+        }
+      ],
+      es: [
+        {
+          title: 'Saludo',
+          items: [
+            {
+              shortcut: '/hi',
+              text: 'Hola, {customer_name}. Bienvenido/a al soporte de {company_name}. ¿En qué puedo ayudarte hoy?'
+            },
+            {
+              shortcut: '/hold',
+              text: 'Gracias por tu paciencia, {customer_name}. Estoy revisando esto para ti. Puede tardar un par de minutos. ¡Vuelvo enseguida!'
+            }
+          ]
+        },
+        {
+          title: 'Solicitar información',
+          items: [
+            {
+              shortcut: '/order',
+              text: 'Para revisar el estado exacto de tu solicitud, ¿podrías compartir tu ID de pedido? Normalmente es un número de 6 dígitos (por ejemplo, #123456), o puedes indicar el correo electrónico asociado a tu cuenta.'
+            }
+          ]
+        },
+        {
+          title: 'Reembolso',
+          items: [
+            {
+              shortcut: '/refund',
+              text: 'Entiendo que quieres solicitar un reembolso para el pedido {order_id}. Nuestra política estándar permite devoluciones dentro de los {return_window} días posteriores a la entrega. ¿Podrías indicarme el motivo específico de la devolución para guiarte con los próximos pasos?'
+            }
+          ]
+        }
+      ]
+    };
+    const quickReplyMyGroups = [
+      {
+        title: 'Order follow-up scripts',
+        items: [
+          {
+            text: 'Please, please, please order! May good fortune follow you.'
+          }
+        ]
+      }
+    ];
+    let quickReplyQuery = '';
+    let quickReplyScope = 'Team';
+    let quickReplyAddCategory = 'Order follow-up scripts';
+    let quickReplyAddCreateNew = false;
+    const quickReplyCollapsed = new Set();
+
+    function setQuickReplyLanguage(lang) {
+      quickReplyLang = quickReplyGroupsByLang[lang] ? lang : 'en';
+      quickReplyGroups = quickReplyGroupsByLang[quickReplyLang];
+      quickReplyCollapsed.clear();
+      renderQuickReplies();
+      if (composerQuickPopover?.classList.contains('open')) renderComposerQuickPopover();
+    }
+
+    function visibleQuickReplyGroups() {
+      return quickReplyScope === 'My' ? quickReplyMyGroups : quickReplyGroups;
+    }
+
+    function renderQuickReplyText(text) {
+      return escapeHtml(text).replace(/(\{[^}]+\})/g, '<span class="quick-reply-token">$1</span>');
+    }
+
+    function renderSearchResultText(text, query) {
+      return String(query || '').trim() ? highlightMatch(text, query) : renderQuickReplyText(text);
+    }
+
+    function renderQuickReplyActions() {
+      if (quickReplyScope !== 'My') return '';
+      return `
+        <div class="quick-reply-actions">
+          <button class="quick-reply-action" type="button" id="quickReplyAddButton"><img src="assets/icons/ic_create_16.svg" alt=""><span>Add Quick Replies</span></button>
+          <button class="quick-reply-action" type="button" id="quickReplyEditButton"><img src="assets/icons/ic_setting_16.svg" alt=""><span>Edit Quick Replies</span></button>
+        </div>
+      `;
+    }
+
+    function renderQuickReplies() {
+      const list = document.getElementById('quickReplyList');
+      if (!list) return;
+      const query = quickReplyQuery.trim().toLowerCase();
+      const groups = visibleQuickReplyGroups().map(function(group) {
+        const items = group.items.filter(function(item) {
+          if (!query) return true;
+          const renderedText = renderQuickReplyPreview(item.text);
+          return group.title.toLowerCase().includes(query)
+            || String(item.shortcut || '').toLowerCase().includes(query)
+            || item.text.toLowerCase().includes(query)
+            || renderedText.toLowerCase().includes(query);
+        });
+        return { title: group.title, items: items };
+      }).filter(function(group) {
+        return group.items.length > 0;
+      });
+      if (!groups.length) {
+        list.innerHTML = '<div class="quick-reply-empty">No quick replies found</div>' + renderQuickReplyActions();
+        return;
+      }
+      list.innerHTML = groups.map(function(group) {
+        const collapsed = quickReplyCollapsed.has(group.title);
+        const items = group.items.map(function(item) {
+          const renderedText = renderQuickReplyPreview(item.text);
+          return `
+            <button class="quick-reply-card" type="button" data-reply-text="${escapeHtml(item.text)}">
+              ${item.shortcut ? `<span class="quick-reply-shortcut">${renderSearchResultText(item.shortcut, query)}</span>` : ''}
+              <span class="quick-reply-text">${renderSearchResultText(renderedText, query)}</span>
+            </button>
+          `;
+        }).join('');
+        return `
+          <section class="quick-reply-group${collapsed ? ' collapsed' : ''}" data-group-title="${escapeHtml(group.title)}">
+            <button class="quick-reply-group-head" type="button">
+              <span>${renderSearchResultText(group.title, query)}</span>
+              <img src="assets/icons/Property%201=up.svg" alt="">
+            </button>
+            <div class="quick-reply-items">${items}</div>
+          </section>
+        `;
+      }).join('') + renderQuickReplyActions();
+    }
+
+    const quickReplySearchInput = document.getElementById('quickReplySearchInput');
+    if (quickReplySearchInput) {
+      quickReplySearchInput.addEventListener('input', function() {
+        quickReplyQuery = quickReplySearchInput.value;
+        renderQuickReplies();
+      });
+    }
+
+    const quickReplyLangDropdown = document.getElementById('quickReplyLangDropdown');
+    if (quickReplyLangDropdown) {
+      quickReplyLangDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          setQuickReplyLanguage(item.dataset.value || 'en');
+        });
+      });
+    }
+
+    const quickReplyTipClose = document.getElementById('quickReplyTipClose');
+    if (quickReplyTipClose) {
+      quickReplyTipClose.addEventListener('click', function(event) {
+        event.stopPropagation();
+        document.getElementById('quickReplyTip')?.classList.add('is-hidden');
+      });
+    }
+
+    const quickReplyAddModal = document.getElementById('quickReplyAddModal');
+    const quickReplyAddBackdrop = document.getElementById('quickReplyAddBackdrop');
+    const quickReplyAddCancel = document.getElementById('quickReplyAddCancel');
+    const quickReplyAddSend = document.getElementById('quickReplyAddSend');
+    const quickReplyAddText = document.getElementById('quickReplyAddText');
+    const quickReplyCategoryDropdown = document.getElementById('quickReplyCategoryDropdown');
+    const quickReplyCategoryLabel = document.getElementById('quickReplyCategoryLabel');
+    const quickReplyCategoryMenu = document.getElementById('quickReplyCategoryMenu');
+    const quickReplyNewCategoryInput = document.getElementById('quickReplyNewCategoryInput');
+    const quickReplyEditModal = document.getElementById('quickReplyEditModal');
+    const quickReplyEditBackdrop = document.getElementById('quickReplyEditBackdrop');
+    const quickReplyEditCancel = document.getElementById('quickReplyEditCancel');
+    const quickReplyEditSave = document.getElementById('quickReplyEditSave');
+    const quickReplyEditList = document.getElementById('quickReplyEditList');
+    let quickReplyEditDraft = [];
+
+    function updateQuickReplyAddSendState() {
+      const hasText = Boolean(quickReplyAddText?.value.trim());
+      const hasCategory = !quickReplyAddCreateNew || Boolean(quickReplyNewCategoryInput?.value.trim());
+      if (quickReplyAddSend) quickReplyAddSend.disabled = !(hasText && hasCategory);
+    }
+
+    function renderQuickReplyCategoryMenu() {
+      if (!quickReplyCategoryMenu) return;
+      const items = quickReplyMyGroups.map(function(group) {
+        const selected = !quickReplyAddCreateNew && group.title === quickReplyAddCategory;
+        return `<div class="dropdown-item${selected ? ' selected' : ''}" data-category="${escapeHtml(group.title)}"><span>${escapeHtml(group.title)}</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>`;
+      }).join('');
+      quickReplyCategoryMenu.innerHTML = items + '<div class="dropdown-item' + (quickReplyAddCreateNew ? ' selected' : '') + '" data-create-new="true"><span class="quick-reply-category-choice"><img src="assets/icons/ic_create_16.svg" alt="">Create New Category</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>';
+    }
+
+    function setQuickReplyAddCategory(createNew, category) {
+      quickReplyAddCreateNew = createNew;
+      if (!createNew) quickReplyAddCategory = category || quickReplyMyGroups[0]?.title || 'Order follow-up scripts';
+      if (quickReplyCategoryLabel) {
+        quickReplyCategoryLabel.innerHTML = createNew
+          ? '<span class="quick-reply-category-choice"><img src="assets/icons/ic_create_16.svg" alt="">Create New Category</span>'
+          : escapeHtml(quickReplyAddCategory);
+      }
+      quickReplyNewCategoryInput?.classList.toggle('is-visible', createNew);
+      renderQuickReplyCategoryMenu();
+      updateQuickReplyAddSendState();
+      if (createNew) quickReplyNewCategoryInput?.focus();
+    }
+
+    function openQuickReplyAddModal() {
+      if (!quickReplyAddModal) return;
+      quickReplyAddText.value = '';
+      if (quickReplyNewCategoryInput) quickReplyNewCategoryInput.value = '';
+      setQuickReplyAddCategory(false, quickReplyMyGroups[0]?.title || 'Order follow-up scripts');
+      quickReplyAddModal.classList.add('open');
+      quickReplyAddModal.setAttribute('aria-hidden', 'false');
+      updateQuickReplyAddSendState();
+    }
+
+    function closeQuickReplyAddModal() {
+      if (!quickReplyAddModal) return;
+      quickReplyAddModal.classList.remove('open');
+      quickReplyAddModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function setQuickReplyEditDirty(dirty) {
+      if (quickReplyEditSave) quickReplyEditSave.disabled = !dirty;
+    }
+
+    function renderQuickReplyEditList() {
+      if (!quickReplyEditList) return;
+      if (!quickReplyEditDraft.length) {
+        quickReplyEditList.innerHTML = '<div class="quick-reply-empty">No quick replies found</div>';
+        return;
+      }
+      quickReplyEditList.innerHTML = quickReplyEditDraft.map(function(group, groupIndex) {
+        const rows = group.items.map(function(item, itemIndex) {
+          return `
+            <div class="quick-reply-edit-row" data-group-index="${groupIndex}" data-item-index="${itemIndex}">
+              <input class="quick-reply-edit-input" type="text" value="${escapeHtml(item.text)}">
+              <button class="quick-reply-delete" type="button" aria-label="Delete quick reply"></button>
+            </div>
+          `;
+        }).join('');
+        return `
+          <section class="quick-reply-edit-group" data-group-index="${groupIndex}">
+            <div class="quick-reply-edit-group-head">
+              <span>${escapeHtml(group.title)}</span>
+              <button class="quick-reply-delete" type="button" data-delete-group="${groupIndex}" aria-label="Delete quick reply group"></button>
+            </div>
+            ${rows}
+          </section>
+        `;
+      }).join('');
+    }
+
+    function openQuickReplyEditModal() {
+      if (!quickReplyEditModal) return;
+      quickReplyEditDraft = quickReplyMyGroups.map(function(group) {
+        return {
+          title: group.title,
+          items: group.items.map(function(item) {
+            return { text: item.text };
+          })
+        };
+      });
+      renderQuickReplyEditList();
+      setQuickReplyEditDirty(false);
+      quickReplyEditModal.classList.add('open');
+      quickReplyEditModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeQuickReplyEditModal() {
+      if (!quickReplyEditModal) return;
+      quickReplyEditModal.classList.remove('open');
+      quickReplyEditModal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (quickReplyCategoryDropdown) {
+      quickReplyCategoryMenu?.addEventListener('click', function(event) {
+        event.stopPropagation();
+        const item = event.target.closest('.dropdown-item');
+        if (!item) return;
+        if (item.dataset.createNew) setQuickReplyAddCategory(true);
+        else setQuickReplyAddCategory(false, item.dataset.category);
+        quickReplyCategoryMenu.classList.remove('open');
+      });
+    }
+
+    quickReplyAddText?.addEventListener('input', updateQuickReplyAddSendState);
+    quickReplyNewCategoryInput?.addEventListener('input', updateQuickReplyAddSendState);
+    quickReplyAddBackdrop?.addEventListener('click', closeQuickReplyAddModal);
+    quickReplyAddCancel?.addEventListener('click', closeQuickReplyAddModal);
+    quickReplyAddSend?.addEventListener('click', function() {
+      const text = quickReplyAddText?.value.trim() || '';
+      const categoryTitle = quickReplyAddCreateNew ? quickReplyNewCategoryInput?.value.trim() : quickReplyAddCategory;
+      if (!text || !categoryTitle) return;
+      let group = quickReplyMyGroups.find(function(item) {
+        return item.title === categoryTitle;
+      });
+      if (!group) {
+        group = { title: categoryTitle, items: [] };
+        quickReplyMyGroups.push(group);
+      }
+      group.items.push({ text: text });
+      quickReplyScope = 'My';
+      document.querySelectorAll('.quick-reply-tab').forEach(function(item) {
+        item.classList.toggle('active', item.dataset.replyScope === 'My');
+      });
+      closeQuickReplyAddModal();
+      renderQuickReplies();
+    });
+    quickReplyEditBackdrop?.addEventListener('click', closeQuickReplyEditModal);
+    quickReplyEditCancel?.addEventListener('click', closeQuickReplyEditModal);
+    quickReplyEditSave?.addEventListener('click', function() {
+      quickReplyMyGroups.splice(0, quickReplyMyGroups.length, ...quickReplyEditDraft.filter(function(group) {
+        group.items = group.items.filter(function(item) {
+          return item.text.trim();
+        });
+        return group.items.length > 0;
+      }));
+      closeQuickReplyEditModal();
+      renderQuickReplies();
+    });
+    quickReplyEditList?.addEventListener('input', function(event) {
+      const input = event.target.closest('.quick-reply-edit-input');
+      if (!input) return;
+      const row = input.closest('.quick-reply-edit-row');
+      const group = quickReplyEditDraft[Number(row?.dataset.groupIndex)];
+      const item = group?.items[Number(row?.dataset.itemIndex)];
+      if (!item) return;
+      item.text = input.value;
+      setQuickReplyEditDirty(true);
+    });
+    quickReplyEditList?.addEventListener('click', function(event) {
+      const groupDelete = event.target.closest('[data-delete-group]');
+      if (groupDelete) {
+        quickReplyEditDraft.splice(Number(groupDelete.dataset.deleteGroup), 1);
+        renderQuickReplyEditList();
+        setQuickReplyEditDirty(true);
+        return;
+      }
+      const deleteButton = event.target.closest('.quick-reply-edit-row .quick-reply-delete');
+      if (!deleteButton) return;
+      const row = deleteButton.closest('.quick-reply-edit-row');
+      const groupIndex = Number(row?.dataset.groupIndex);
+      const itemIndex = Number(row?.dataset.itemIndex);
+      quickReplyEditDraft[groupIndex]?.items.splice(itemIndex, 1);
+      if (quickReplyEditDraft[groupIndex] && quickReplyEditDraft[groupIndex].items.length === 0) {
+        quickReplyEditDraft.splice(groupIndex, 1);
+      }
+      renderQuickReplyEditList();
+      setQuickReplyEditDirty(true);
+    });
+
+    document.querySelectorAll('.quick-reply-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        quickReplyScope = tab.dataset.replyScope || 'Team';
+        document.querySelectorAll('.quick-reply-tab').forEach(function(item) {
+          item.classList.toggle('active', item === tab);
+        });
+        renderQuickReplies();
+      });
+    });
+
+    const quickReplyList = document.getElementById('quickReplyList');
+    if (quickReplyList) {
+      quickReplyList.addEventListener('click', function(event) {
+        const head = event.target.closest('.quick-reply-group-head');
+        if (head) {
+          const group = head.closest('.quick-reply-group');
+          const title = group?.dataset.groupTitle || '';
+          if (quickReplyCollapsed.has(title)) quickReplyCollapsed.delete(title);
+          else quickReplyCollapsed.add(title);
+          renderQuickReplies();
+          return;
+        }
+        const addButton = event.target.closest('#quickReplyAddButton');
+        if (addButton) {
+          openQuickReplyAddModal();
+          return;
+        }
+        const editButton = event.target.closest('#quickReplyEditButton');
+        if (editButton) {
+          openQuickReplyEditModal();
+          return;
+        }
+        const card = event.target.closest('.quick-reply-card');
+        if (!card) return;
+        setComposerText(renderQuickReplyPreview(card.dataset.replyText || ''));
+      });
+      quickReplyList.addEventListener('dblclick', function(event) {
+        const card = event.target.closest('.quick-reply-card');
+        if (!card) return;
+        setComposerText(renderQuickReplyPreview(card.dataset.replyText || ''));
+        sendComposerMessage();
+      });
+    }
+    setQuickReplyLanguage(quickReplyLang);
 
     // Search All drawer state
     let searchDrawerType = 'User ID';
@@ -7601,59 +9843,33 @@
       });
     }
 
-    // WorkOrder Pool drawer state
-    let workorderDrawerType = 'User ID';
-    let workorderDrawerQuery = '';
+    // Product recommendation center drawer state
+    let workorderPriorityFilter = 'All';
+    let workorderCountryFilter = 'All';
 
     function renderWorkorderDrawer() {
       const container = document.getElementById('workorderDrawerResults');
+      const sendButton = document.getElementById('workorderProductSend');
       if (!container) return;
 
-      // Pool: Serving, Unsolved, Converting (per backend rules)
-      let pool = sessionData.filter(s => ['Serving', 'Unsolved', 'Converting'].includes(s.status));
-      pool = pool.filter(s => sessionMatchesSearch(s, workorderDrawerType, workorderDrawerQuery));
-
-      const brandImg = (src) => brandImages[src] || 'assets/crops/brand-einseo.png';
-      const statusColors = { 'Pending':'orange', 'Serving':'green', 'Unsolved':'red', 'Converting':'blue', 'Closed':'gray', 'New':'green', 'Replace':'blue' };
-
-      container.innerHTML = pool.length
-        ? pool.map((s, i) => {
-            const msgs = s.messages || [];
-            const lastMsg = msgs[msgs.length - 1];
-            const lastText = lastMsg ? lastMsg.text : '';
-            const preview = previewForSearch(s, workorderDrawerType, workorderDrawerQuery, lastText, 35);
-            const timeAgo = getTimeAgo(s.lastSeen);
-            const isNew = i < 2; // first 2 items get NEW tag for visual variety
-            const sc = statusColors[s.status] || 'gray';
-            const parts = highlightedSessionParts(s, workorderDrawerType, workorderDrawerQuery, preview);
-            return `<div class="workorder-card" data-session="${sessionData.indexOf(s)}">
-              <div class="workorder-source-row">
-                <span class="wo-source"><span class="brand-frame"><img src="${brandImg(s.source)}" alt="" ${brandFallbackAttrs}></span>${parts.source}</span>
-                <div class="spacer"></div>
-                <span class="copy-badge"><img src="assets/icons/ic_copy_12.svg" alt=""></span>
-              </div>
-              <div class="workorder-body">
-                <div class="search-all-avatar"><img src="${s.avatar}" alt=""><span class="search-all-dot online"></span></div>
-                <div class="search-all-info">
-                  <div class="workorder-name-row"><span class="workorder-name">${parts.name}</span><span class="workorder-time"><span>${timeAgo}</span></span></div>
-                  <div class="workorder-msg-row"><span class="workorder-msg">${parts.preview}</span></div>
-                </div>
-              </div>
-              <div class="workorder-tags">${isNew ? '<span class="workorder-tag">NEW</span>' : ''}<span class="workorder-tag">${s.status}</span></div>
-              <div class="workorder-action"><span>${t('drawer.workorder.takeWorkorder')}</span></div>
-            </div>`;
-          }).join('')
-        : '<div class="workorder-empty">No available work orders</div>';
-
-      // Bind Take else's Workorder
-      container.querySelectorAll('.workorder-action').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const idx = parseInt(this.closest('.workorder-card').dataset.session);
-          selectSession(idx);
-          closeDrawer(document.querySelector('#workorderDrawer'));
-        });
+      const priorities = workorderPriorityFilter === 'All' ? ['S', '1', '2', '3'] : [workorderPriorityFilter];
+      const groups = priorities.map(function(priority) {
+        return sortedProductCards(productCardItems.filter(function(item) {
+          const priorityMatched = item.priority === priority;
+          const countryMatched = workorderCountryFilter === 'All' || item.country === workorderCountryFilter;
+          return priorityMatched && countryMatched;
+        }));
+      }).filter(function(group) {
+        return group.length > 0;
       });
+
+      container.innerHTML = groups.length
+        ? groups.map(function(group) {
+          return `<div class="product-card-priority-group">${group.map(renderProductCardItem).join('')}</div>`;
+        }).join('')
+        : '<div class="product-card-empty">No product tasks</div>';
+      ensureScrollThumb(container);
+      if (sendButton) sendButton.disabled = selectedProductCardIds.size === 0;
     }
 
     // Search Drawer: wire up dropdown + input
@@ -7680,23 +9896,47 @@
       });
     }
 
-    // WorkOrder Drawer: wire up dropdown + input
-    const workorderDD = document.getElementById('workorderDrawerTypeDropdown');
-    if (workorderDD) {
-      workorderDD.querySelectorAll('.dropdown-item').forEach(item => {
+    // Product recommendation center drawer: wire up filters
+    const workorderPriorityDD = document.getElementById('workorderPriorityDropdown');
+    if (workorderPriorityDD) {
+      workorderPriorityDD.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', function() {
-          workorderDrawerType = this.dataset.value;
+          workorderPriorityFilter = this.dataset.value;
           renderWorkorderDrawer();
         });
       });
     }
-    const workorderInput = document.getElementById('workorderDrawerInput');
-    if (workorderInput) {
-      workorderInput.addEventListener('input', function() {
-        workorderDrawerQuery = this.value;
-        renderWorkorderDrawer();
+    const workorderCountryDD = document.getElementById('workorderCountryDropdown');
+    if (workorderCountryDD) {
+      workorderCountryDD.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+          workorderCountryFilter = this.dataset.value;
+          renderWorkorderDrawer();
+        });
       });
     }
+    const workorderProductList = document.getElementById('workorderDrawerResults');
+    if (workorderProductList) {
+      function toggleWorkorderProductFromEvent(event) {
+        const card = event.target.closest('.product-card-option[data-card-id]');
+        if (!card) return;
+        toggleProductCardSelection(card.dataset.cardId, renderWorkorderDrawer);
+      }
+      workorderProductList.addEventListener('click', toggleWorkorderProductFromEvent);
+      workorderProductList.addEventListener('keydown', function(event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (!event.target.closest('.product-card-option[data-card-id]')) return;
+        event.preventDefault();
+        toggleWorkorderProductFromEvent(event);
+      });
+    }
+    document.getElementById('workorderProductCancel')?.addEventListener('click', function() {
+      closeDrawer(document.querySelector('#workorderDrawer'));
+    });
+    document.getElementById('workorderProductSend')?.addEventListener('click', function() {
+      if (this.disabled) return;
+      sendSelectedProductCards();
+    });
 
     var statusActions = {
       'Pending':   ['Transfer Ticket', 'Close Chat'],
@@ -7821,7 +10061,7 @@
 
     // Initial render of session list
     renderCurrentList();
-    selectSession(1); // Select Klaus Crawley by default
+    selectSession(0, { suppressRiskAlert: true });
     applyLanguage();
 
     // ===== Dashboard =====
@@ -7906,7 +10146,101 @@
       dashCharts = {};
     }
 
+    function drawCanvasFallback(canvasId, kind, labels, datasets) {
+      var canvas = document.getElementById(canvasId);
+      if (!canvas || !canvas.getContext) return;
+      var wrap = canvas.parentElement;
+      var rect = wrap ? wrap.getBoundingClientRect() : { width: 320, height: 220 };
+      var dpr = window.devicePixelRatio || 1;
+      var width = Math.max(280, Math.floor(rect.width || 320));
+      var height = Math.max(180, Math.floor(rect.height || 220));
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      var ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      var pad = 34;
+      var plotW = width - pad * 2;
+      var plotH = height - pad * 2;
+      var max = 1;
+      datasets.forEach(function(set) {
+        set.data.forEach(function(value) {
+          if (Number(value) > max) max = Number(value);
+        });
+      });
+      ctx.strokeStyle = '#f2f3f5';
+      ctx.lineWidth = 1;
+      for (var g = 0; g < 4; g++) {
+        var y = pad + (plotH / 3) * g;
+        ctx.beginPath();
+        ctx.moveTo(pad, y);
+        ctx.lineTo(width - pad, y);
+        ctx.stroke();
+      }
+      ctx.font = '11px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+      ctx.fillStyle = '#a6abb5';
+      if (kind === 'line') {
+        datasets.forEach(function(set) {
+          ctx.strokeStyle = set.color || '#1677ff';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          set.data.forEach(function(value, index) {
+            var x = pad + (labels.length <= 1 ? 0 : (plotW / (labels.length - 1)) * index);
+            var y = height - pad - (Number(value) / max) * plotH;
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        });
+        return;
+      }
+      if (kind === 'horizontal') {
+        var rowH = plotH / labels.length;
+        datasets[0].data.forEach(function(value, index) {
+          var y = pad + rowH * index + rowH * 0.24;
+          var barW = (Number(value) / max) * Math.max(40, plotW - 92);
+          var color = datasets[0].colors ? datasets[0].colors[index] : datasets[0].color;
+          ctx.fillStyle = '#a6abb5';
+          ctx.fillText(labels[index], pad, y + rowH * 0.46);
+          ctx.fillStyle = color || '#c2e0ff';
+          ctx.fillRect(pad + 92, y, Math.max(4, barW), rowH * 0.5);
+        });
+        return;
+      }
+      var groupW = plotW / labels.length;
+      datasets[0].data.forEach(function(value, index) {
+        var barH = (Number(value) / max) * plotH;
+        var x = pad + groupW * index + groupW * 0.22;
+        var y = height - pad - barH;
+        var color = datasets[0].colors ? datasets[0].colors[index] : datasets[0].color;
+        ctx.fillStyle = color || '#c2e0ff';
+        ctx.fillRect(x, y, Math.max(4, groupW * 0.56), barH);
+        if (labels.length <= 8) {
+          ctx.fillStyle = '#a6abb5';
+          ctx.textAlign = 'center';
+          ctx.fillText(labels[index], x + groupW * 0.28, height - 10);
+          ctx.textAlign = 'left';
+        }
+      });
+    }
+
+    function canRenderChartJs() {
+      return typeof Chart !== 'undefined';
+    }
+
     function initChartsOverview() {
+      if (!canRenderChartJs()) {
+        drawCanvasFallback('chartTrend', 'line', dates, [
+          { data:dates.map(function(_,i){return getDailySessions(i)}), color:'#9747ff' },
+          { data:dates.map(function(_,i){return getDailyCustomers(i)}), color:'#1677ff' },
+          { data:[820,780,850,790,830,810,860,840], color:'#00b42a' }
+        ]);
+        drawCanvasFallback('chartDuration2', 'bar', durationBuckets(), [{ data:[320,580,440,280,150,58], color:'#c2e0ff' }]);
+        drawCanvasFallback('chartRegions', 'horizontal', [t('dash.region.apac'),t('dash.region.eu'),t('dash.region.na'),t('dash.region.me'),t('dash.region.sa'),t('dash.region.africa'),t('dash.region.sea')], [{ data:[4520,2180,1650,720,480,310,250], colors:['#9747ff','#a764ff','#b582ff','#c4a0ff','#d2bdff','#e1dbff','#efe8ff'] }]);
+        return;
+      }
       // Trend line
       dashCharts.trend = new Chart(document.getElementById('chartTrend'),{type:'line',data:{labels:dates,datasets:[
         {label:t('dash.kpi.totalSessions'),data:dates.map(function(_,i){return getDailySessions(i)}),borderColor:'#9747ff',backgroundColor:'rgba(151,71,255,0.06)',fill:true,tension:.3,pointRadius:3},
@@ -7927,6 +10261,11 @@
     }
 
     function initChartsWorkload() {
+      if (!canRenderChartJs()) {
+        drawCanvasFallback('chartMsgDist', 'bar', ['1-5','6-10','11-15','16-20','21-30','30+'], [{ data:[890,1020,560,320,180,75], color:'#d9bbff' }]);
+        drawCanvasFallback('chartDailySessions', 'bar', dates, [{ data:dates.map(function(_,i){return getDailySessions(i)}), color:'#c2e0ff' }]);
+        return;
+      }
       // Msg distribution
       dashCharts.msgDist = new Chart(document.getElementById('chartMsgDist'),{type:'bar',data:{labels:['1-5','6-10','11-15','16-20','21-30','30+'],datasets:[{label:t('dash.metric.sessions'),data:[890,1020,560,320,180,75],backgroundColor:'#d9bbff',borderColor:'#9747ff',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#f2f3f5'}}}}});
       // Daily sessions
@@ -7935,6 +10274,12 @@
 
     function initChartsQuality() {
       var frBuckets=['0-5s','5-10s','10-30s','30s-1m',t('dash.bucket.1to3m'),t('dash.bucket.3to5m'),t('dash.bucket.5to10m'),'>10m'];
+      if (!canRenderChartJs()) {
+        drawCanvasFallback('chartFRDist', 'bar', frBuckets, [{ data:[180,320,480,560,420,280,150,80], color:'#c2e0ff' }]);
+        var sortedFallback=agents.slice().sort(function(a,b){return a.firstResp-b.firstResp});
+        drawCanvasFallback('chartFRRank', 'horizontal', sortedFallback.map(function(a){return a.name}), [{ data:sortedFallback.map(function(a){return a.firstResp}), color:'#d9bbff' }]);
+        return;
+      }
       dashCharts.frDist = new Chart(document.getElementById('chartFRDist'),{type:'bar',data:{labels:frBuckets,datasets:[{label:t('dash.metric.sessions'),data:[180,320,480,560,420,280,150,80],backgroundColor:'#c2e0ff',borderColor:'#1677ff',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:'#f2f3f5'}}}}});
       // FR rank by agent
       var sorted=agents.slice().sort(function(a,b){return a.firstResp-b.firstResp});
@@ -7942,6 +10287,15 @@
     }
 
     function initChartsAttendance() {
+      if (!canRenderChartJs()) {
+        drawCanvasFallback('chartAttCombo', 'bar', dates, [{ data:[12,8,15,6,10,9,14,7], color:'rgba(194,9,10,0.35)' }]);
+        var avgOnF=Math.round(agents.reduce(function(s,a){return s+a.online},0)/agents.length/8);
+        var avgOffF=Math.round(agents.reduce(function(s,a){return s+a.offline},0)/agents.length/8);
+        var avgDurF=Math.round(agents.reduce(function(s,a){return s+a.avgDur},0)/agents.length);
+        var avgAbF=Math.round(agents.reduce(function(s,a){return s+a.abOffDur},0)/agents.length/8);
+        drawCanvasFallback('chartAttTime', 'bar', [t('dash.metric.online'),t('dash.metric.offline'),t('dash.metric.sessions'),t('dash.metric.abOff')], [{ data:[avgOnF,avgOffF,avgDurF,avgAbF], colors:['rgba(22,119,255,0.6)','rgba(194,9,10,0.4)','rgba(0,180,42,0.5)','rgba(255,125,0,0.5)'] }]);
+        return;
+      }
       // Combo
       dashCharts.attCombo = new Chart(document.getElementById('chartAttCombo'),{type:'bar',data:{labels:dates,datasets:[
         {label:t('dash.kpi.abnormalOffline'),data:[12,8,15,6,10,9,14,7],backgroundColor:'rgba(194,9,10,0.12)',borderColor:'#c2090a',borderWidth:1,borderRadius:3,yAxisID:'y'},
@@ -7992,16 +10346,27 @@
 
     function formatSec(s){var h=Math.floor(s/3600),m=Math.round((s%3600)/60);return h+'h '+m+'m';}
 
-    function switchDashTab(tab) {
+    function renderDashCharts(tab) {
       destroyCharts();
+      try {
+        if (tab==='overview') initChartsOverview();
+        else if (tab==='workload') initChartsWorkload();
+        else if (tab==='quality') initChartsQuality();
+        else if (tab==='attendance') initChartsAttendance();
+      } catch (error) {
+        console.warn('Dashboard chart render failed:', error);
+      }
+    }
+
+    function switchDashTab(tab) {
       renderDashKpis(tab);
       document.querySelectorAll('.dash-tab').forEach(function(t){t.classList.toggle('active',t.dataset.dashTab===tab);});
       document.querySelectorAll('.dash-side-item').forEach(function(t){t.classList.toggle('active',t.dataset.dashTab===tab);});
       document.querySelectorAll('.dash-tab-panel').forEach(function(p){p.classList.toggle('active',p.dataset.dashPanel===tab);});
-      if (tab==='overview'){initChartsOverview();renderDashTable('overview');}
-      else if (tab==='workload'){initChartsWorkload();renderDashTable('workload');}
-      else if (tab==='quality'){initChartsQuality();}
-      else if (tab==='attendance'){initChartsAttendance();renderDashTable('attendance');}
+      if (tab==='overview') renderDashTable('overview');
+      else if (tab==='workload') renderDashTable('workload');
+      else if (tab==='attendance') renderDashTable('attendance');
+      renderDashCharts(tab);
       // Resize any charts in newly visible panel
       setTimeout(function(){Object.values(dashCharts).forEach(function(c){try{c.resize()}catch(e){}});},50);
     }

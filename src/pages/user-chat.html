@@ -58,9 +58,13 @@
     display: flex; align-items: center; gap: 12px; padding: 12px 20px;
     border-bottom: 1px solid var(--neutral-2); flex: none;
   }
-  .chat-topbar .brand { display: flex; align-items: center; gap: 8px; }
-  .chat-topbar .brand img { width: 24px; height: 24px; border-radius: 6px; }
-  .chat-topbar .brand span { font-size: 13px; color: var(--neutral-5); }
+  .chat-topbar .home-link {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+    border-radius: 8px; color: var(--neutral-7); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+  }
+  .chat-topbar .home-link:hover { background: var(--neutral-1); color: var(--blue-6); }
+  .chat-topbar .home-link .arrow { font-size: 16px; line-height: 1; }
   .chat-topbar .spacer { flex: 1; }
   .chat-topbar .user-chip {
     display: flex; align-items: center; gap: 8px; text-align: right;
@@ -117,7 +121,7 @@
 
 <div class="chat-container hidden" id="chatView">
   <header class="chat-topbar">
-    <div class="brand" id="chatBrand"></div>
+    <a class="home-link" href="../../index.html"><span class="arrow">←</span><span>Back Home</span></a>
     <div class="spacer"></div>
     <div class="user-chip"><div><div class="uname" id="chatUserName"></div><div class="uid" id="chatUserId"></div></div><img class="avatar-sm" id="chatUserAvatar" src="" alt=""></div>
     <button class="switch-btn" id="switchBtn">Switch Role</button>
@@ -227,8 +231,6 @@ function selectRole(index) {
   document.getElementById('roleModal').classList.add('hidden');
   document.getElementById('chatView').classList.remove('hidden');
 
-  const bi = brandImgs[s.source] || '../../assets/crops/brand-einseo.png';
-  document.getElementById('chatBrand').innerHTML = `<img src="${bi}" alt=""><span>${s.source}</span>`;
   document.getElementById('chatUserName').textContent = s.name;
   document.getElementById('chatUserId').textContent = 'ID ' + s.id;
   document.getElementById('chatUserAvatar').src = s.avatar;
