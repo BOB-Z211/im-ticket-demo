@@ -26,8 +26,11 @@
       --success-light: #e8feea;
       --success-dark: #00801e;
       --warning: #ff7d00;
+      --warning-light: #fff5e8;
+      --warning-dark: #cc6400;
       --error-light: #ffecee;
       --error-dark: #c2090a;
+      --neutral-9: #0f1114;
     }
 
     * { box-sizing: border-box; }
@@ -1526,8 +1529,16 @@
     }
 
     .message-system {
-      text-align: center; padding: 16px 0 8px; color: var(--neutral-4);
-      font-size: 12px; line-height: 1.5; user-select: none;
+      align-self: stretch;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      padding: 16px 0 8px;
+      color: var(--neutral-4);
+      font-size: 12px;
+      line-height: 1.5;
+      user-select: none;
     }
 
     .message-date-separator {
@@ -1756,6 +1767,212 @@
       width: 12px;
       height: 12px;
       flex: none;
+    }
+
+    .message.handover {
+      align-self: center;
+      width: min(640px, 100%);
+      display: block;
+    }
+
+    .handover-card {
+      width: 100%;
+      padding: 20px;
+      border-radius: 12px;
+      outline: 1px solid var(--neutral-2);
+      outline-offset: -1px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: var(--neutral-8);
+      box-shadow: 0 2px 8px rgba(29, 33, 41, 0.04);
+    }
+
+    .handover-card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .handover-card-title {
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+
+    .handover-card-type {
+      min-height: 23px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--neutral-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-8);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 15px;
+    }
+
+    .handover-icon {
+      width: 12px;
+      height: 12px;
+      flex: none;
+      display: block;
+      object-fit: contain;
+    }
+
+    .handover-action .handover-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .handover-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 12px;
+    }
+
+    .handover-status-label,
+    .handover-timeline {
+      color: var(--neutral-6);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+    }
+
+    .handover-status {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .handover-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .handover-chip {
+      min-height: 23px;
+      padding: 4px 8px 4px 4px;
+      border-radius: 8px;
+      background: var(--neutral-1);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--neutral-9);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 15px;
+    }
+
+    .handover-chip.risk {
+      background: var(--error-light);
+      color: var(--error-dark);
+    }
+
+    .handover-info-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .handover-info-panel {
+      min-height: 132px;
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .handover-info-panel.issue {
+      background: var(--blue-1);
+    }
+
+    .handover-info-panel.commitments {
+      background: var(--warning-light);
+    }
+
+    .handover-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .handover-section-title {
+      color: var(--blue-5);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 16px;
+    }
+
+    .handover-info-panel.commitments .handover-section-title {
+      color: var(--warning-dark);
+    }
+
+    .handover-section-text,
+    .handover-list,
+    .handover-list li {
+      color: var(--neutral-9);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+    }
+
+    .handover-section-text.warning {
+      color: var(--warning-dark);
+    }
+
+    .handover-section-text strong {
+      font-weight: 700;
+    }
+
+    .handover-list {
+      margin: 0;
+      padding-left: 16px;
+    }
+
+    .handover-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .handover-action {
+      min-width: 100px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font: 600 14px/17px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      cursor: pointer;
+    }
+
+    .handover-action.secondary {
+      background: #fff;
+      color: var(--neutral-5);
+      outline: 1px solid var(--neutral-1);
+      outline-offset: -1px;
+    }
+
+    .handover-action.primary {
+      background: var(--blue-6);
+      color: #fff;
+    }
+
+    .handover-action.accepted {
+      background: var(--blue-1);
+      color: var(--blue-6);
+      cursor: default;
     }
 
     .bubble-time {
@@ -5796,18 +6013,45 @@
       return NORA_REVIEW_ACTIVITY_MESSAGES.map(message => Object.assign({}, message));
     }
 
+    const AMELIA_HANDOVER_CARD = {
+      type: 'handoverCard',
+      id: 'amelia-handover-after-sales',
+      time: '2026-06-22 18:34',
+      text: 'Handover Card',
+      accepted: false,
+      acceptedAt: '',
+      transferredFrom: 'Noimz',
+      category: 'After-sales Issue',
+      status: 'Awaiting Tech Confirmation',
+      sentiment: 'Poor Sentiment',
+      risk: 'Negative Review Risk',
+      issue: 'Unable to bind App, reinstalled but still failing',
+      nextAction: 'Follow up by night shift before',
+      deadline: '18:00',
+      deadlineSuffix: 'today',
+      commitments: ['Provide solution within 24h;', 'Replacement/refund if failed'],
+      donts: 'Do NOT ask for order screenshots again (already provided 2 times)',
+      timeline: '6/28 first feedback → 6/29 CS A follow-up → 6/30 tech confirmation'
+    };
+
+    function cloneAmeliaHandoverCard() {
+      return Object.assign({}, AMELIA_HANDOVER_CARD, {
+        commitments: AMELIA_HANDOVER_CARD.commitments.slice()
+      });
+    }
+
     const sessionData = [
       { // 0 Amelia Reed — Pending: 从其他客服转接过来，等待新客服接入
         name: 'Amelia Reed', avatar: 'assets/crops/avatar01.jpg', source: 'US-EINSEO', status: 'Pending',
         id: '20491862', destination: '2016', country: '🇺🇸 US', gender: 'Female', age: '32',
-        lastSeen: '2026-06-22 19:16:04', lastIsAgent: false,
+        lastSeen: '2026-06-22 18:34:00', lastIsAgent: false, handoverVersion: 3,
         messages: [
           { dir:'in', time:'2026-06-22 18:12', text:'Hi, my SmartHub Pro X200 keeps disconnecting from WiFi every few hours. I’ve tried restarting it but it doesn’t help.' },
           { dir:'out', time:'2026-06-22 18:18', text:'I understand the frustration, Amelia. Let me check a few things — can you tell me when you first noticed this issue, and which firmware version the device is running?' },
           { dir:'in', time:'2026-06-22 18:25', text:'Started about 3 days ago. The firmware says v2.4.1. I also noticed the LED blinks red twice every few minutes.' },
           { dir:'out', time:'2026-06-22 18:32', text:'The red blink pattern suggests a connectivity loop. This needs a deeper diagnostic from our hardware team. Let me transfer you to a specialist who can run remote tests on your unit.' },
           { system:true, time:'2026-06-22 18:33', text:'Chat transferred — waiting for hardware specialist' },
-          { dir:'in', time:'2026-06-22 19:16', text:'OK, I’ll wait. How long does the transfer usually take?' }
+          cloneAmeliaHandoverCard()
         ]
       },
       { // 1 Klaus Crawley — Serving: 设备设置，多轮活跃对话
@@ -6063,6 +6307,40 @@
       return true;
     }
 
+    function ensureAmeliaHandoverCard() {
+      const amelia = sessionData.find(session => session.name === 'Amelia Reed');
+      if (!amelia || !Array.isArray(amelia.messages)) return false;
+      let changed = amelia.handoverVersion !== 3;
+      let cardIndex = amelia.messages.findIndex(message => message.type === 'handoverCard' && message.id === AMELIA_HANDOVER_CARD.id);
+      if (cardIndex < 0) {
+        const card = cloneAmeliaHandoverCard();
+        const transferIndex = amelia.messages.findIndex(message => message.system && /transfer|transferred|waiting/i.test(message.text || ''));
+        cardIndex = transferIndex >= 0 ? transferIndex + 1 : Math.min(amelia.messages.length, 4);
+        amelia.messages.splice(cardIndex, 0, card);
+        changed = true;
+      }
+      if (amelia.messages.length > cardIndex + 1) {
+        amelia.messages.splice(cardIndex + 1);
+        changed = true;
+      }
+      const card = amelia.messages[cardIndex];
+      if (card && (card.accepted || card.acceptedAt || card.transferredFrom !== AMELIA_HANDOVER_CARD.transferredFrom)) {
+        card.accepted = false;
+        card.acceptedAt = '';
+        card.transferredFrom = AMELIA_HANDOVER_CARD.transferredFrom;
+        changed = true;
+      }
+      if (amelia.lastSeen !== '2026-06-22 18:34:00') {
+        amelia.lastSeen = '2026-06-22 18:34:00';
+        changed = true;
+      }
+      if (amelia.handoverVersion !== 3) {
+        amelia.handoverVersion = 3;
+        changed = true;
+      }
+      return changed;
+    }
+
     // On first load: seed localStorage if empty, otherwise load from it
     (function() {
       const stored = loadSessionData();
@@ -6086,7 +6364,8 @@
       }
       const updatedDemoOrders = ensureDemoAmazonOrderMessages();
       const updatedNoraConversation = ensureNoraReviewActivityConversation();
-      if (updatedDemoOrders || updatedNoraConversation) saveSessionData();
+      const updatedAmeliaHandover = ensureAmeliaHandoverCard();
+      if (updatedDemoOrders || updatedNoraConversation || updatedAmeliaHandover) saveSessionData();
     })();
 
     // ── i18n ──
@@ -6496,6 +6775,13 @@
       return date.getFullYear() + '-' + pad(date.getMonth()+1) + '-' + pad(date.getDate()) + ' ' + timeStr;
     }
 
+    function formatHandoverTimestamp(value) {
+      var date = value instanceof Date ? value : new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      var pad = function(n) { return n < 10 ? '0' + n : n; };
+      return date.getFullYear() + '-' + pad(date.getMonth()+1) + '-' + pad(date.getDate()) + ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+    }
+
     function dateKey(dateStr) {
       var date = new Date(dateStr);
       var pad = function(n) { return n < 10 ? '0' + n : n; };
@@ -6558,6 +6844,64 @@
             <div class="bubble-time"><span>${timeStr}</span><span>-</span><span>Noimz</span></div>
           </div>
           <img class="avatar" src="assets/crops/agent01.jpg" alt="">
+        </div>
+      `;
+    }
+
+    function renderHandoverCardMessage(card) {
+      const data = Object.assign({}, AMELIA_HANDOVER_CARD, card || {});
+      const commitments = Array.isArray(data.commitments) ? data.commitments : [];
+      const accepted = data.accepted === true;
+      const actionHtml = accepted
+        ? '<button class="handover-action accepted" type="button" disabled><span>✓</span><span>Accepted</span></button>'
+        : `<button class="handover-action primary" type="button" data-handover-action="accept" data-card-id="${escapeHtml(data.id)}">Mark as Handed Over</button>`;
+      return `
+        <div class="message handover">
+          <article class="handover-card" data-card-id="${escapeHtml(data.id)}">
+            <div class="handover-card-head">
+              <div class="handover-card-title">Handover Card</div>
+              <div class="handover-card-type"><img class="handover-icon" src="assets/icons/ic_wrench_12.svg" alt=""><span>${escapeHtml(data.category)}</span></div>
+            </div>
+            <div class="handover-card-body">
+              <div class="handover-status">
+                <div class="handover-status-label">Current Status:</div>
+                <div class="handover-chip-row">
+                  <span class="handover-chip"><img class="handover-icon" src="assets/icons/ic_clock_12.svg" alt=""><span>${escapeHtml(data.status)}</span></span>
+                  <span class="handover-chip risk"><img class="handover-icon" src="assets/icons/angry@2x.png" alt=""><span>${escapeHtml(data.sentiment)}</span></span>
+                  <span class="handover-chip risk"><img class="handover-icon" src="assets/icons/ic_error_12.svg" alt=""><span>${escapeHtml(data.risk)}</span></span>
+                </div>
+              </div>
+              <div class="handover-info-grid">
+                <div class="handover-info-panel issue">
+                  <div class="handover-section">
+                    <div class="handover-section-title">Current Issue:</div>
+                    <div class="handover-section-text">${escapeHtml(data.issue)}</div>
+                  </div>
+                  <div class="handover-section">
+                    <div class="handover-section-title">Next Action :</div>
+                    <div class="handover-section-text">${escapeHtml(data.nextAction)} <strong>${escapeHtml(data.deadline)}</strong> ${escapeHtml(data.deadlineSuffix)}</div>
+                  </div>
+                </div>
+                <div class="handover-info-panel commitments">
+                  <div class="handover-section">
+                    <div class="handover-section-title">Commitments Made:</div>
+                    <ul class="handover-list">
+                      ${commitments.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+                    </ul>
+                  </div>
+                  <div class="handover-section">
+                    <div class="handover-section-title">Strict Don'ts:</div>
+                    <div class="handover-section-text warning">${escapeHtml(data.donts)}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="handover-timeline">${escapeHtml(data.timeline)}</div>
+            </div>
+            <div class="handover-actions">
+              <button class="handover-action secondary" type="button" data-handover-action="expand"><img class="handover-icon" src="assets/icons/ic_clock_16.svg" alt=""><span>Expand Full Chat</span></button>
+              ${actionHtml}
+            </div>
+          </article>
         </div>
       `;
     }
@@ -6636,10 +6980,13 @@
           lastDateKey = currentDateKey;
         }
         if (m.system) {
-          html += `<div class="message-system"><span>${escapeHtml(m.text)}</span>&nbsp;·&nbsp;<span>${formatChatTime(m.time)}</span></div>`;
+          const systemTime = m.type === 'handoverAcceptedSystem' ? formatHandoverTimestamp(m.time) : formatChatTime(m.time);
+          html += `<div class="message-system"><span>${escapeHtml(m.text)}</span>&nbsp;·&nbsp;<span>${escapeHtml(systemTime)}</span></div>`;
         } else {
           var timeStr = formatChatTime(m.time);
-          if (m.dir === 'in') {
+          if (m.type === 'handoverCard') {
+            html += renderHandoverCardMessage(m);
+          } else if (m.dir === 'in') {
             var safeText = renderChatTextWithAmazonOrders(m.text, m.time);
             html += `<div class="message in"><img class="avatar" src="${avatar}" alt=""><div class="bubble"><div>${safeText}</div><div class="bubble-time">${timeStr}</div></div></div>`;
           } else if (m.type === 'productCards') {
@@ -7137,6 +7484,43 @@
       if (dates[1]) dates[1].innerHTML = `<span class="label">Last Seen:</span>${data.lastSeen}`;
       maybeStartAiSuggestion(data);
       requestAnimationFrame(positionAiCapsule);
+    }
+
+    function rerenderCurrentMessages(options) {
+      const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
+      const msgStack = document.querySelector('.message-stack');
+      if (!session || !msgStack) return;
+      const keepScroll = options && options.keepScroll;
+      const previousScrollTop = msgStack.scrollTop;
+      msgStack.innerHTML = renderMessagesWithDateSeparators(session.messages, session.avatar);
+      ensureScrollThumb(msgStack);
+      hydrateAmazonOrderTokens(msgStack);
+      msgStack.scrollTop = keepScroll ? previousScrollTop : msgStack.scrollHeight;
+      requestAnimationFrame(positionAiCapsule);
+    }
+
+    function acceptHandoverCard(cardId) {
+      const session = currentSessionIndex !== null ? sessionData[currentSessionIndex] : null;
+      if (!session || !Array.isArray(session.messages)) return;
+      const cardIndex = session.messages.findIndex(message => message.type === 'handoverCard' && message.id === cardId);
+      const card = session.messages[cardIndex];
+      if (!card || card.accepted) return;
+      const acceptedAt = formatHandoverTimestamp(new Date());
+      const transferredFrom = card.transferredFrom || AMELIA_HANDOVER_CARD.transferredFrom;
+      card.accepted = true;
+      card.acceptedAt = acceptedAt;
+      card.transferredFrom = transferredFrom;
+      session.messages = session.messages.filter(message => message.type !== 'handoverAcceptedSystem');
+      session.messages.splice(cardIndex + 1, 0, {
+        system: true,
+        type: 'handoverAcceptedSystem',
+        id: `${card.id}-accepted`,
+        time: acceptedAt,
+        text: `Transferred from ${transferredFrom}`
+      });
+      saveSessionData();
+      rerenderCurrentMessages({ keepScroll: true });
+      showToast('Handover accepted');
     }
 
     const acknowledgedHighRiskSessions = new Set();
@@ -8391,6 +8775,16 @@
     if (messageStackForAi) {
       messageStackForAi.addEventListener('scroll', positionAiCapsule, { passive: true });
       messageStackForAi.addEventListener('click', (event) => {
+        const handoverAction = event.target.closest('[data-handover-action]');
+        if (handoverAction) {
+          event.preventDefault();
+          event.stopPropagation();
+          const action = handoverAction.dataset.handoverAction;
+          if (action === 'expand') openConversationHistoryModal();
+          if (action === 'accept') acceptHandoverCard(handoverAction.dataset.cardId || '');
+          return;
+        }
+
         const orderToken = event.target.closest('.amazon-order-token.is-clickable');
         if (!orderToken) return;
         event.preventDefault();
