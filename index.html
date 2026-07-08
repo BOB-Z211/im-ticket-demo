@@ -171,19 +171,164 @@
     }
     .topbar-lang:hover { background: var(--neutral-2); }
     .topbar-lang img { width: 16px; height: 16px; }
+    .topbar-plain.dropdown-trigger {
+      border: 0;
+      background: transparent;
+    }
+    .topbar-plain.dropdown-trigger:hover {
+      background: transparent;
+    }
     .topbar-status {
       padding: 8px; border-radius: 8px; display: flex; align-items: center;
-      gap: 4px; font-size: 14px; background: var(--neutral-2);
+      gap: 4px; font-size: 14px; background: transparent;
       color: var(--success); cursor: pointer; border: 0; font-family: inherit;
     }
     .topbar-status img { width: 16px; height: 16px; }
+    .topbar-status.is-offline {
+      color: var(--error-dark);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--success);
+      flex: none;
+    }
+    .status-dot.offline {
+      background: var(--error-dark);
+    }
     .topbar-user {
       padding: 8px; border-radius: 8px; display: flex; align-items: center;
-      gap: 4px; font-size: 14px; color: var(--neutral-8); cursor: pointer;
+      gap: 4px; font-size: 14px; color: var(--blue-6); cursor: pointer;
       border: 0; background: transparent; font-family: inherit;
     }
-    .topbar-user:hover { background: var(--neutral-2); }
+    .topbar-user:hover { background: transparent; }
+    .topbar-user-menu { min-width: 160px; }
+    .topbar-user-menu .dropdown-item { padding-right: 12px; }
+    #agentStatusDropdown .dropdown-item {
+      gap: 8px;
+      padding-left: 12px;
+    }
     .topbar-breadcrumb { display: none; }
+
+    .login-page {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 160px;
+      background: whitesmoke;
+    }
+    .viewport.logged-out .login-page {
+      display: flex;
+    }
+    .login-card {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .login-brand img {
+      width: 220px;
+      height: auto;
+      object-fit: contain;
+    }
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .login-field {
+      width: 100%;
+    }
+    .login-field input,
+    .login-captcha-input {
+      width: 100%;
+      height: 45px;
+      padding: 0 12px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 4px;
+      outline: none;
+      color: var(--neutral-8);
+      font: inherit;
+      font-size: 14px;
+      background: #fff;
+    }
+    .login-field input::placeholder,
+    .login-captcha-input::placeholder {
+      color: var(--neutral-5);
+    }
+    .login-field input:focus,
+    .login-captcha-input:focus {
+      border-color: #7152d4;
+      box-shadow: 0 0 0 2px rgba(113, 82, 212, 0.12);
+    }
+    .login-captcha-row {
+      display: grid;
+      grid-template-columns: 185px 120px;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .login-captcha-img {
+      height: 45px;
+      border: 1px solid #e6e6e6;
+      border-radius: 4px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: #7152d4;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      cursor: pointer;
+      user-select: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .login-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .login-remember {
+      height: 45px;
+      padding: 0 15px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 4px;
+      background: #fff;
+      color: var(--neutral-8);
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .login-remember.active {
+      border-color: #7152d4;
+      color: #7152d4;
+      background: rgba(113, 82, 212, 0.08);
+    }
+    .login-submit {
+      flex: 1;
+      height: 36px;
+      border: 0;
+      border-radius: 4px;
+      background: #7152d4;
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .login-submit:hover {
+      opacity: 0.8;
+    }
 
     .workspace-empty {
       position: absolute;
@@ -5061,7 +5206,7 @@
             <span class="red-badge">3</span>
           </button>
           <div class="dropdown" id="langDropdown">
-            <button class="topbar-lang dropdown-trigger" type="button">
+            <button class="topbar-lang dropdown-trigger topbar-plain" type="button">
               <img src="assets/icons/ic_language_16.svg" alt="">
               <span class="dropdown-label" data-i18n="topbar.lang">English</span>
               <img src="assets/icons/Property%201=down.svg" alt="">
@@ -5072,17 +5217,55 @@
               <div class="dropdown-item" data-value="ja"><span>日本語</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
             </div>
           </div>
-          <button class="topbar-status">
-            <span data-i18n="topbar.status.online">Online</span>
-            <img src="assets/icons/Property%201=down.svg" alt="">
-          </button>
-          <button class="topbar-user">User-Name</button>
+          <div class="dropdown" id="agentStatusDropdown">
+            <button class="topbar-status dropdown-trigger topbar-plain" type="button">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span class="dropdown-label">Online</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu dropdown-right">
+              <div class="dropdown-item selected" data-value="online"><span class="status-dot" aria-hidden="true"></span><span data-i18n="topbar.status.online">Online</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+              <div class="dropdown-item" data-value="offline"><span class="status-dot offline" aria-hidden="true"></span><span data-i18n="topbar.status.offline">Offline</span><img class="check" src="assets/icons/ic_checkmark_16.svg" alt=""></div>
+            </div>
+          </div>
+          <div class="dropdown" id="agentUserDropdown">
+            <button class="topbar-user dropdown-trigger topbar-plain" type="button">
+              <span class="dropdown-label">Noimz</span>
+              <img src="assets/icons/Property%201=down.svg" alt="">
+            </button>
+            <div class="dropdown-menu dropdown-right topbar-user-menu">
+              <div class="dropdown-item danger" data-action="logout"><span data-i18n="topbar.user.logout">Log out</span></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="topbar-breadcrumb">
         <span>IM</span><span>/</span><strong>Sessions</strong>
       </div>
     </div>
+    <section class="login-page" id="loginPage" aria-label="Agent Login">
+      <form class="login-card" id="loginForm">
+        <div class="login-brand">
+          <img src="assets/crops/login-logo.png" alt="JOYHUB">
+        </div>
+        <div class="login-form">
+          <div class="login-field">
+            <input id="loginUsername" name="username" type="text" autocomplete="username" placeholder="用户名" data-i18n-ph="login.username" value="noimz">
+          </div>
+          <div class="login-field">
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="密码" data-i18n-ph="login.password" value="joyhub123">
+          </div>
+          <div class="login-captcha-row">
+            <input class="login-captcha-input" id="loginCaptcha" name="captcha" type="text" autocomplete="off" placeholder="验证码" data-i18n-ph="login.captcha">
+            <button class="login-captcha-img" id="loginCaptchaImage" type="button" title="Refresh captcha">JHAD</button>
+          </div>
+          <div class="login-actions">
+            <button class="login-remember" id="loginRemember" type="button" aria-pressed="false" data-i18n="login.remember">记住</button>
+            <button class="login-submit" type="submit" data-i18n="login.submit">登 录</button>
+          </div>
+        </div>
+      </form>
+    </section>
     <nav class="rail" aria-label="Primary">
       <div class="rail-header">
         <img class="rail-logo" src="assets/crops/logo_1@3x.png" alt="">
@@ -6409,6 +6592,13 @@
       'currency.aud':                 ['AUD · Australian Dollar','AUD · 澳元','AUD · 豪ドル'],
       'topbar.lang':                  ['English','中文','日本語'],
       'topbar.status.online':         ['Online','在线','オンライン'],
+      'topbar.status.offline':        ['Offline','离线','オフライン'],
+      'topbar.user.logout':           ['Log out','注销登录','ログアウト'],
+      'login.username':               ['Username','用户名','ユーザー名'],
+      'login.password':               ['Password','密码','パスワード'],
+      'login.captcha':                ['Captcha','验证码','認証コード'],
+      'login.remember':               ['Remember','记住','記憶'],
+      'login.submit':                 ['Log in','登 录','ログイン'],
       'rail.aria.primary':            ['Primary','主导航','メインナビゲーション'],
       'rail.aria.collapse':           ['Collapse sidebar','收起侧边栏','サイドバーを折りたたむ'],
       'rail.section.im':              ['IM','IM','IM'],
@@ -6630,6 +6820,7 @@
       updateDashFilterSummary();
       if (dashInitialized && document.querySelector('.viewport.workspace-dashboard')) switchDashTab(currentDashTab());
       if (typeof updateRailToggleTip === 'function') updateRailToggleTip();
+      if (typeof renderAgentAuth === 'function') renderAgentAuth();
       // Status dropdown
       var sl = document.querySelector('#statusActionDropdown .dropdown-label');
       if (sl && currentSessionIndex !== null) { sl.textContent = t('status.' + sessionData[currentSessionIndex].status.toLowerCase()); populateStatusActions(sessionData[currentSessionIndex].status); }
@@ -6644,6 +6835,159 @@
           applyLanguage();
         });
       });
+    }
+
+    const ELAD_USER_KEY = 'elad_user';
+    const ELAD_LOGIN_INIT_KEY = 'im_ticket_login_initialized';
+    const AUTH_API = {
+      captcha: 'admin/login/captcha',
+      login: 'admin/login/login',
+      rememberLogin: '/admin/login/remLogin',
+      online: '/admin/service/online',
+      offline: '/admin/service/offline'
+    };
+    const DEFAULT_ELAD_USER = {
+      id: 20491862,
+      username: 'noimz',
+      nickname: 'Noimz',
+      token: 'demo-token',
+      expire: 4102444800000,
+      menus: []
+    };
+    let captchaObj = { text: '', key: '' };
+    let captchaInitialized = false;
+    let agentStatus = localStorage.getItem('im_ticket_agent_status') || 'online';
+
+    function loadEladUser() {
+      try {
+        const raw = localStorage.getItem(ELAD_USER_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) { /* ignore */ }
+      return null;
+    }
+
+    function seedEladUser() {
+      if (!loadEladUser() && localStorage.getItem(ELAD_LOGIN_INIT_KEY) !== 'true') {
+        localStorage.setItem(ELAD_USER_KEY, JSON.stringify(DEFAULT_ELAD_USER));
+        localStorage.setItem(ELAD_LOGIN_INIT_KEY, 'true');
+      }
+    }
+
+    function clearRememberCookie() {
+      const ex = new Date(1);
+      document.cookie = 'userInfo=0;expires=' + ex.toUTCString();
+    }
+
+    function saveRememberCookie(username, password) {
+      const ex = new Date();
+      ex.setDate(ex.getDate() + 30);
+      document.cookie = 'userInfo=' + username + '_' + password + ';expires=' + ex.toUTCString();
+    }
+
+    function refreshDemoCaptcha() {
+      const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+      let next = '';
+      for (let i = 0; i < 4; i++) {
+        next += chars[Math.floor(Math.random() * chars.length)];
+      }
+      captchaObj = { text: next, key: 'demo-captcha-' + next.toLowerCase() };
+      captchaInitialized = true;
+      const captchaButton = document.getElementById('loginCaptchaImage');
+      const captchaInput = document.getElementById('loginCaptcha');
+      if (captchaButton) captchaButton.textContent = next;
+      if (captchaInput) captchaInput.value = '';
+    }
+
+    function renderAgentAuth() {
+      const viewportEl = document.querySelector('.viewport');
+      const userLabel = document.querySelector('#agentUserDropdown .dropdown-label');
+      const statusTrigger = document.querySelector('#agentStatusDropdown .topbar-status');
+      const statusLabel = document.querySelector('#agentStatusDropdown .dropdown-label');
+      const currentStatusDot = document.querySelector('#agentStatusDropdown .topbar-status .status-dot');
+      const statusItems = document.querySelectorAll('#agentStatusDropdown .dropdown-item');
+      const usernameInput = document.getElementById('loginUsername');
+      const userInfo = loadEladUser();
+      const isLoggedOut = !userInfo || !userInfo.token || userInfo.expire < Date.now();
+      const isOffline = agentStatus === 'offline';
+      if (viewportEl) viewportEl.classList.toggle('logged-out', isLoggedOut);
+      if (userLabel) userLabel.textContent = userInfo?.nickname || userInfo?.username || DEFAULT_ELAD_USER.nickname;
+      if (usernameInput) usernameInput.value = userInfo?.username || DEFAULT_ELAD_USER.username;
+      if (statusTrigger) statusTrigger.classList.toggle('is-offline', isOffline);
+      if (currentStatusDot) currentStatusDot.classList.toggle('offline', isOffline);
+      if (statusLabel) statusLabel.textContent = isOffline ? t('topbar.status.offline') : t('topbar.status.online');
+      statusItems.forEach(function(item) {
+        item.classList.toggle('selected', item.dataset.value === agentStatus);
+      });
+      if (isLoggedOut && !captchaInitialized) refreshDemoCaptcha();
+    }
+
+    function setupAgentAuthControls() {
+      seedEladUser();
+      const statusDropdown = document.getElementById('agentStatusDropdown');
+      const userDropdown = document.getElementById('agentUserDropdown');
+      const loginForm = document.getElementById('loginForm');
+      const rememberButton = document.getElementById('loginRemember');
+      const captchaButton = document.getElementById('loginCaptchaImage');
+      if (statusDropdown) {
+        statusDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+          item.addEventListener('click', function() {
+            agentStatus = item.dataset.value === 'offline' ? 'offline' : 'online';
+            localStorage.setItem('im_ticket_agent_status', agentStatus);
+            renderAgentAuth();
+          });
+        });
+      }
+      if (userDropdown) {
+        userDropdown.querySelector('[data-action="logout"]')?.addEventListener('click', function() {
+          agentStatus = 'offline';
+          localStorage.setItem('im_ticket_agent_status', agentStatus);
+          localStorage.removeItem(ELAD_USER_KEY);
+          clearRememberCookie();
+          renderAgentAuth();
+        });
+      }
+      if (rememberButton) {
+        rememberButton.addEventListener('click', function() {
+          const nextPressed = rememberButton.getAttribute('aria-pressed') !== 'true';
+          rememberButton.setAttribute('aria-pressed', String(nextPressed));
+          rememberButton.classList.toggle('active', nextPressed);
+        });
+      }
+      if (captchaButton) {
+        captchaButton.addEventListener('click', refreshDemoCaptcha);
+      }
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const username = (document.getElementById('loginUsername')?.value || '').trim();
+          const password = document.getElementById('loginPassword')?.value || '';
+          const captcha = (document.getElementById('loginCaptcha')?.value || '').trim();
+          if (!username || !password || !captcha) {
+            showToast('请输入用户名、密码和验证码');
+            return;
+          }
+          if (captcha.toLowerCase() !== captchaObj.text.toLowerCase()) {
+            showToast('验证码错误');
+            refreshDemoCaptcha();
+            return;
+          }
+          const cacheData = Object.assign({}, DEFAULT_ELAD_USER, {
+            username,
+            nickname: username === 'noimz' ? 'Noimz' : username,
+            token: 'demo-token-' + Date.now(),
+            expire: Date.now() + 64800000,
+            captchaKey: captchaObj.key
+          });
+          localStorage.setItem(ELAD_USER_KEY, JSON.stringify(cacheData));
+          if (rememberButton?.getAttribute('aria-pressed') === 'true') saveRememberCookie(username, password);
+          agentStatus = 'online';
+          localStorage.setItem('im_ticket_agent_status', agentStatus);
+          showToast('登录成功');
+          renderAgentAuth();
+        });
+      }
+      refreshDemoCaptcha();
+      renderAgentAuth();
     }
 
     // Filter and search state
@@ -8999,6 +9343,7 @@
     }
 
     initDropdowns();
+    setupAgentAuthControls();
 
     // Status filter dropdown
     const statusDropdown = document.getElementById('statusDropdown');
