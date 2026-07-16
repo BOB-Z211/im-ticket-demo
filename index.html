@@ -2748,6 +2748,10 @@
       width: min(500px, calc(100vw - 48px));
     }
 
+    .product-card-dialog.excess-reason-dialog {
+      width: min(460px, calc(100vw - 48px));
+    }
+
     .conversation-history-dialog {
       width: min(820px, calc(100vw - 48px));
       height: min(640px, calc(100vh - 48px));
@@ -2764,6 +2768,37 @@
       color: #000;
       font-size: 16px;
       font-weight: 600;
+    }
+
+    .excess-reason-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .excess-reason-copy {
+      color: var(--neutral-8);
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .excess-reason-textarea {
+      width: 100%;
+      min-height: 96px;
+      padding: 10px 12px;
+      border: 1px solid var(--neutral-3);
+      border-radius: 8px;
+      color: var(--neutral-8);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 20px;
+      resize: vertical;
+      outline: none;
+    }
+
+    .excess-reason-textarea:focus {
+      border-color: var(--blue-6);
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
     }
 
     .product-card-filter {
@@ -4423,6 +4458,12 @@
       flex-direction: column;
       gap: 4px;
     }
+    .oa-create-fieldset.is-hidden {
+      display: none;
+    }
+    .oa-create-fieldset.is-error .oa-create-input {
+      border-color: var(--error-light);
+    }
     .oa-create-section-title {
       color: #000;
       font-size: 12px;
@@ -4631,6 +4672,16 @@
     .oa-order-error.is-visible {
       display: block;
     }
+    .oa-field-error {
+      width: 100%;
+      color: var(--error-dark);
+      font-size: 10px;
+      line-height: 12px;
+      display: none;
+    }
+    .oa-field-error.is-visible {
+      display: block;
+    }
     .oa-create-field-label {
       display: flex;
       align-items: center;
@@ -4734,6 +4785,20 @@
     }
     .oa-currency-dropdown .dropdown-menu {
       min-width: 184px;
+    }
+    .oa-remittance-dropdown {
+      width: 100%;
+    }
+    .oa-remittance-dropdown .dropdown-trigger {
+      justify-content: space-between;
+    }
+    .oa-remittance-dropdown .dropdown-label {
+      flex: 1;
+      text-align: left;
+    }
+    .oa-remittance-dropdown .dropdown-menu {
+      width: 100%;
+      min-width: 100%;
     }
     .oa-upload-box.has-image {
       padding: 0;
@@ -4899,6 +4964,9 @@
       background: #fff;
       z-index: 2;
     }
+    #oaCreateDrawer .oa-create-submit-row {
+      padding-top: 60px;
+    }
     .oa-review-filled,
     .oa-refund-filled {
       width: 100%;
@@ -4909,6 +4977,9 @@
     .oa-review-filled.is-hidden,
     .oa-refund-filled.is-hidden,
     .oa-readonly-pending.is-hidden {
+      display: none;
+    }
+    .oa-excess-row.is-hidden {
       display: none;
     }
     .search-all-section {
@@ -5920,7 +5991,7 @@
               <div class="oa-create-fieldset">
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Amazon Order No.</span></div>
                 <div class="oa-order-verify-row" id="oaOrderVerifyRow">
-                  <input class="oa-create-input-field" id="oaOrderNoInput" type="text" inputmode="numeric" maxlength="19" placeholder="XXX-XXXXXXX-XXXXXXX" aria-label="Amazon Order No.">
+                  <input class="oa-create-input-field" id="oaOrderNoInput" type="text" inputmode="text" maxlength="19" placeholder="XXX-XXXXXXX-XXXXXXX" aria-label="Amazon Order No.">
                   <button class="oa-order-verify-action" type="button" id="oaOrderVerifyButton" aria-label="Verify Amazon Order No.">
                     <span class="oa-order-verify-icon is-idle" id="oaOrderVerifyIcon" aria-hidden="true"></span>
                   </button>
@@ -5957,8 +6028,18 @@
             <div class="oa-create-detail-form" id="oaRefundInfoForm">
               <div class="oa-create-detail-title">Refund Info</div>
               <div class="oa-create-fieldset">
-                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Review Type</span></div>
-                <div class="oa-create-input"><span>Principal</span><img src="assets/icons/Property%201=down.svg" alt=""></div>
+                <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Remittance Type</span></div>
+                <div class="dropdown oa-remittance-dropdown" id="oaRemittanceDropdown">
+                  <button class="oa-create-input dropdown-trigger" type="button">
+                    <span class="dropdown-label" id="oaRemittanceType">Walmart Gift Card</span><img src="assets/icons/Property%201=down.svg" alt="">
+                  </button>
+                  <div class="dropdown-menu dropdown-right">
+                    <div class="dropdown-item selected" data-value="Walmart Gift Card"><span>Walmart Gift Card</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                    <div class="dropdown-item" data-value="Amazon Gift Card"><span>Amazon Gift Card</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                    <div class="dropdown-item" data-value="PayPal"><span>PayPal</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                    <div class="dropdown-item" data-value="CashApp"><span>CashApp</span><img class="check" src="assets/icons/Property%201=check.svg" alt=""></div>
+                  </div>
+                </div>
               </div>
               <div class="oa-create-fieldset">
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Refund Method</span></div>
@@ -5979,11 +6060,12 @@
                   </div>
                 </div>
               </div>
-              <div class="oa-create-fieldset">
+              <div class="oa-create-fieldset is-hidden" id="oaRefundAccountField">
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Account</span></div>
                 <div class="oa-create-input"><input class="oa-create-input-field oa-required-field" id="oaRefundAccountInput" type="text" data-i18n-ph="oa.placeholder.account" placeholder="Please enter account info" aria-label="Account"></div>
+                <div class="oa-field-error" id="oaRefundAccountError">Please enter a valid email address.</div>
               </div>
-              <div class="oa-create-fieldset">
+              <div class="oa-create-fieldset is-hidden" id="oaCollectionCodeField">
                 <div class="oa-create-field-label"><span class="oa-create-required">*</span><span>Collection Code</span></div>
                 <button class="oa-upload-box oa-demo-upload" type="button" id="oaCollectionCodeUpload" data-upload-target="collection" aria-label="Collection code"><span class="oa-upload-plus" aria-hidden="true"></span></button>
               </div>
@@ -6042,10 +6124,12 @@
             <div class="oa-readonly-head"><div class="oa-create-detail-title">Refund Info</div><div class="oa-readonly-status">Pending</div></div>
             <div class="oa-refund-filled">
               <div class="oa-readonly-row"><div class="oa-create-field-label">Refund ID</div><div class="oa-readonly-value">9001</div></div>
-              <div class="oa-readonly-row"><div class="oa-create-field-label">Review Type</div><div class="oa-readonly-value">Principal</div></div>
+              <div class="oa-readonly-row"><div class="oa-create-field-label">Refund Type</div><div class="oa-readonly-value">Principal</div></div>
               <div class="oa-readonly-row"><div class="oa-create-field-label">Refund Method</div><div class="oa-readonly-value">PayPal</div></div>
               <div class="oa-readonly-row"><div class="oa-create-field-label">Amount</div><div class="oa-readonly-value">20 USD</div></div>
               <div class="oa-readonly-row"><div class="oa-create-field-label">Account</div><div class="oa-readonly-value">user@mail.com</div></div>
+              <div class="oa-readonly-row oa-excess-row is-hidden"><div class="oa-create-field-label">is_excess</div><div class="oa-readonly-value" id="oaDetailIsExcess">0</div></div>
+              <div class="oa-readonly-row oa-excess-row is-hidden"><div class="oa-create-field-label" data-i18n="oa.excess.title">Excess Reason</div><div class="oa-readonly-value" id="oaDetailExcessReason"></div></div>
               <div class="oa-create-fieldset"><div class="oa-create-field-label">Collection Code</div><div class="oa-readonly-upload"><img src="assets/crops/oa-uploaded-screenshot.png" alt=""></div></div>
             </div>
             <div class="oa-readonly-pending oa-refund-empty">Refund info pending</div>
@@ -6124,6 +6208,22 @@
         </div>
         <div class="product-card-footer">
           <button class="product-card-action primary" type="button" id="conversationHistoryOk">OK</button>
+        </div>
+      </section>
+    </div>
+    <div class="product-card-modal-layer" id="excessReasonModal" role="presentation" aria-hidden="true">
+      <button class="product-card-backdrop" type="button" id="excessReasonBackdrop" aria-label="Close excess reason dialog"></button>
+      <section class="product-card-dialog excess-reason-dialog" role="dialog" aria-modal="true" aria-labelledby="excessReasonTitle">
+        <div class="product-card-modal-head">
+          <div class="product-card-modal-title" id="excessReasonTitle" data-i18n="oa.excess.title">Excess Reason</div>
+        </div>
+        <div class="excess-reason-body">
+          <div class="excess-reason-copy" data-i18n="oa.excess.message">Principal refund amount exceeds 120%, excess reason is required</div>
+          <textarea class="excess-reason-textarea" id="excessReasonInput" data-i18n-ph="oa.excess.placeholder" placeholder="Please enter excess reason"></textarea>
+        </div>
+        <div class="product-card-footer">
+          <button class="product-card-action" type="button" id="excessReasonCancel" data-i18n="common.cancel">Cancel</button>
+          <button class="product-card-action primary" type="button" id="excessReasonConfirm" data-i18n="common.confirm" disabled>Confirm</button>
         </div>
       </section>
     </div>
@@ -6584,6 +6684,11 @@
       'oa.placeholder.link':          ['Please enter link','请输入链接','リンクを入力してください'],
       'oa.placeholder.amount':        ['Please enter amount','请输入金额','金額を入力してください'],
       'oa.placeholder.account':       ['Please enter account info','请输入账号信息','アカウント情報を入力してください'],
+      'oa.excess.title':              ['Excess Reason','超额说明','超過理由'],
+      'oa.excess.message':            ['Principal refund amount exceeds 120%, excess reason is required','本金请款金额超过 120%，需要填写超额说明','元本返金申請額が120%を超えています。超過理由の入力が必要です'],
+      'oa.excess.placeholder':        ['Please enter excess reason','请输入超额说明','超過理由を入力してください'],
+      'common.cancel':                ['Cancel','取消','キャンセル'],
+      'common.confirm':               ['Confirm','确认','確認'],
       'currency.usd':                 ['USD · US Dollar','USD · 美元','USD · 米ドル'],
       'currency.eur':                 ['EUR · Euro','EUR · 欧元','EUR · ユーロ'],
       'currency.gbp':                 ['GBP · British Pound','GBP · 英镑','GBP · 英ポンド'],
@@ -6594,6 +6699,7 @@
       'topbar.status.online':         ['Online','在线','オンライン'],
       'topbar.status.offline':        ['Offline','离线','オフライン'],
       'topbar.user.logout':           ['Log out','注销登录','ログアウト'],
+      'todo.transferNotice':          ['This session is assigned to {agent}. Please request transfer back first.','该会话已分配给 {agent}，请先申请转接回来。','このセッションは {agent} に割り当て済みです。先に引き戻しを申請してください。'],
       'login.username':               ['Username','用户名','ユーザー名'],
       'login.password':               ['Password','密码','パスワード'],
       'login.captcha':                ['Captcha','验证码','認証コード'],
@@ -7086,10 +7192,15 @@
       const now = new Date('2026-06-23T12:00:00');
       const date = new Date(dateStr);
       const diffMs = now - date;
+      if (!dateStr || Number.isNaN(date.getTime()) || diffMs < 60000) return t('time.now');
+      const diffYears = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 365));
+      const diffMonths = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 30));
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor(diffMs / (1000 * 60));
 
+      if (diffYears > 0) return diffYears + 'y';
+      if (diffMonths > 0) return diffMonths + 'mo';
       if (diffDays > 0) return diffDays + t('time.suffix.d');
       if (diffHours > 0) return diffHours + t('time.suffix.h');
       if (diffMins > 0) return diffMins + t('time.suffix.m');
@@ -7511,13 +7622,16 @@
       for (let k = msgs.length - 1; k >= 0; k--) { if (!msgs[k].system) { lastMsgObj = msgs[k]; break; } }
       const lastText = lastMsgObj ? lastMsgObj.text : '';
       const isAgentLast = lastMsgObj ? lastMsgObj.dir === 'out' : false;
+      const startedAgo = firstMsgObj ? getTimeAgo(firstMsgObj.time) : '';
+      const latestAgo = lastMsgObj ? getTimeAgo(lastMsgObj.time) : getTimeAgo(session.lastSeen);
       return {
         firstMsgObj,
         lastMsgObj,
         lastText,
         isAgentLast,
-        startedAgo: firstMsgObj ? getTimeAgo(firstMsgObj.time) : '',
-        lastMsgAgo: lastMsgObj ? getTimeAgo(lastMsgObj.time) : getTimeAgo(session.lastSeen),
+        startedAgo,
+        latestAgo,
+        timeTitle: [startedAgo ? 'Conversation started ' + startedAgo + ' ago' : '', latestAgo ? 'Latest message ' + latestAgo + ' ago' : ''].filter(Boolean).join(' · '),
       };
     }
 
@@ -7554,7 +7668,7 @@
             <div class="session-copy">
               <div class="session-name-row">
                 <div class="name session-name-with-risk">${riskIcon}<span class="session-name-text">${parts.name}</span></div>
-                <div class="session-time-group"><span>${model.startedAgo}</span><span class="session-time-dot"></span><span>${model.lastMsgAgo}</span></div>
+                <div class="session-time-group" title="${escapeHtml(model.timeTitle)}"><span class="session-start-time">${model.startedAgo}</span><span class="session-time-dot"></span><span class="session-latest-time">${model.latestAgo}</span></div>
               </div>
               <div class="last-msg">${lastMsg}${unread}</div>
             </div>
@@ -7582,7 +7696,7 @@
               <div class="session-copy">
                 <div class="session-name-row">
                   <div class="name">${parts.name}</div>
-                  <div class="session-time-group"><span>${model.startedAgo}</span><span class="session-time-dot"></span><span>${model.lastMsgAgo}</span></div>
+                  <div class="session-time-group" title="${escapeHtml(model.timeTitle)}"><span class="session-start-time">${model.startedAgo}</span><span class="session-time-dot"></span><span class="session-latest-time">${model.latestAgo}</span></div>
                 </div>
                 <div class="last-msg">${sentIcon}<span class="last-msg-text">${parts.preview}</span>${unread}</div>
               </div>
@@ -7631,41 +7745,41 @@
     const todoGroupsByType = {
       RSO: [
         { key: 'todo.pendingPromptedReview', count: 3, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO' },
-          { index: 0, source: 'CA-allovu' },
-          { index: 2, source: 'GB-HanaCute' },
+          { index: 1, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: true, registeredAt: '2025-03-28 14:22:52' },
+          { index: 0, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: true, registeredAt: '2025-03-28 14:24:18' },
+          { index: 2, source: 'GB-HanaCute', ownerAgent: 'Lena', customerOnline: false, registeredAt: '2025-03-28 14:21:36' },
         ] },
         { key: 'todo.awaitingRefund', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO' },
-          { index: 0, source: 'CA-allovu' },
+          { index: 1, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: true, registeredAt: '2025-03-28 14:30:12' },
+          { index: 0, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: false, registeredAt: '2025-03-28 14:18:52' },
         ] },
         { key: 'todo.refundFailed', count: 2, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
-          { index: 1, source: 'US-EINSEO', statusKey: 'todo.refundRejection' },
-          { index: 0, source: 'CA-allovu', statusKey: 'todo.refundFailedStatus' },
+          { index: 1, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: false, registeredAt: '2025-03-28 14:26:20', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: false, registeredAt: '2025-03-28 14:40:00', statusKey: 'todo.refundFailedStatus' },
         ] },
         { key: 'todo.pendingConfirmation', count: 2, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 3, source: 'US-EINSEO' },
-          { index: 4, source: 'CA-allovu' },
+          { index: 3, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: true, registeredAt: '2025-03-28 15:08:09' },
+          { index: 4, source: 'CA-allovu', ownerAgent: 'Lena', customerOnline: false, registeredAt: '2025-03-28 15:11:27' },
         ] },
       ],
       RDO: [
         { key: 'todo.awaitingRefund', count: 4, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 1, source: 'US-EINSEO' },
-          { index: 0, source: 'CA-allovu' },
-          { index: 3, source: 'GB-HanaCute' },
-          { index: 4, source: 'US-EINSEO' },
+          { index: 1, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: true, registeredAt: '2025-03-28 14:22:52' },
+          { index: 0, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: true, registeredAt: '2025-03-28 14:45:02' },
+          { index: 3, source: 'GB-HanaCute', ownerAgent: 'Noimz', customerOnline: false, registeredAt: '2025-03-28 14:20:00' },
+          { index: 4, source: 'US-EINSEO', ownerAgent: 'Lena', customerOnline: false, registeredAt: '2025-03-28 14:50:24' },
         ] },
         { key: 'todo.refundFailed', count: 3, expanded: true, statusKey: 'todo.refundRejection', statusTone: 'red', items: [
-          { index: 2, source: 'GB-HanaCute', statusKey: 'todo.refundRejection' },
-          { index: 0, source: 'CA-allovu', statusKey: 'todo.refundFailedStatus' },
-          { index: 1, source: 'US-EINSEO', statusKey: 'todo.refundFailedStatus' },
+          { index: 2, source: 'GB-HanaCute', ownerAgent: 'Lena', customerOnline: true, registeredAt: '2025-03-28 13:58:11', statusKey: 'todo.refundRejection' },
+          { index: 0, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: false, registeredAt: '2025-03-28 14:08:33', statusKey: 'todo.refundFailedStatus' },
+          { index: 1, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: false, registeredAt: '2025-03-28 14:10:52', statusKey: 'todo.refundFailedStatus' },
         ] },
         { key: 'todo.pendingConfirmation', count: 2, expanded: true, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 5, source: 'US-EINSEO' },
-          { index: 6, source: 'CA-allovu' },
+          { index: 5, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: true, registeredAt: '2025-03-28 15:04:12' },
+          { index: 6, source: 'CA-allovu', ownerAgent: 'Mia', customerOnline: false, registeredAt: '2025-03-28 15:06:45' },
         ] },
         { key: 'todo.pendingPromptedReview', count: 1, expanded: false, statusKey: 'todo.pendingReviewStatus', statusTone: 'orange', items: [
-          { index: 7, source: 'US-EINSEO' },
+          { index: 7, source: 'US-EINSEO', ownerAgent: 'Noimz', customerOnline: false, registeredAt: '2025-03-28 15:18:51' },
         ] },
       ],
     };
@@ -7674,18 +7788,20 @@
       const session = sessionData[item.index] || sessionData[1];
       const brandImg = brandImages[item.source] || brandImages[session.source] || 'assets/crops/brand-einseo.png';
       const statusKey = item.statusKey || group.statusKey;
+      const onlineDotStyle = item.customerOnline ? '' : ' style="display:none"';
+      const registeredAt = item.registeredAt || '2025-03-28 14:22:52';
       return `
-        <button class="todo-order-card" type="button" data-index="${item.index}">
+        <button class="todo-order-card" type="button" data-index="${item.index}" data-owner-agent="${escapeHtml(item.ownerAgent || 'Noimz')}">
           <div class="todo-card-top">
             <span class="todo-card-source"><span class="brand-frame"><img class="brand" src="${brandImg}" alt="" ${brandFallbackAttrs}></span><span>${escapeHtml(item.source || session.source)}</span></span>
-            <span class="todo-card-user"><img class="avatar" src="${session.avatar}" alt=""><span class="online-dot-inline"></span><span class="todo-user-name">${escapeHtml(session.name)}</span></span>
+            <span class="todo-card-user"><img class="avatar" src="${session.avatar}" alt=""><span class="online-dot-inline"${onlineDotStyle}></span><span class="todo-user-name">${escapeHtml(session.name)}</span></span>
           </div>
           <div class="todo-order-main">
             <img class="todo-product-img" src="assets/crops/product-rose.png" alt="">
             <div class="todo-card-copy">
               <div class="todo-product-title">贵妃多多款五代-玫红-新APP</div>
               <div class="todo-product-model">Rosethorn 2</div>
-              <div class="todo-card-time">2025-03-28 14:22:52</div>
+              <div class="todo-card-time">${escapeHtml(registeredAt)}</div>
               <div class="todo-category">03玫瑰花品类</div>
               <div class="todo-status-pill ${group.statusTone}">${t(statusKey)}</div>
               <div class="todo-order-no">026-6986879-2656330</div>
@@ -7693,6 +7809,30 @@
           </div>
         </button>
       `;
+    }
+
+    function getCurrentAgentName() {
+      const userInfo = typeof loadEladUser === 'function' ? loadEladUser() : null;
+      return userInfo?.nickname || userInfo?.username || DEFAULT_ELAD_USER.nickname;
+    }
+
+    function sortTodoItems(items) {
+      return items.slice().sort((a, b) => {
+        if (Boolean(a.customerOnline) !== Boolean(b.customerOnline)) {
+          return a.customerOnline ? -1 : 1;
+        }
+        return new Date(a.registeredAt || 0) - new Date(b.registeredAt || 0);
+      });
+    }
+
+    function handleTodoOrderClick(item) {
+      const ownerAgent = item.ownerAgent || 'Noimz';
+      const currentAgent = getCurrentAgentName();
+      if (ownerAgent !== currentAgent) {
+        showToast(t('todo.transferNotice').replace('{agent}', ownerAgent));
+        return;
+      }
+      selectSession(item.index);
     }
 
     function renderContactsList() {
@@ -7706,7 +7846,7 @@
       };
 
       const groupsHtml = todoGroups.map(group => {
-        const items = group.items.filter(queryFiltered);
+        const items = sortTodoItems(group.items.filter(queryFiltered));
         const collapsedClass = group.expanded ? '' : ' collapsed';
         return `
           <section class="todo-group${collapsedClass}" data-todo-group="${group.key}">
@@ -7737,7 +7877,10 @@
       container.querySelectorAll('.todo-order-card').forEach(item => {
         item.addEventListener('click', () => {
           const idx = parseInt(item.dataset.index);
-          selectSession(idx);
+          const groupEl = item.closest('.todo-group');
+          const group = todoGroups.find(todoGroup => todoGroup.key === groupEl?.dataset.todoGroup);
+          const data = group?.items.find(todoItem => todoItem.index === idx);
+          if (data) handleTodoOrderClick(data);
         });
       });
       ensureScrollThumb(container);
@@ -8354,8 +8497,6 @@
     let quickReplyLang = 'en';
     let aiRequestSeq = 0;
     const COMPOSER_DOUBLE_ESCAPE_MS = 500;
-    const AI_RECOMMEND_BASE = 'https://test-manager-api.best-envision.com';
-    const AI_RECOMMEND_PATH = '/admin/imAiReply/recommend';
 
     function composerText() {
       return composerInput.textContent.replace(/\u00a0/g, ' ').trim();
@@ -8727,24 +8868,7 @@
     }
 
     async function fetchAiRecommendation(session, userMessage) {
-      const params = aiRecommendParams(session, userMessage);
-      const token = storedApiToken();
-      if (!params || !token) return null;
-      const res = await fetch(AI_RECOMMEND_BASE + AI_RECOMMEND_PATH, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          'Authorization': token
-        },
-        body: new URLSearchParams(params).toString()
-      });
-      const payload = await res.json();
-      if (!res.ok || payload.code !== 0 || !payload.data || !payload.data.recommend_msg) return null;
-      return {
-        text: payload.data.recommend_msg,
-        source: payload.data.user_msg || (userMessage && userMessage.text) || '',
-        meta: payload.data
-      };
+      return null;
     }
 
     async function startAiGeneration(forceError) {
@@ -9555,23 +9679,80 @@
     const oaReviewInfoForm = document.getElementById('oaReviewInfoForm');
     const oaRefundInfoForm = document.getElementById('oaRefundInfoForm');
     const oaReviewLinkInput = document.getElementById('oaReviewLinkInput');
+    const oaRemittanceDropdown = document.getElementById('oaRemittanceDropdown');
     const oaRefundAmountInput = document.getElementById('oaRefundAmountInput');
     const oaRefundAccountInput = document.getElementById('oaRefundAccountInput');
+    const oaRefundAccountField = document.getElementById('oaRefundAccountField');
+    const oaRefundAccountError = document.getElementById('oaRefundAccountError');
+    const oaCollectionCodeField = document.getElementById('oaCollectionCodeField');
     const oaCurrencyDropdown = document.getElementById('oaCurrencyDropdown');
     const oaPreSubmitUpload = document.getElementById('oaPreSubmitUpload');
     const oaReviewScreenshotUpload = document.getElementById('oaReviewScreenshotUpload');
     const oaCollectionCodeUpload = document.getElementById('oaCollectionCodeUpload');
     const oaCreateSubmit = document.getElementById('oaCreateSubmit');
+    const excessReasonModal = document.getElementById('excessReasonModal');
+    const excessReasonBackdrop = document.getElementById('excessReasonBackdrop');
+    const excessReasonInput = document.getElementById('excessReasonInput');
+    const excessReasonCancel = document.getElementById('excessReasonCancel');
+    const excessReasonConfirm = document.getElementById('excessReasonConfirm');
     const oaUploadedScreenshotSrc = 'assets/crops/oa-uploaded-screenshot.png';
     const oaCopyIconSrc = 'assets/icons/ic_copy_12.svg';
     let currentOaDetailCard = null;
     let oaCreateMode = 'create';
+    let pendingExcessSubmit = null;
     function isOaUploadReady(button) {
       return !!button?.classList.contains('has-image');
     }
+    function getSelectedRemittanceType() {
+      return oaRemittanceDropdown?.querySelector('.dropdown-item.selected')?.dataset.value || 'Walmart Gift Card';
+    }
+    function setSelectedRemittanceType(value) {
+      const nextValue = ['Walmart Gift Card', 'Amazon Gift Card', 'PayPal', 'CashApp'].includes(value) ? value : 'Walmart Gift Card';
+      const label = document.getElementById('oaRemittanceType');
+      if (label) label.textContent = nextValue;
+      oaRemittanceDropdown?.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.classList.toggle('selected', item.dataset.value === nextValue);
+      });
+      updateRefundFieldsForRemittance();
+    }
+    function updateRefundFieldsForRemittance() {
+      const remittanceType = getSelectedRemittanceType();
+      const needsAccount = remittanceType === 'PayPal';
+      const needsCollectionCode = remittanceType === 'CashApp';
+      oaRefundAccountField?.classList.toggle('is-hidden', !needsAccount);
+      oaCollectionCodeField?.classList.toggle('is-hidden', !needsCollectionCode);
+      if (!needsAccount && oaRefundAccountInput) oaRefundAccountInput.value = '';
+      updateRefundAccountError();
+      if (!needsCollectionCode && oaCollectionCodeUpload) {
+        oaCollectionCodeUpload.classList.remove('has-image');
+        oaCollectionCodeUpload.innerHTML = '<span class="oa-upload-plus" aria-hidden="true"></span>';
+      }
+      updateOaCreateSubmitState();
+    }
+    function isValidOaEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+    }
+    function updateRefundAccountError() {
+      const needsAccount = getSelectedRemittanceType() === 'PayPal';
+      const value = oaRefundAccountInput?.value.trim() || '';
+      const isInvalid = needsAccount && value.length > 0 && !isValidOaEmail(value);
+      oaRefundAccountField?.classList.toggle('is-error', isInvalid);
+      oaRefundAccountError?.classList.toggle('is-visible', isInvalid);
+      return !needsAccount || isValidOaEmail(value);
+    }
+    function isOaRefundInfoComplete() {
+      const remittanceType = getSelectedRemittanceType();
+      if (!oaRefundAmountInput?.value.trim()) return false;
+      if (remittanceType === 'PayPal') return updateRefundAccountError();
+      if (remittanceType === 'CashApp') return isOaUploadReady(oaCollectionCodeUpload);
+      return true;
+    }
+    function normalizeAmazonOrderNo(value) {
+      return String(value || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 17);
+    }
     function formatAmazonOrderNo(value) {
-      const digits = value.replace(/\D/g, '').slice(0, 17);
-      const groups = [digits.slice(0, 3), digits.slice(3, 10), digits.slice(10, 17)].filter(Boolean);
+      const orderChars = normalizeAmazonOrderNo(value);
+      const groups = [orderChars.slice(0, 3), orderChars.slice(3, 10), orderChars.slice(10, 17)].filter(Boolean);
       return groups.join('-');
     }
     function formatRefundAmount(value) {
@@ -9584,12 +9765,52 @@
       }
       return next;
     }
+    function parseOaAmount(value) {
+      const amount = Number(String(value || '').replace(/[^\d.]/g, ''));
+      return Number.isFinite(amount) ? amount : 0;
+    }
+    function defaultOaAmounts(orderType) {
+      return orderType === 'RSO'
+        ? { orderAmount: 100, planAmount: 80 }
+        : { orderAmount: 100, planAmount: 0 };
+    }
+    function oaExcessPayload(reason) {
+      return {
+        is_excess: reason ? 1 : 0,
+        excess_reason: reason || ''
+      };
+    }
+    function checkOaRefundExcess(orderType, currentRefund, card) {
+      const defaults = defaultOaAmounts(orderType);
+      const orderAmount = parseOaAmount(card?.dataset.orderAmount) || defaults.orderAmount;
+      const planAmount = parseOaAmount(card?.dataset.planAmount) || defaults.planAmount;
+      const hasExistingRefund = !!card && (card.dataset.matchType || '') === 'Customer Orders' && !card.classList.contains('product-hidden-preview');
+      const historyRefund = parseOaAmount(card?.dataset.refundedAmount) || (hasExistingRefund ? 20 : 0);
+      const totalRefund = historyRefund + currentRefund;
+      if (orderType === 'RSO') {
+        return totalRefund > orderAmount * 1.2 || (planAmount > 0 && totalRefund > planAmount * 1.2);
+      }
+      return totalRefund > orderAmount * 1.2;
+    }
+    function openExcessReasonModal(submitPayload) {
+      pendingExcessSubmit = submitPayload;
+      if (excessReasonInput) excessReasonInput.value = '';
+      if (excessReasonConfirm) excessReasonConfirm.disabled = true;
+      excessReasonModal?.classList.add('open');
+      excessReasonModal?.setAttribute('aria-hidden', 'false');
+      window.setTimeout(function() { excessReasonInput?.focus(); }, 0);
+    }
+    function closeExcessReasonModal() {
+      pendingExcessSubmit = null;
+      excessReasonModal?.classList.remove('open');
+      excessReasonModal?.setAttribute('aria-hidden', 'true');
+    }
     function updateOaCreateSubmitState() {
       if (!oaCreateSubmit) return;
       const reviewReady = oaReviewInfoForm?.classList.contains('is-visible');
       const refundReady = oaRefundInfoForm?.classList.contains('is-visible');
       const reviewComplete = !reviewReady || (!!oaReviewLinkInput?.value.trim() && isOaUploadReady(oaReviewScreenshotUpload));
-      const refundComplete = !refundReady || (!!oaRefundAmountInput?.value.trim() && !!oaRefundAccountInput?.value.trim() && isOaUploadReady(oaCollectionCodeUpload));
+      const refundComplete = !refundReady || isOaRefundInfoComplete();
       oaCreateSubmit.disabled = oaOrderVerifyState.value !== 'success' || !reviewComplete || !refundComplete;
     }
     function setOaOrderVerifyState(state) {
@@ -9614,6 +9835,8 @@
     }
     function resetOaCreateForm() {
       oaCreateMode = 'create';
+      pendingExcessSubmit = null;
+      closeExcessReasonModal();
       if (oaOrderVerifyState.timer) {
         window.clearTimeout(oaOrderVerifyState.timer);
         oaOrderVerifyState.timer = null;
@@ -9631,6 +9854,8 @@
       if (oaRefundInfoForm) oaRefundInfoForm.classList.remove('is-visible');
       if (oaAddReviewInfo) oaAddReviewInfo.classList.remove('is-hidden');
       if (oaAddRefundInfo) oaAddRefundInfo.classList.remove('is-hidden');
+      setSelectedRemittanceType('Walmart Gift Card');
+      updateRefundAccountError();
       [oaReviewLinkInput, oaRefundAmountInput, oaRefundAccountInput].forEach(function(input) {
         if (input) input.value = '';
       });
@@ -9667,6 +9892,11 @@
         subtitle: copyLines[1] || 'Rosethorn 2',
         category: card.querySelector('.category')?.textContent?.trim() || '03玫瑰花品类',
         orderNo: card.querySelector('.order-id')?.childNodes[0]?.textContent?.trim() || '026-6986879-2656330',
+        orderAmount: parseOaAmount(card.dataset.orderAmount) || defaultOaAmounts(card.closest('.oa-order-group')?.dataset.orderType || 'RDO').orderAmount,
+        planAmount: parseOaAmount(card.dataset.planAmount) || defaultOaAmounts(card.closest('.oa-order-group')?.dataset.orderType || 'RDO').planAmount,
+        refundedAmount: parseOaAmount(card.dataset.refundedAmount),
+        isExcess: card.dataset.isExcess === '1',
+        excessReason: card.dataset.excessReason || '',
         hasFilledInfo: (card.dataset.matchType || '') === 'Customer Orders' && !card.classList.contains('product-hidden-preview')
       };
     }
@@ -9694,24 +9924,24 @@
         oaAddRefundInfo?.classList.add('is-hidden');
         if (oaReviewLinkInput) oaReviewLinkInput.value = document.getElementById('oaDetailReviewLink')?.textContent?.trim() || 'http://page.quark.cn/baike?id=a93577d561c54570b5a117f1e67b8a1b';
         if (oaRefundAmountInput) oaRefundAmountInput.value = '20';
+        setSelectedRemittanceType('PayPal');
         if (oaRefundAccountInput) oaRefundAccountInput.value = 'user@mail.com';
         setOaUploadComplete(oaReviewScreenshotUpload);
-        setOaUploadComplete(oaCollectionCodeUpload);
       }
       updateOaCreateSubmitState();
     }
     function verifyOaOrderNo() {
       if (!oaOrderNoInput) return;
       oaOrderNoInput.value = formatAmazonOrderNo(oaOrderNoInput.value);
-      const orderDigits = oaOrderNoInput.value.replace(/\D/g, '');
-      if (orderDigits.length !== 17) return;
+      const orderChars = normalizeAmazonOrderNo(oaOrderNoInput.value);
+      if (orderChars.length !== 17) return;
       if (oaOrderVerifyState.timer) {
         window.clearTimeout(oaOrderVerifyState.timer);
         oaOrderVerifyState.timer = null;
       }
       setOaOrderVerifyState('loading');
       oaOrderVerifyState.timer = window.setTimeout(function() {
-        const shouldFail = orderDigits.length !== 17 || orderDigits.includes('000');
+        const shouldFail = orderChars.length !== 17 || orderChars.includes('000');
         setOaOrderVerifyState(shouldFail ? 'error' : 'success');
       }, 800);
     }
@@ -9719,7 +9949,7 @@
       oaOrderNoInput.addEventListener('input', function() {
         const formattedValue = formatAmazonOrderNo(oaOrderNoInput.value);
         if (oaOrderNoInput.value !== formattedValue) oaOrderNoInput.value = formattedValue;
-        const orderDigits = oaOrderNoInput.value.replace(/\D/g, '');
+        const orderChars = normalizeAmazonOrderNo(oaOrderNoInput.value);
         if (oaOrderVerifyState.value !== 'idle') {
           if (oaOrderVerifyState.timer) {
             window.clearTimeout(oaOrderVerifyState.timer);
@@ -9727,7 +9957,7 @@
           }
           setOaOrderVerifyState('idle');
         }
-        if (orderDigits.length === 17) {
+        if (orderChars.length === 17) {
           verifyOaOrderNo();
         }
       });
@@ -9774,9 +10004,19 @@
         addOaDetailForm(oaRefundInfoForm, 'Order status does not allow adding refund info yet.');
       });
     }
-    [oaReviewLinkInput, oaRefundAccountInput].forEach(function(input) {
-      input?.addEventListener('input', updateOaCreateSubmitState);
+    oaReviewLinkInput?.addEventListener('input', updateOaCreateSubmitState);
+    oaRefundAccountInput?.addEventListener('input', function() {
+      updateRefundAccountError();
+      updateOaCreateSubmitState();
     });
+    if (oaRemittanceDropdown) {
+      oaRemittanceDropdown.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          window.setTimeout(updateRefundFieldsForRemittance, 0);
+        });
+      });
+      updateRefundFieldsForRemittance();
+    }
     if (oaRefundAmountInput) {
       oaRefundAmountInput.addEventListener('input', function() {
         const formattedValue = formatRefundAmount(oaRefundAmountInput.value);
@@ -9803,10 +10043,21 @@
         setOaUploadComplete(button);
       });
     });
-    function createOaOrderCard(orderType) {
+    function applyOaRefundPayloadToCard(card, payload) {
+      if (!card || !payload) return;
+      const currentRefund = parseOaAmount(payload.refundAmount);
+      const historyRefund = parseOaAmount(card.dataset.refundedAmount);
+      card.dataset.refundedAmount = String(historyRefund + currentRefund);
+      card.dataset.isExcess = String(payload.is_excess || 0);
+      card.dataset.excessReason = payload.excess_reason || '';
+    }
+    function createOaOrderCard(orderType, payload) {
       const article = document.createElement('article');
       article.className = 'product is-new-order';
       article.dataset.matchType = 'Customer Orders';
+      const defaults = defaultOaAmounts(orderType);
+      article.dataset.orderAmount = String(defaults.orderAmount);
+      if (defaults.planAmount) article.dataset.planAmount = String(defaults.planAmount);
       const orderNo = oaOrderNoInput?.value.trim() || '026-6986879-2656330';
       article.innerHTML = [
         '<img src="assets/crops/product-rose.png" alt="">',
@@ -9820,15 +10071,17 @@
         '</div>',
         '<div class="product-actions"><button class="product-action" type="button" disabled>Bind</button><button class="product-action" type="button">View Detail</button></div>'
       ].join('');
+      applyOaRefundPayloadToCard(article, payload);
       return article;
     }
-    function saveEditedOaOrderCard() {
+    function saveEditedOaOrderCard(payload) {
       if (!currentOaDetailCard) return;
       const orderNo = oaOrderNoInput?.value.trim() || '026-6986879-2656330';
       const orderId = currentOaDetailCard.querySelector('.order-id');
       if (orderId) {
         orderId.innerHTML = orderNo + ' <img class="copy-icon" src="' + oaCopyIconSrc + '" width="12" height="12" data-copy="' + orderNo + '" alt="">';
       }
+      applyOaRefundPayloadToCard(currentOaDetailCard, payload);
       openOaDetailDrawer(currentOaDetailCard);
       showToast('Saved');
     }
@@ -9855,7 +10108,7 @@
       });
       applyOaOrderFilter('All');
     }
-    function appendCreatedOaOrderCard(orderType) {
+    function appendCreatedOaOrderCard(orderType, payload) {
       const targetType = orderType === 'RSO' ? 'RSO' : 'RDO';
       const group = document.querySelector('.oa-order-group[data-order-type="' + targetType + '"]');
       if (!group) return;
@@ -9863,7 +10116,7 @@
       group.classList.remove('collapsed');
       const count = group.querySelector('.count');
       if (count) count.textContent = String((Number(count.textContent.trim()) || 0) + 1);
-      const card = createOaOrderCard(targetType);
+      const card = createOaOrderCard(targetType, payload);
       const firstProduct = group.querySelector('.product');
       group.insertBefore(card, firstProduct);
       applyOaOrderFilter();
@@ -9917,10 +10170,53 @@
       drawer.querySelector('#oaDetailProductSubtitle').textContent = data.subtitle;
       drawer.querySelector('#oaDetailProductCategory').textContent = data.category;
       drawer.querySelector('#oaDetailOrderNo').textContent = data.orderNo;
+      const excessRows = drawer.querySelectorAll('.oa-excess-row');
+      const isExcessValue = drawer.querySelector('#oaDetailIsExcess');
+      const excessReasonValue = drawer.querySelector('#oaDetailExcessReason');
+      excessRows.forEach(function(row) {
+        row.classList.toggle('is-hidden', !data.isExcess);
+      });
+      if (isExcessValue) isExcessValue.textContent = data.isExcess ? '1' : '0';
+      if (excessReasonValue) excessReasonValue.textContent = data.excessReason;
       updateOaDetailBindButton(data.matchType);
       setOaDetailFilled(drawer.querySelector('#oaDetailReviewSection'), 'review', data.hasFilledInfo);
       setOaDetailFilled(drawer.querySelector('#oaDetailRefundSection'), 'refund', data.hasFilledInfo);
       openDrawer(drawer);
+    }
+    function buildOaSubmitPayload(reason) {
+      const orderType = document.getElementById('oaCreateOrderType')?.textContent?.trim() || 'RDO';
+      const refundAmount = parseOaAmount(oaRefundAmountInput?.value);
+      return {
+        orderType,
+        remittanceType: getSelectedRemittanceType(),
+        refundAmount,
+        refundAccount: oaRefundAccountInput?.value.trim() || '',
+        hasCollectionCode: isOaUploadReady(oaCollectionCodeUpload),
+        currency: document.getElementById('oaRefundCurrency')?.textContent?.trim() || 'USD',
+        ...oaExcessPayload(reason)
+      };
+    }
+    function currentOaSubmitCard() {
+      return oaCreateMode === 'edit' ? currentOaDetailCard : null;
+    }
+    function submitOaOrder(payload) {
+      if (oaCreateMode === 'edit') {
+        saveEditedOaOrderCard(payload);
+        return;
+      }
+      closeDrawer(document.querySelector('#oaCreateDrawer'));
+      window.setTimeout(function() {
+        appendCreatedOaOrderCard(payload.orderType, payload);
+        showToast('Submitted');
+      }, 280);
+    }
+    function handleOaSubmit() {
+      const payload = buildOaSubmitPayload('');
+      if (checkOaRefundExcess(payload.orderType, payload.refundAmount, currentOaSubmitCard())) {
+        openExcessReasonModal(payload);
+        return;
+      }
+      submitOaOrder(payload);
     }
     document.querySelectorAll('.oa-order-group').forEach(function(group) {
       group.addEventListener('click', function(event) {
@@ -9954,16 +10250,24 @@
     if (oaCreateSubmit) {
       oaCreateSubmit.addEventListener('click', function() {
         if (oaCreateSubmit.disabled) return;
-        if (oaCreateMode === 'edit') {
-          saveEditedOaOrderCard();
-          return;
-        }
-        const orderType = document.getElementById('oaCreateOrderType')?.textContent?.trim() || 'RDO';
-        closeDrawer(document.querySelector('#oaCreateDrawer'));
-        window.setTimeout(function() {
-          appendCreatedOaOrderCard(orderType);
-          showToast('Submitted');
-        }, 280);
+        handleOaSubmit();
+      });
+    }
+    [excessReasonBackdrop, excessReasonCancel].forEach(function(button) {
+      button?.addEventListener('click', closeExcessReasonModal);
+    });
+    if (excessReasonInput) {
+      excessReasonInput.addEventListener('input', function() {
+        if (excessReasonConfirm) excessReasonConfirm.disabled = excessReasonInput.value.trim().length === 0;
+      });
+    }
+    if (excessReasonConfirm) {
+      excessReasonConfirm.addEventListener('click', function() {
+        const reason = excessReasonInput?.value.trim() || '';
+        if (!reason || !pendingExcessSubmit) return;
+        const payload = { ...pendingExcessSubmit, ...oaExcessPayload(reason) };
+        closeExcessReasonModal();
+        submitOaOrder(payload);
       });
     }
 
